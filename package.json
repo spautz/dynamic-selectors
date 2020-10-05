@@ -1,0 +1,105 @@
+{
+  "name": "@dynamic-selectors/workspace",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Root workspace for Dynamic-Selectors",
+  "license": "MIT",
+  "homepage": "https://github.com/spautz/dynamic-selectors#readme",
+  "bugs": "https://github.com/spautz/dynamic-selectors/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spautz/dynamic-selectors.git"
+  },
+  "author": {
+    "name": "Steven Pautz",
+    "url": "http://stevenpautz.com/"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=10",
+    "yarn": "1.*"
+  },
+  "scripts": {
+    "____ LIFECYCLE HOOKS _______________________________________________": "",
+    "prepare": "lerna bootstrap && yon run packages:prepare",
+    "pretest": "yon run test:clean",
+    "____ INTEGRATION ___________________________________________________": "",
+    "clean": "yon run storybook:clean && yon run test:clean && rimraf ./node_modules/.cache",
+    "test": "yon run test:nowatch",
+    "dev": "yon run format && yon run types && yon run lint",
+    "dev:readonly": "yon run format:verify && yon run types && yon run lint",
+    "all": "yon run prepare && yon run dev && yon run test:nowatch && yon run build-storybook",
+    "all:readonly": "yon run dev:readonly && yon run test:nowatch",
+    "ci": "yon run dev:readonly && yon run test:report && yon run build-storybook",
+    "____ BATCH COMMANDS FOR PACKAGES ___________________________________": "",
+    "packages:prepare": "lerna run prepare",
+    "packages:clean": "lerna run clean",
+    "packages:test": "lerna run test:nowatch",
+    "packages:dev": "lerna run dev",
+    "packages:dev:readonly": "lerna run dev:readonly",
+    "packages:all": "lerna run all",
+    "packages:all:readonly": "lerna run all:readonly",
+    "packages:build": "lerna run build",
+    "packages:release:changelog": "lerna run release:changelog -- ",
+    "____ INDIVIDUAL COMMANDS ___________________________________________": "",
+    "demo:prepare": "yarn install && yarn build-storybook",
+    "demo:deploy": "gh-pages -d ./storybook-static",
+    "format": "prettier --write .",
+    "format:verify": "prettier --list-different .",
+    "lint": "tsdx lint . --max-warnings 0",
+    "storybook": "start-storybook -p 6006",
+    "storybook:clean": "rimraf ./storybook-static",
+    "build-storybook": "build-storybook",
+    "release:version": "yarn lerna version --no-changelog --no-push --no-git-tag-version ",
+    "release:tag": "yarn lerna version --no-changelog --no-push --sign-git-commit ",
+    "release:postpublish": "standard-version --commit-all --sign --skip.changelog --release-as ",
+    "test:clean": "rimraf ./coverage",
+    "test:nowatch": "tsdx test --coverage",
+    "test:report": "tsdx test --coverage && coveralls < ./coverage/lcov.info",
+    "test:watch": "tsdx test --watch",
+    "test:watchcoverage": "tsdx test --watchAll --coverage",
+    "types": "tsc --p tsconfig.json"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "7.11.6",
+    "@storybook/addon-actions": "6.0.26",
+    "@storybook/addon-essentials": "6.0.26",
+    "@storybook/addon-links": "6.0.26",
+    "@storybook/react": "6.0.26",
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.0.4",
+    "@types/react": "16.9.51",
+    "@types/react-dom": "16.9.8",
+    "@types/react-is": "16.7.1",
+    "babel-loader": "8.1.0",
+    "coveralls": "3.1.0",
+    "gh-pages": "3.1.0",
+    "husky": "4.3.0",
+    "lerna": "3.22.1",
+    "lint-staged": "10.4.0",
+    "standard-version": "9.0.0",
+    "tsdx": "0.14.0",
+    "typescript": "3.9.7",
+    "yarn-or-npm": "3.0.1"
+  },
+  "lint-staged": {
+    "**/*.{css,html,js,jsx,json,less,md,scss,ts,tsx}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yon run dev:readonly"
+    }
+  },
+  "standard-version": {
+    "scripts": {
+      "postchangelog": "yon run format"
+    }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
