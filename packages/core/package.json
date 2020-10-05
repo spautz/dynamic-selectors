@@ -1,0 +1,61 @@
+{
+  "name": "@dynamic-selectors/core",
+  "version": "0.0.1",
+  "description": "Dynamic selector functions",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "https://github.com/spautz/dynamic-selectors/packages/core#readme",
+  "bugs": "https://github.com/spautz/dynamic-selectors/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spautz/dynamic-selectors.git",
+    "directory": "packages/core"
+  },
+  "author": {
+    "name": "Steven Pautz",
+    "url": "http://stevenpautz.com/"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "LICENSE",
+    "*.md"
+  ],
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/dynamic-selectors-core.esm.js",
+  "jsnext:main": "dist/dynamic-selectors-core.esm.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "____ LIFECYCLE HOOKS _______________________________________________": "",
+    "prepare": "yon run build",
+    "prebuild": "yon run build:clean",
+    "prerelease": "yon run clean",
+    "prepublishOnly": "yarn run dev:readonly && yarn run build",
+    "pretest": "yon run test:clean",
+    "____ INTEGRATION ___________________________________________________": "",
+    "clean": "yon run build:clean && yon run test:clean && rimraf ./node_modules/.cache",
+    "test": "yon run test:nowatch",
+    "dev": "yarn run format && yarn run types && yarn run lint",
+    "dev:readonly": "yarn run format:verify && yarn run types && yarn run lint",
+    "all": "yarn run clean && yarn run dev && yarn run test:nowatch && yarn run build",
+    "all:readonly": "yarn run dev:readonly && yarn run test:nowatch",
+    "____ INDIVIDUAL COMMANDS ___________________________________________": "",
+    "build": "tsdx build",
+    "build:clean": "rimraf ./dist",
+    "build:watch": "tsdx watch",
+    "format": "prettier --write .",
+    "format:verify": "prettier --list-different .",
+    "lint": "tsdx lint . --max-warnings 0",
+    "release:changelog": "standard-version --skip.commit --skip.tag --release-as ",
+    "test:clean": "rimraf ./coverage-local",
+    "test:nowatch": "tsdx test --coverage",
+    "test:watch": "tsdx test --watch",
+    "test:watchcoverage": "tsdx test --watchAll --coverage",
+    "types": "tsc --p tsconfig.json"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {}
+}
