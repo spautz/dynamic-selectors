@@ -6,7 +6,6 @@
 
 # outputs
 /coverage
-/storybook-static
 /packages/*/coverage-local
 /packages/*/dist
 

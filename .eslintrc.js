@@ -8,12 +8,5 @@ module.exports = {
     },
   },
 
-  ignorePatterns: [
-    'build/',
-    'dist/',
-    'coverage/',
-    'coverage-local/',
-    'node_modules/',
-    'storybook-static/',
-  ],
+  ignorePatterns: ['dist/', 'coverage/', 'coverage-local/', 'node_modules/'],
 };
