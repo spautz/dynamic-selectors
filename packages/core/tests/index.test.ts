@@ -1,7 +1,12 @@
-import TODO from '../src';
+import { createDynamicSelector } from '../src';
 
-describe('TODO', () => {
-  it('TODO', () => {
-    console.log('TODO! ', TODO);
+describe('createDynamicSelector with defaults', () => {
+  it('runs functions', () => {
+    const state = { foo: 'bar' };
+    const mySelector = createDynamicSelector((getState) => {
+      return getState('foo');
+    });
+
+    expect(mySelector(state)).toEqual('bar');
   });
 });

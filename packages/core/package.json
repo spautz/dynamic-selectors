@@ -55,7 +55,13 @@
     "test:watchcoverage": "tsdx test --watchAll --coverage",
     "types": "tsc --p tsconfig.json"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "lodash": "^4.0.0",
+    "shallowequal": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.161",
+    "@types/shallowequal": "1.1.1"
+  },
   "peerDependencies": {}
 }
