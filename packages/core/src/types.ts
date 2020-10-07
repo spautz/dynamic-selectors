@@ -1,3 +1,5 @@
+import { DynamicSelectorResultCache } from './internals';
+
 type AnyPrimitive = boolean | number | string | null | undefined;
 
 /**
@@ -17,11 +19,11 @@ export type DynamicSelectorStateOptions<StateType = any> = {
  */
 export type DynamicSelectorOptions<ReturnType = any, StateType = any> = {
   compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
-  debug: boolean;
   getKeyForParams: (params: DynamicSelectorParams) => string;
   onException:
     | ((error: Error, args: [StateType, DynamicSelectorParams, ...Array<any>]) => void)
     | null;
+  createResultCache: () => DynamicSelectorResultCache;
 };
 
 /**
