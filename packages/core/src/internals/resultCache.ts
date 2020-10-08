@@ -1,15 +1,17 @@
 import { DynamicSelectorDependencyEntry } from './callStack';
-import { DynamicSelectorDebugInfo } from './debugInfo';
+import { createDebugInfo, DynamicSelectorDebugInfo } from './debugInfo';
 
 export type DynamicSelectorResultEntry = [
   /* lastState */
   any,
-  /* dependencies */
+  /* lastDependencies */
   Array<DynamicSelectorDependencyEntry>,
   /* hasLastReturnValue */
   boolean,
   /* lastReturnValue */
   any,
+  /* lastError thrown by innerFn */
+  Error | null,
   /* debugInfo */
   DynamicSelectorDebugInfo,
 ];
@@ -19,7 +21,8 @@ export const RESULT_ENTRY__STATE = 0;
 export const RESULT_ENTRY__DEPENDENCIES = 1;
 export const RESULT_ENTRY__HAS_RETURN_VALUE = 2;
 export const RESULT_ENTRY__RETURN_VALUE = 3;
-export const RESULT_ENTRY__DEBUG_INFO = 4;
+export const RESULT_ENTRY__ERROR = 4;
+export const RESULT_ENTRY__DEBUG_INFO = 5;
 
 export type DynamicSelectorResultCache = {
   has: (paramKey: string) => boolean;
@@ -27,3 +30,19 @@ export type DynamicSelectorResultCache = {
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
   reset: () => void;
 };
+
+const createResultEntry = (
+  state: any,
+  previousResult?: DynamicSelectorResultEntry,
+): DynamicSelectorResultEntry => {
+  const newResultEntry: DynamicSelectorResultEntry = [state, [], false, undefined, null, null];
+
+  if (process.env.NODE_ENV !== 'production') {
+    newResultEntry[RESULT_ENTRY__DEBUG_INFO] = previousResult
+      ? previousResult[RESULT_ENTRY__DEBUG_INFO]
+      : createDebugInfo();
+  }
+  return newResultEntry;
+};
+
+export { createResultEntry };

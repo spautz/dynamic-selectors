@@ -1,10 +1,10 @@
-import { DynamicSelectorFn, DynamicSelectorStateOptions } from '../types';
+import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateOptions } from '../types';
 
 export type DynamicSelectorDependencyEntry = [
-  /* selectorFn */
-  DynamicSelectorFn,
-  /* paramString */
-  string,
+  /* selectorFn OR a path in state */
+  DynamicSelectorFn | string | Array<string>,
+  /* params */
+  DynamicSelectorParams,
   /* returnValue */
   any,
 ];
@@ -13,6 +13,12 @@ export type DynamicSelectorDependencyEntry = [
 export const DEPENDENCY_ENTRY__SELECTOR_FN = 0;
 export const DEPENDENCY_ENTRY__PARAM_STRING = 1;
 export const DEPENDENCY_ENTRY__RETURN_VALUE = 2;
+
+const createDependencyEntry = (
+  selectorFnOrStatePath: DynamicSelectorFn | string | Array<string>,
+  params: DynamicSelectorParams,
+  returnValue: any,
+): DynamicSelectorDependencyEntry => [selectorFnOrStatePath, params, returnValue];
 
 export type DynamicSelectorCallStackEntry = [
   /* stateOptions (used to indicate the 'universe' this selector lives in) */
@@ -24,9 +30,9 @@ export type DynamicSelectorCallStackEntry = [
 ];
 
 // These keys just make the CallStackEntry code easier to read
-export const DEPENDENCY_ENTRY__STATE_OPTIONS = 0;
-export const DEPENDENCY_ENTRY__STATE = 1;
-export const DEPENDENCY_ENTRY__DEPENDENCIES = 2;
+export const CALL_STACK_ENTRY__STATE_OPTIONS = 0;
+export const CALL_STACK_ENTRY__STATE = 1;
+export const CALL_STACK_ENTRY__DEPENDENCIES = 2;
 
 /**
  * When any Dynamic Selector is run, its info is pushed onto this stack. Then, *other* Dynamic Selectors which get
@@ -35,7 +41,7 @@ export const DEPENDENCY_ENTRY__DEPENDENCIES = 2;
  */
 const callStack: Array<DynamicSelectorCallStackEntry> = [];
 
-const getTopCallStackEntry = () => callStack.length && callStack[callStack.length - 1];
+const getTopCallStackEntry = () => (callStack.length ? callStack[callStack.length - 1] : null);
 
 const pushCallStackEntry = (
   stateOptions: DynamicSelectorStateOptions,
@@ -49,4 +55,4 @@ const pushCallStackEntry = (
 
 const popCallStackEntry = callStack.pop.bind(callStack);
 
-export { getTopCallStackEntry, pushCallStackEntry, popCallStackEntry };
+export { createDependencyEntry, getTopCallStackEntry, pushCallStackEntry, popCallStackEntry };

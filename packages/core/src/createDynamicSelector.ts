@@ -9,7 +9,7 @@ import { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
  * Default cache
  */
 const createDefaultCache = (): DynamicSelectorResultCache => {
-  // @TODO: LimitedCache
+  // @TODO: use LimitedCache
   let resultCache: Record<string, DynamicSelectorResultEntry> = {};
 
   return {
@@ -28,7 +28,7 @@ const createDefaultCache = (): DynamicSelectorResultCache => {
  * Default options for a normal state:
  */
 const defaultSelectorOptions: DynamicSelectorOptions = {
-  compareResult: (oldReturnValue, newReturnValue) => oldReturnValue === newReturnValue,
+  compareResult: shallowEqual,
   getKeyForParams: JSON.stringify,
   onException: null,
   createResultCache: createDefaultCache,
@@ -38,13 +38,13 @@ const defaultSelectorOptions: DynamicSelectorOptions = {
  * Default options for a normal state: referential equality and reasonable default options.
  */
 const defaultStateOptions: DynamicSelectorStateOptions = {
-  compareState: shallowEqual,
+  compareState: (oldReturnValue, newReturnValue) => oldReturnValue === newReturnValue,
   get: lodashGet,
   defaultSelectorOptions,
 };
 
 /**
- * The default entry point for creating Dynamic Selectors: this uses reasonable defaults that work out of the box.
+ * The default createDynamicSelector: this uses reasonable defaults that work out of the box.
  */
 const createDynamicSelector = dynamicSelectorForState(defaultStateOptions);
 
