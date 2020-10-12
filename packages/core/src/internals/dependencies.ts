@@ -75,6 +75,7 @@ const hasAnyCallDependencyChanged = (
         dependencyReturnValue,
       ] = previousCallDependencies[i];
 
+      /* istanbul ignore next */
       if (false) {
         // This block is here ONLY to catch possible errors if the structure of `previousCallDependencies` changes
         const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] = dependencySelectorFn;
@@ -87,6 +88,7 @@ const hasAnyCallDependencyChanged = (
       const result = dependencySelectorFn._callDirect(state, dependencyParams, ...otherArgs);
       const [, , , , hasReturnValue, newReturnValue] = result;
 
+      /* istanbul ignore next */
       if (false) {
         // This block is here ONLY to catch possible errors if the structure of `result` changes
         const checkType_hasReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] = hasReturnValue;

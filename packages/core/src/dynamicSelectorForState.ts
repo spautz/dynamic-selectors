@@ -127,6 +127,7 @@ const dynamicSelectorForState = <StateType = any>(
           hasPreviousReturnValue,
         ] = previousResult;
 
+        /* istanbul ignore next */
         if (false) {
           // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
           const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] = previousState;
@@ -297,6 +298,19 @@ const dynamicSelectorForState = <StateType = any>(
       return null;
     };
 
+    // Common code for getCachedResult & hasCachedResult
+    const evaluateSelectorReadOnly = (
+      args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState,
+    ): DynamicSelectorResultEntry => {
+      const argsWithState = addStateToArguments(args);
+
+      pushCallStackEntry(false);
+      const result = evaluateSelector(...argsWithState);
+      popCallStackEntry();
+
+      return result;
+    };
+
     /**
      * This is just like the main outerFn, except it prohibits all selectors (this and its dependencies) from
      * re-executing.
@@ -304,11 +318,7 @@ const dynamicSelectorForState = <StateType = any>(
     outerFn.getCachedResult = ((
       ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
     ): ReturnType | undefined => {
-      const argsWithState = addStateToArguments(args);
-
-      pushCallStackEntry(false);
-      const result = evaluateSelector(...argsWithState);
-      popCallStackEntry();
+      const result = evaluateSelectorReadOnly(args);
 
       if (result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
         return result[RESULT_ENTRY__RETURN_VALUE];
@@ -319,12 +329,7 @@ const dynamicSelectorForState = <StateType = any>(
     outerFn.hasCachedResult = ((
       ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
     ): boolean => {
-      const argsWithState = addStateToArguments(args);
-
-      pushCallStackEntry(false);
-      const result = evaluateSelector(...argsWithState);
-      popCallStackEntry();
-
+      const result = evaluateSelectorReadOnly(args);
       return result[RESULT_ENTRY__HAS_RETURN_VALUE];
     }) as DynamicSelectorFn<boolean>;
 
