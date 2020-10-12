@@ -15,6 +15,7 @@ const createDefaultCache = (): DynamicSelectorResultCache => {
   return {
     has: (paramKey) => resultCache.hasOwnProperty(paramKey),
     get: (paramKey) => resultCache[paramKey],
+    getAll: () => resultCache,
     set: (paramKey, newEntry) => {
       resultCache[paramKey] = newEntry;
     },

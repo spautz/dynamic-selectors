@@ -18,12 +18,12 @@ Selectors with parameters and dynamic dependencies.
 
 ## What is this?
 
-A "selector" is a memoized function to compute derived data from state. [Reselect](https://github.com/reduxjs/reselect)
-is a popular selector library: their ["motivation" section](https://github.com/reduxjs/reselect#motivation-for-memoized-selectors)
-explains why you might want to use selectors.
+Selectors are memoized functions that transform data -- like computing a derived value from state -- which only re-run
+when their dependencies change. [Reselect](https://github.com/reduxjs/reselect) is a popular selector library: their
+["motivation" section](https://github.com/reduxjs/reselect#motivation-for-memoized-selectors) is a good introduction.
 
-**"Dynamic selectors" look and work more like plain functions.** There is no up-front registration to connect selectors
-together, you can pass arguments to them, and they work within `if` blocks and loops.
+_"Dynamic selectors" are built like plain functions._ There is no up-front registration to connect selectors
+together, you can pass arguments to them, and they can be called within `if` blocks and loops.
 
 This may be used with a state library like Redux, or on its own as a general memoization util.
 
@@ -44,13 +44,13 @@ This may be used with a state library like Redux, or on its own as a general mem
 
   <dt>Equality comparisons</dt>
   <dd>
-    Like the [`useSelector` hook](https://react-redux.js.org/api/hooks#equality-comparisons-and-updates), you can
-    specify your own comparison function to 'freeze' updates. This may be set per-selector.
+    Like the <a href="https://react-redux.js.org/api/hooks#equality-comparisons-and-updates"><code>useSelector</code>
+    hook</a>, you can specify your own comparison function to 'freeze' updates. This may be customized for each selector.
   </dd>
 
   <dt>Compatible with Reselect and Re-reselect</dt>
   <dd>
     You can call other libraries' selectors from within dynamic selectors, and dynamic selectors can be used as
-    dependencies with other libraries. (<code>@TODO</code>. This will be the `@dynamic-selectors/with-reselect` package.)
+    dependencies with other libraries. (@TODO: This will be the <code>@dynamic-selectors/with-reselect</code> package.)
   </dd>
 </dl>

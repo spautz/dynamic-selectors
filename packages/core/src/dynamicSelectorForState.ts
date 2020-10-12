@@ -1,107 +1,68 @@
 import {
+  RESULT_ENTRY__STATE_OPTIONS,
+  RESULT_ENTRY__STATE,
+  RESULT_ENTRY__STATE_DEPENDENCIES,
+  RESULT_ENTRY__CALL_DEPENDENCIES,
+  RESULT_ENTRY__HAS_RETURN_VALUE,
+  RESULT_ENTRY__RETURN_VALUE,
+  RESULT_ENTRY__ERROR,
+  RESULT_ENTRY__DEBUG_INFO,
+  DynamicSelectorDebugInfo,
+  DynamicSelectorResultCache,
+  DynamicSelectorResultEntry,
+  createCallDependency,
+  createResultEntry,
+  debugAbortedRun,
+  debugDepCheck,
+  debugFullRun,
+  debugInvoked,
+  debugPhantomRun,
+  debugSkippedRun,
+  getTopCallStackEntry,
+  hasAnyCallDependencyChanged,
+  hasAnyStateDependencyChanged,
+  popCallStackEntry,
+  pushCallStackEntry,
+  getTopCallStackEntryWithState,
+  isFullEntry,
+} from './internals';
+import {
   DynamicSelectorArgsWithoutState,
   DynamicSelectorArgsWithState,
   DynamicSelectorFn,
   DynamicSelectorInnerFn,
   DynamicSelectorOptions,
   DynamicSelectorParams,
+  DynamicSelectorStateAccessor,
   DynamicSelectorStateOptions,
 } from './types';
-
-import {
-  CALL_STACK_ENTRY__DEPENDENCIES,
-  CALL_STACK_ENTRY__STATE,
-  CALL_STACK_ENTRY__STATE_OPTIONS,
-  RESULT_ENTRY__DEBUG_INFO,
-  RESULT_ENTRY__ERROR,
-  RESULT_ENTRY__HAS_RETURN_VALUE,
-  RESULT_ENTRY__RETURN_VALUE,
-  RESULT_ENTRY__STATE,
-  DynamicSelectorDebugInfo,
-  DynamicSelectorDependencyEntry,
-  DynamicSelectorResultCache,
-  DynamicSelectorResultEntry,
-  createDependencyEntry,
-  createResultEntry,
-  debugAbortedRun,
-  debugFullRun,
-  debugInvoked,
-  debugPhantomRun,
-  debugSkippedRun,
-  getTopCallStackEntry,
-  popCallStackEntry,
-  pushCallStackEntry,
-} from './internals';
 
 const dynamicSelectorForState = <StateType = any>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
 ) => {
   const { compareState, get, defaultSelectorOptions } = stateOptions;
 
-  console.log('dynamicSelectorForState()', stateOptions);
-
-  const hasAnyDependencyChanged = (
-    state: StateType,
-    previousDependencies: Array<DynamicSelectorDependencyEntry>,
-    otherArgs: Array<any>,
-  ): boolean => {
-    const dependencyListLength = previousDependencies.length;
-    for (let i = 0; i < dependencyListLength; i += 1) {
-      const [
-        dependencySelectorOrStatePath,
-        dependencyParams,
-        dependencyReturnValue,
-      ] = previousDependencies[i];
-
-      if (
-        typeof dependencySelectorOrStatePath === 'string' ||
-        Array.isArray(dependencySelectorOrStatePath)
-      ) {
-        // There's some direct state access: if the accessed value in state is new, we need to know
-        const [path, previousStateValue] = dependencySelectorOrStatePath;
-        const currentStateValue = get(state, path);
-        if (currentStateValue !== previousStateValue) {
-          return true;
-        }
-      } else {
-        // Does our dependency have anything new? Let's run it to find out.
-        const result = dependencySelectorOrStatePath._runWithState(
-          state,
-          dependencyParams,
-          ...otherArgs,
-        );
-        const [, , hasReturnValue, newReturnValue] = result;
-
-        if (hasReturnValue && newReturnValue !== dependencyReturnValue) {
-          // Something returned a new value: that's a real chance
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
   /**
    * If the selector is called from within another selector, in the same 'universe' (stateOptions), then we need
-   * to
+   * to prepend `state` to its arguments.
    *
    * Most of the 'public' entry points can be called from either a "with state" context or a "without state"
    * context. We use this to avoid doubling the argument-massaging logic in each of them.
    */
-  const getFullArguments = (
+  const addStateToArguments = (
     args: DynamicSelectorArgsWithState<StateType> | DynamicSelectorArgsWithoutState,
   ): DynamicSelectorArgsWithState<StateType> => {
-    const parentCaller = getTopCallStackEntry();
+    const parentCaller = getTopCallStackEntryWithState();
 
     if (parentCaller) {
-      if (parentCaller[CALL_STACK_ENTRY__STATE_OPTIONS] !== stateOptions) {
+      if (parentCaller[RESULT_ENTRY__STATE_OPTIONS] !== stateOptions) {
         // @TODO: Better error message/explanation, and add a way to mute it
         console.error(
           'A selector for one state is being called from a selector for a different state: this is probably a bug',
         );
         return args as DynamicSelectorArgsWithState;
       }
-      const state = parentCaller[CALL_STACK_ENTRY__STATE];
+      const state = parentCaller[RESULT_ENTRY__STATE];
       return [state, ...args] as DynamicSelectorArgsWithState;
     }
 
@@ -117,11 +78,9 @@ const dynamicSelectorForState = <StateType = any>(
       ? { ...defaultSelectorOptions, ...options }
       : defaultSelectorOptions;
 
-    console.log('createDynamicSelector()', options);
-
     const resultCache: DynamicSelectorResultCache = createResultCache();
 
-    let dynamicSelectorFn: DynamicSelectorFn;
+    let outerFn: DynamicSelectorFn;
 
     ///////////////////////////////////////////////////////////////////////////
     // The main algorithm
@@ -136,119 +95,176 @@ const dynamicSelectorForState = <StateType = any>(
     ): DynamicSelectorResultEntry => {
       const paramKey = getKeyForParams(params);
       const previousResult = resultCache.get(paramKey);
-      let thisResult: DynamicSelectorResultEntry = createResultEntry(state, previousResult);
+      let nextResult: DynamicSelectorResultEntry = createResultEntry(
+        stateOptions,
+        state,
+        previousResult,
+      );
       const parentCaller = getTopCallStackEntry();
 
-      const debugInfo = thisResult[RESULT_ENTRY__DEBUG_INFO];
+      const allowExecution = parentCaller !== false;
+      // When called as part of the call-dependency-check of another selector, we only log a depCheck instead of
+      // a full invoke and result
+      let debugInfo: DynamicSelectorDebugInfo = null;
 
-      debugInvoked(debugInfo);
+      if (process.env.NODE_ENV !== 'production') {
+        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
+        if (isFullEntry(parentCaller)) {
+          debugInvoked(debugInfo);
+        } else {
+          debugDepCheck(nextResult[RESULT_ENTRY__DEBUG_INFO]);
+        }
+      }
 
       // Do we have a prior result we can use?
       let canUsePreviousResult = false;
       if (previousResult) {
-        const [previousState, previousDependencies, hasPreviousReturnValue] = previousResult;
+        const [
+          ,
+          previousState,
+          previousStateDependencies,
+          previousCallDependencies,
+          hasPreviousReturnValue,
+        ] = previousResult;
+
+        if (false) {
+          // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
+          const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] = previousState;
+          const checkType_previousStateDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE_DEPENDENCIES] = previousStateDependencies;
+          const checkType_previousCallDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__CALL_DEPENDENCIES] = previousCallDependencies;
+          const checkType_hasPreviousReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] = hasPreviousReturnValue;
+          console.log({
+            checkType_previousState,
+            checkType_previousStateDependencies,
+            checkType_previousCallDependencies,
+            checkType_hasPreviousReturnValue,
+          });
+        }
 
         if (hasPreviousReturnValue) {
-          if (state && previousState && compareState && compareState(previousState, state)) {
+          if (compareState && compareState(previousState, state)) {
             // We've already run with these params and this state
             canUsePreviousResult = true;
           } else {
             // Have any of our dependencies changed?
-            pushCallStackEntry(stateOptions, state);
-            canUsePreviousResult = !hasAnyDependencyChanged(state, previousDependencies, otherArgs);
-            popCallStackEntry();
-          }
-
-          if (canUsePreviousResult) {
-            // The cache is good!
-            debugSkippedRun(debugInfo);
-            // Mutate the previous result to apply the current state. This may help memory usage and
-            // future checks.
-            previousResult[RESULT_ENTRY__STATE] = state;
-            // We still need to register this selectorFn as a dependency of the parent (if any)
-            if (parentCaller) {
-              const dependencyEntry = createDependencyEntry(
-                dynamicSelectorFn,
-                params,
-                previousResult[RESULT_ENTRY__RETURN_VALUE],
+            canUsePreviousResult =
+              !hasAnyStateDependencyChanged(get, state, previousStateDependencies) &&
+              !hasAnyCallDependencyChanged(
+                state,
+                previousCallDependencies,
+                allowExecution,
+                otherArgs,
               );
-              parentCaller[CALL_STACK_ENTRY__DEPENDENCIES].push(dependencyEntry);
-            }
-            return previousResult;
           }
         }
       }
 
-      // If we reach this point, the previousResult could not be used: we MUST run
-      const getState = (path: string | Array<string>, defaultValue: any) => {
-        const stateValue = get(state, path, defaultValue);
+      // This is the block where we decide what the overall result was: skipped, phantom, full, or aborted
+      if (canUsePreviousResult && previousResult) {
+        debugSkippedRun(debugInfo);
+        // Mutate the previous result to apply the current state. This may help memory usage and future checks.
+        previousResult[RESULT_ENTRY__STATE] = state;
+        // And just discard our 'new' result because we don't need it
+        nextResult = previousResult;
+      } else if (allowExecution) {
+        // If we reach this point, the previousResult could not be used: we MUST run
 
-        // Mark this dependency on ourselves
-        const thisCallStackEntry = getTopCallStackEntry()!;
+        // Any calls to getState while run will register a state dependency on ourselves / our result
+        const getState: DynamicSelectorStateAccessor = (path, defaultValue) => {
+          let stateValue;
+          if (path) {
+            stateValue = get(state, path, defaultValue);
+          } else {
+            stateValue = state;
+          }
+          nextResult[RESULT_ENTRY__STATE_DEPENDENCIES][path || ''] = stateValue;
+          return stateValue;
+        };
 
-        const dependencyEntry = createDependencyEntry(path, params, stateValue);
-        thisCallStackEntry[CALL_STACK_ENTRY__DEPENDENCIES].push(dependencyEntry);
+        // Any calls to other selectors will register a call dependency on ourselves / our result
+        pushCallStackEntry(nextResult);
+        try {
+          nextResult[RESULT_ENTRY__RETURN_VALUE] = innerFn(getState, params, ...otherArgs);
+          nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] = true;
+        } catch (e) {
+          nextResult[RESULT_ENTRY__ERROR] = e;
 
-        return stateValue;
-      };
-
-      let newReturnValue: any;
-      try {
-        newReturnValue = innerFn(getState, params, ...otherArgs);
-      } catch (e) {
-        debugAbortedRun(debugInfo);
-
-        // @TODO: Mark results
-
-        if (onException) {
-          newReturnValue = onException(e, [state, params, ...otherArgs], dynamicSelectorFn);
-        } else {
-          thisResult[RESULT_ENTRY__ERROR] = e;
+          if (onException) {
+            // If the onException callback returns anything, we'll use that as the return value -- but we still
+            // track the error.
+            nextResult[RESULT_ENTRY__RETURN_VALUE] = onException(
+              e,
+              [state, params, ...otherArgs],
+              outerFn,
+            );
+            // If a value wasn't returned, make sure we don't reuse it for future cache checks
+            nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] =
+              nextResult[RESULT_ENTRY__RETURN_VALUE] !== undefined;
+          }
         }
-      }
+        popCallStackEntry();
 
-      if (!thisResult[RESULT_ENTRY__ERROR]) {
-        // Did the return value *really* change?
-        if (
+        // We were able to run without error -- but is our "new" result actually new?
+        if (!nextResult[RESULT_ENTRY__HAS_RETURN_VALUE]) {
+          debugAbortedRun(debugInfo);
+        } else if (
+          compareResult &&
           previousResult &&
           previousResult[RESULT_ENTRY__HAS_RETURN_VALUE] &&
-          compareResult(previousResult[RESULT_ENTRY__RETURN_VALUE], newReturnValue)
+          nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] &&
+          compareResult(
+            previousResult[RESULT_ENTRY__RETURN_VALUE],
+            nextResult[RESULT_ENTRY__RETURN_VALUE],
+          )
         ) {
-          // It's not actually different: just use the old one (phantom run: return value is not changed)
+          canUsePreviousResult = true;
           debugPhantomRun(debugInfo);
-          thisResult = previousResult!;
-          thisResult[RESULT_ENTRY__STATE] = state;
+          // Carry over the *exact* return value we had before
+          nextResult[RESULT_ENTRY__RETURN_VALUE] = previousResult[RESULT_ENTRY__RETURN_VALUE];
         } else {
-          // It *is* different: we truly re-ran and generated a new value
           debugFullRun(debugInfo);
-          thisResult[RESULT_ENTRY__HAS_RETURN_VALUE] = true;
-          thisResult[RESULT_ENTRY__RETURN_VALUE] = newReturnValue;
         }
       }
+      // Else: we needed to run, but we're in a read-only depCheck. Oh well.
 
-      resultCache.set(paramKey, thisResult);
-      return thisResult;
+      // At this point we're done with *this* selector: nextResult has everything we need, and debugInfo has been logged.
+
+      // We still need to register this selectorFn as a dependency of the parent (if any)
+      if (isFullEntry(parentCaller)) {
+        parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
+          createCallDependency(outerFn, params, nextResult[RESULT_ENTRY__RETURN_VALUE]),
+        );
+      }
+
+      resultCache.set(paramKey, nextResult);
+      return nextResult;
     };
 
     /*
      * This is the 'public' selector function. You can call it like normal and it behaves like a normal function;
-     * it's just a straightforward wrapper around evaluateParameterizedSelector for handling the common case.
+     * it's just a straightforward wrapper around evaluateSelector for handling the common case.
      */
-    dynamicSelectorFn = ((
+    outerFn = ((
       ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
     ): ReturnType => {
       const isNewStart = !getTopCallStackEntry();
-      const argsWithState = getFullArguments(args);
+      const argsWithState = addStateToArguments(args);
 
       if (isNewStart) {
-        pushCallStackEntry(stateOptions, argsWithState[0]);
+        // This makes the rest of the code much simpler: put a fake entry onto the call stack.
+        // That way, the selectorFn does not know whether or not it's the root, and we don't need to wrap all its
+        // stack-related and dependency-related work in if/else blocks.
+        const rootResult = createResultEntry(stateOptions, argsWithState[0]);
+        pushCallStackEntry(rootResult);
       }
       const result = evaluateSelector(...argsWithState);
       if (isNewStart) {
         popCallStackEntry();
       }
 
-      if (result[RESULT_ENTRY__ERROR]) {
+      // It's okay to have *both* an error *and* a return value (although that's rare: it only happens if onException
+      // returned a value)
+      if (!result[RESULT_ENTRY__HAS_RETURN_VALUE] && result[RESULT_ENTRY__ERROR]) {
         throw result[RESULT_ENTRY__ERROR];
       }
       return result[RESULT_ENTRY__RETURN_VALUE];
@@ -262,32 +278,67 @@ const dynamicSelectorForState = <StateType = any>(
      * This lets selectors bypass the wrappers internally, when appropriate. It shouldn't be called from outside of
      * this file, except in tests.
      */
-    dynamicSelectorFn._runWithState = evaluateSelector;
+    outerFn._callDirect = evaluateSelector;
 
     /**
+     * DO NOT USE THIS.
      * This is only for debugging purposes
      */
-    dynamicSelectorFn._innerFn = innerFn;
+    outerFn._innerFn = innerFn;
 
-    dynamicSelectorFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
-      const paramKey = getKeyForParams(params);
-      const resultEntry = resultCache.get(paramKey);
-      if (resultEntry) {
-        return resultEntry[RESULT_ENTRY__DEBUG_INFO];
+    outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
+      if (process.env.NODE_ENV !== 'production') {
+        const paramKey = getKeyForParams(params);
+        const resultEntry = resultCache.get(paramKey);
+        if (resultEntry) {
+          return resultEntry[RESULT_ENTRY__DEBUG_INFO];
+        }
       }
       return null;
     };
 
-    dynamicSelectorFn.hasCachedResult = (/* params: DynamicSelectorParams */) => {
-      // @TODO
-      return false;
-    };
+    /**
+     * This is just like the main outerFn, except it prohibits all selectors (this and its dependencies) from
+     * re-executing.
+     */
+    outerFn.getCachedResult = ((
+      ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
+    ): ReturnType | undefined => {
+      const argsWithState = addStateToArguments(args);
 
-    dynamicSelectorFn.isParameterizedSelector = true;
+      pushCallStackEntry(false);
+      const result = evaluateSelector(...argsWithState);
+      popCallStackEntry();
 
-    dynamicSelectorFn.displayName = displayName || innerFn.displayName || innerFn.name;
+      if (result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
+        return result[RESULT_ENTRY__RETURN_VALUE];
+      }
+      return;
+    }) as DynamicSelectorFn<ReturnType | undefined>;
 
-    return dynamicSelectorFn;
+    outerFn.hasCachedResult = ((
+      ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
+    ): boolean => {
+      const argsWithState = addStateToArguments(args);
+
+      pushCallStackEntry(false);
+      const result = evaluateSelector(...argsWithState);
+      popCallStackEntry();
+
+      return result[RESULT_ENTRY__HAS_RETURN_VALUE];
+    }) as DynamicSelectorFn<boolean>;
+
+    /**
+     * DO NOT USE THIS.
+     * This is only for debugging purposes
+     */
+    outerFn._resultCache = resultCache;
+
+    outerFn.isDynamicSelector = true;
+
+    outerFn.displayName = displayName || innerFn.displayName || innerFn.name;
+
+    return outerFn;
   };
 
   return createDynamicSelector;

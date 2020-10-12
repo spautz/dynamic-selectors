@@ -1,41 +1,67 @@
-import { DynamicSelectorDependencyEntry } from './callStack';
 import { createDebugInfo, DynamicSelectorDebugInfo } from './debugInfo';
+import { DynamicSelectorCallDependencies, DynamicSelectorStateDependencies } from './dependencies';
+import { DynamicSelectorStateOptions } from '../types';
 
+/**
+ * This is where things happen: this tracks everything about a single Dynamic Selector call: what was called,
+ * what arguments and params were used, what state and call dependenies it accessed, and what the result was.
+ *
+ * Depending on whether it's active (in the CallStack) or finished (in the resultCache) these values will either
+ * represent the current state or the previous state from when it ran. Only debugInfo persists forever.
+ */
 export type DynamicSelectorResultEntry = [
-  /* lastState */
+  /* stateOptions (used to indicate the 'universe' this selector lives in) */
+  DynamicSelectorStateOptions,
+  /* state/lastState */
   any,
-  /* lastDependencies */
-  Array<DynamicSelectorDependencyEntry>,
-  /* hasLastReturnValue */
+  /* stateDependencies/lastStateDependencies */
+  DynamicSelectorStateDependencies,
+  /* callDependencies/lastCallDependencies */
+  DynamicSelectorCallDependencies,
+  /* hasReturnValue/hasLastReturnValue */
   boolean,
-  /* lastReturnValue */
+  /* returnValue/lastReturnValue */
   any,
-  /* lastError thrown by innerFn */
+  /* error/lastError thrown by innerFn */
   Error | null,
   /* debugInfo */
   DynamicSelectorDebugInfo,
 ];
 
 // These keys just make the ResultEntry code easier to read
-export const RESULT_ENTRY__STATE = 0;
-export const RESULT_ENTRY__DEPENDENCIES = 1;
-export const RESULT_ENTRY__HAS_RETURN_VALUE = 2;
-export const RESULT_ENTRY__RETURN_VALUE = 3;
-export const RESULT_ENTRY__ERROR = 4;
-export const RESULT_ENTRY__DEBUG_INFO = 5;
+export const RESULT_ENTRY__STATE_OPTIONS = 0 as const;
+export const RESULT_ENTRY__STATE = 1 as const;
+export const RESULT_ENTRY__STATE_DEPENDENCIES = 2 as const;
+export const RESULT_ENTRY__CALL_DEPENDENCIES = 3 as const;
+export const RESULT_ENTRY__HAS_RETURN_VALUE = 4 as const;
+export const RESULT_ENTRY__RETURN_VALUE = 5 as const;
+export const RESULT_ENTRY__ERROR = 6 as const;
+export const RESULT_ENTRY__DEBUG_INFO = 7 as const;
 
 export type DynamicSelectorResultCache = {
   has: (paramKey: string) => boolean;
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  reset: () => void;
+  getAll?: () => Record<string, DynamicSelectorResultEntry>;
+  reset?: () => void;
+  [propName: string]: any;
 };
 
 const createResultEntry = (
+  stateOptions: DynamicSelectorStateOptions,
   state: any,
   previousResult?: DynamicSelectorResultEntry,
 ): DynamicSelectorResultEntry => {
-  const newResultEntry: DynamicSelectorResultEntry = [state, [], false, undefined, null, null];
+  const newResultEntry: DynamicSelectorResultEntry = [
+    stateOptions,
+    state,
+    [],
+    [],
+    false,
+    undefined,
+    null,
+    null,
+  ];
 
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = previousResult
