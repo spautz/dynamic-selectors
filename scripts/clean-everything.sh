@@ -44,6 +44,7 @@ run_command "rm -rf
   coverage/
   node_modules/
   storybook-static/
+  lerna-debug.log*
   npm-debug.log*
   yarn-debug.log*
   yarn-error.log*
@@ -53,6 +54,7 @@ run_command "rm -rf
   packages/*/coverage-local
   packages/*/dist
   packages/*/node_modules
+  packages/*/lerna-debug.log*
   packages/*/npm-debug.log*
   packages/*/yarn-debug.log*
   packages/*/yarn-error.log*
