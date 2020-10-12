@@ -1,5 +1,6 @@
 // Because this is ONLY used in dev mode, it's stored as a normal object instead of an array
 export type DynamicSelectorDebugInfo = {
+  depCheckCount: number;
   invokeCount: number;
   skippedRunCount: number;
   phantomRunCount: number;
@@ -10,6 +11,7 @@ export type DynamicSelectorDebugInfo = {
 const createDebugInfo = (): DynamicSelectorDebugInfo => {
   if (process.env.NODE_ENV !== 'production') {
     return {
+      depCheckCount: 0,
       invokeCount: 0,
       skippedRunCount: 0,
       phantomRunCount: 0,
@@ -18,6 +20,12 @@ const createDebugInfo = (): DynamicSelectorDebugInfo => {
     };
   }
   return null;
+};
+
+const debugDepCheck = (debugInfo: DynamicSelectorDebugInfo) => {
+  if (process.env.NODE_ENV !== 'production' && debugInfo) {
+    debugInfo.depCheckCount++;
+  }
 };
 
 const debugInvoked = (debugInfo: DynamicSelectorDebugInfo) => {
@@ -52,6 +60,7 @@ const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo) => {
 
 export {
   createDebugInfo,
+  debugDepCheck,
   debugInvoked,
   debugSkippedRun,
   debugPhantomRun,

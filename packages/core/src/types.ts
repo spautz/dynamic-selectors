@@ -2,6 +2,12 @@ import { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internal
 
 type AnyPrimitive = boolean | number | string | null | undefined;
 
+export type DynamicSelectorStateGetFn<StateType = any, ReturnType = any> = (
+  state: StateType,
+  path: string | null,
+  defaultValue?: ReturnType,
+) => ReturnType;
+
 /**
  * Options for how to interact with the state.
  *
@@ -12,7 +18,7 @@ export type DynamicSelectorStateOptions<StateType = any> = {
   /* State equality checking: if this returns true then the states will be considered the same */
   compareState: (oldState: StateType, newState: StateType) => boolean;
   /* Accessor to retrieve a value from the state */
-  get: (state: StateType, path: string | Array<string>, defaultValue?: any) => any;
+  get: DynamicSelectorStateGetFn<StateType>;
   /* The base options that will be assigned to each selector (unless overridden when creating the selector) */
   defaultSelectorOptions: DynamicSelectorOptions;
 };
@@ -28,12 +34,12 @@ export type DynamicSelectorOptions<ReturnType = any, StateType = any> = {
   /* Sets the function's displayName */
   displayName?: string;
   /* Generates a unique ID for the selector's params */
-  getKeyForParams: (params: DynamicSelectorParams) => string;
+  getKeyForParams: (params?: DynamicSelectorParams) => string;
   /* Called if the selector function throws an exception */
   onException:
     | ((
         error: Error,
-        args: [StateType, DynamicSelectorParams, ...Array<any>],
+        args: DynamicSelectorArgsWithState<StateType>,
         selectorFn: DynamicSelectorFn,
       ) => void)
     | null;
@@ -52,7 +58,7 @@ export type DynamicSelectorParams =
  * The `getState` function that's available within each Dynamic Selector.
  */
 export type DynamicSelectorStateAccessor<ReturnType = any> = (
-  path: string | Array<string>,
+  path: string | null,
   defaultValue?: ReturnType,
 ) => ReturnType;
 
@@ -61,7 +67,7 @@ export type DynamicSelectorStateAccessor<ReturnType = any> = (
  */
 export type DynamicSelectorInnerFn<ReturnType = any> = ((
   stateAccessor: DynamicSelectorStateAccessor,
-  params: DynamicSelectorParams,
+  params?: DynamicSelectorParams | any,
   ...extraArgs: Array<any>
 ) => ReturnType) & {
   displayName?: string;
@@ -69,10 +75,10 @@ export type DynamicSelectorInnerFn<ReturnType = any> = ((
 
 export type DynamicSelectorArgsWithState<StateType = any> = [
   StateType,
-  DynamicSelectorParams,
+  DynamicSelectorParams?,
   ...Array<any>
 ];
-export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams, ...Array<any>];
+export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams?, ...Array<any>];
 
 export type DynamicSelectorFnWithState<ReturnType = any> = (
   ...args: DynamicSelectorArgsWithState
@@ -89,9 +95,11 @@ export type DynamicSelectorFn<ReturnType = any> = ((
   ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
 ) => ReturnType) & {
   _innerFn: DynamicSelectorInnerFn<ReturnType>;
-  _runWithState: DynamicSelectorFnWithState<ReturnType>;
+  _callDirect: DynamicSelectorFnWithState<ReturnType>;
+  _resultCache: DynamicSelectorResultCache;
   displayName: string;
-  getDebugInfo: (params: DynamicSelectorParams) => DynamicSelectorDebugInfo;
-  hasCachedResult: (params: DynamicSelectorParams) => boolean;
-  isParameterizedSelector: true;
+  getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
+  getCachedResult: DynamicSelectorFn<ReturnType>;
+  hasCachedResult: DynamicSelectorFn<boolean>;
+  isDynamicSelector: true;
 };
