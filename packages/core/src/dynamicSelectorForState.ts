@@ -25,7 +25,6 @@ import {
   pushCallStackEntry,
   getTopCallStackEntryWithState,
   isFullEntry,
-  createDebugInfo,
 } from './internals';
 import {
   DynamicSelectorArgsWithoutState,
@@ -112,7 +111,7 @@ const dynamicSelectorForState = <StateType = any>(
         debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
         if (isFullEntry(parentCaller)) {
           debugInvoked(debugInfo);
-        } else if (allowExecution) {
+        } else {
           debugDepCheck(nextResult[RESULT_ENTRY__DEBUG_INFO]);
         }
       }
@@ -294,7 +293,6 @@ const dynamicSelectorForState = <StateType = any>(
         if (resultEntry) {
           return resultEntry[RESULT_ENTRY__DEBUG_INFO];
         }
-        return createDebugInfo();
       }
       return null;
     };

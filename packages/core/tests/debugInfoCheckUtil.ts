@@ -10,6 +10,7 @@ import {
 } from '../src/internals';
 import { DynamicSelectorFn, DynamicSelectorParams } from '../src';
 
+type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
 
 /**
@@ -28,14 +29,16 @@ class DebugInfoCheckUtil {
     this._defaultParams = defaultParams;
   }
 
+  // User- and Test-friendly API
+
   expectDepChecked(
     result: ExpectedDebugInfoResultType,
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    debugDepCheck(this._expectedDebugInfo);
+    this._logExpectedEntry('depCheck');
     this._logExpectedResult(result);
-    this._checkExpect(selector, params);
+    this._checkLogs(selector, params);
   }
 
   expectInvoked(
@@ -43,37 +46,57 @@ class DebugInfoCheckUtil {
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    debugInvoked(this._expectedDebugInfo);
+    this._logExpectedEntry('invoked');
     this._logExpectedResult(result);
-    this._checkExpect(selector, params);
+    this._checkLogs(selector, params);
   }
 
-  expectDepCheckAndInvoked(
-    depCheckResult: ExpectedDebugInfoResultType,
-    invokeResult: ExpectedDebugInfoResultType,
+  expectMultiple(
+    results: Array<[ExpectedDebugInfoEntryType, ExpectedDebugInfoResultType]>,
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    debugDepCheck(this._expectedDebugInfo);
-    this._logExpectedResult(depCheckResult);
-    debugInvoked(this._expectedDebugInfo);
-    this._logExpectedResult(invokeResult);
-    this._checkExpect(selector, params);
+    results.forEach(([entry, result]) => {
+      this._logExpectedEntry(entry);
+      this._logExpectedResult(result);
+    });
+    this._checkLogs(selector, params);
   }
 
-  // This is ONLY syntactic sugar to make the tests read nicer
   expectUntouched(
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    return this._checkExpect(selector, params);
+    if (this._expectedDebugInfo!.invokeCount) {
+      return this._checkLogs(selector, params);
+    }
+    // If it's never been invoked, there should be nothing at all
+    expect(selector.getDebugInfo(params)).toEqual(null);
   }
 
-  _checkExpect(
+  // Lower-level API
+
+  _checkLogs(
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     expect(selector.getDebugInfo(params)).toEqual(this._expectedDebugInfo);
+  }
+
+  _logExpectedEntry(entry: ExpectedDebugInfoEntryType) {
+    switch (entry) {
+      case 'depCheck': {
+        debugDepCheck(this._expectedDebugInfo);
+        break;
+      }
+      case 'invoked': {
+        debugInvoked(this._expectedDebugInfo);
+        break;
+      }
+      default: {
+        throw new Error(`Invalid expectedEntry: ${entry}`);
+      }
+    }
   }
 
   _logExpectedResult(result: ExpectedDebugInfoResultType) {

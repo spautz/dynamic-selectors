@@ -42,7 +42,9 @@ export type DynamicSelectorResultCache = {
   has: (paramKey: string) => boolean;
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  reset: () => void;
+  getAll?: () => Record<string, DynamicSelectorResultEntry>;
+  reset?: () => void;
+  [propName: string]: any;
 };
 
 const createResultEntry = (
