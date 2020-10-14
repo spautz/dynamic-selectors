@@ -253,7 +253,12 @@ const dynamicSelectorForState = <StateType = any>(
       // We still need to register this selectorFn as a dependency of the parent (if any).
       if (recordDependencies) {
         parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
-          createCallDependency(outerFn, params, nextResult[RESULT_ENTRY__RETURN_VALUE]),
+          createCallDependency(
+            outerFn,
+            params,
+            nextResult[RESULT_ENTRY__RETURN_VALUE],
+            !allowExecution,
+          ),
         );
       }
 
@@ -298,8 +303,10 @@ const dynamicSelectorForState = <StateType = any>(
      * DO NOT USE THIS.
      * This lets selectors bypass the wrappers internally, when appropriate. It shouldn't be called from outside of
      * this file, except in tests.
+     *
+     * "dc" = "DepCheck"
      */
-    outerFn._callDirect = evaluateSelector;
+    outerFn._dc = evaluateSelector;
 
     /**
      * DO NOT USE THIS.
@@ -322,21 +329,24 @@ const dynamicSelectorForState = <StateType = any>(
     const evaluateSelectorReadOnly = (
       args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState,
     ): DynamicSelectorResultEntry => {
-      const parentCaller = getTopCallStackEntry();
       const argsWithState = addStateToArguments(args);
-
       const rootResult = createResultEntry(stateOptions, argsWithState[0], false, false);
-      if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
-        // If our parent is checking our cache result, record our dependencies onto the parent instead
-        rootResult[RESULT_ENTRY__RECORD_DEPENDENCIES] = true;
-        rootResult[RESULT_ENTRY__STATE_DEPENDENCIES] =
-          parentCaller[RESULT_ENTRY__STATE_DEPENDENCIES];
-        rootResult[RESULT_ENTRY__CALL_DEPENDENCIES] = parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES];
-      }
 
       pushCallStackEntry(rootResult);
       const result = evaluateSelector(...argsWithState);
       popCallStackEntry();
+
+      const parentCaller = getTopCallStackEntry();
+      if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
+        parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
+          createCallDependency(
+            outerFn,
+            argsWithState[1],
+            result[RESULT_ENTRY__RETURN_VALUE],
+            false,
+          ),
+        );
+      }
 
       return result;
     };

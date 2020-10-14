@@ -97,7 +97,7 @@ export type DynamicSelectorFn<ReturnType = any> = ((
   ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
 ) => ReturnType) & {
   _innerFn: DynamicSelectorInnerFn<ReturnType>;
-  _callDirect: DynamicSelectorFnWithState<ReturnType>;
+  _dc: DynamicSelectorFnWithState<ReturnType>;
   _resultCache: DynamicSelectorResultCache;
   displayName: string;
   getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
