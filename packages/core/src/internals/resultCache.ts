@@ -1,7 +1,7 @@
+import { getTopCallStackEntry } from './callStack';
 import { createDebugInfo, DynamicSelectorDebugInfo } from './debugInfo';
 import { DynamicSelectorCallDependencies, DynamicSelectorStateDependencies } from './dependencies';
 import { DynamicSelectorStateOptions } from '../types';
-import { getTopCallStackEntry } from './callStack';
 
 /**
  * This is where things happen: this tracks everything about a single Dynamic Selector call: what was called,
@@ -46,11 +46,11 @@ export const RESULT_ENTRY__ERROR = 8 as const;
 export const RESULT_ENTRY__DEBUG_INFO = 9 as const;
 
 export type DynamicSelectorResultCache = {
-  has: (paramKey: string) => boolean;
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  getAll?: () => Record<string, DynamicSelectorResultEntry>;
-  reset?: () => void;
+  // getAll?: () => Record<string, DynamicSelectorResultEntry>;
+  // has?: (paramKey: string) => boolean;
+  // reset?: () => void;
   [propName: string]: any;
 };
 

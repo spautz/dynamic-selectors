@@ -13,14 +13,10 @@ const createDefaultCache = (): DynamicSelectorResultCache => {
   let resultCache: Record<string, DynamicSelectorResultEntry> = {};
 
   return {
-    has: (paramKey) => resultCache.hasOwnProperty(paramKey),
     get: (paramKey) => resultCache[paramKey],
     getAll: () => resultCache,
     set: (paramKey, newEntry) => {
       resultCache[paramKey] = newEntry;
-    },
-    reset: () => {
-      resultCache = {};
     },
   };
 };

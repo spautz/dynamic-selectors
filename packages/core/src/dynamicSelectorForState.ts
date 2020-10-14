@@ -83,7 +83,7 @@ const dynamicSelectorForState = <StateType = any>(
       onError,
     } = options ? { ...defaultSelectorOptions, ...options } : defaultSelectorOptions;
 
-    const resultCache: DynamicSelectorResultCache = createResultCache();
+    let resultCache: DynamicSelectorResultCache = createResultCache();
 
     let outerFn: DynamicSelectorFn;
 
@@ -313,7 +313,7 @@ const dynamicSelectorForState = <StateType = any>(
      * DO NOT USE THIS.
      * This is only for debugging purposes
      */
-    outerFn._innerFn = innerFn;
+    outerFn._fn = innerFn;
 
     outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
       if (process.env.NODE_ENV !== 'production') {
@@ -374,11 +374,22 @@ const dynamicSelectorForState = <StateType = any>(
       return result[RESULT_ENTRY__HAS_RETURN_VALUE];
     }) as DynamicSelectorFn<boolean>;
 
+    outerFn.resetCache = () => {
+      if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
+        // @TODO: Add a way to mute this warning
+        console.warn(
+          'Called resetCache while selectors are running: this will probably cause unexpected results',
+        );
+      }
+
+      outerFn._rc = resultCache = createResultCache();
+    };
+
     /**
      * DO NOT USE THIS.
      * This is only for debugging purposes
      */
-    outerFn._resultCache = resultCache;
+    outerFn._rc = resultCache;
 
     outerFn.isDynamicSelector = true;
 
