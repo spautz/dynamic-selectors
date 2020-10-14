@@ -2,15 +2,17 @@
 
 **This package is in active development. Things will change rapidly, and it is not yet production-ready. Feedback is welcome.**
 
+**Release `0.1.0` will be the first stable, production-ready version.**
+
+[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core/latest.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
+[![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
+
 Selectors with parameters and dynamic dependencies.
 
 Selectors can access state and call each other dynamically, even conditionally or within loops, without needing to
 register dependencies up-front. As with Reselect and Re-reselect, functions are only re-run when necessary.
 
 This is the core functionality for [Dynamic Selectors](https://github.com/spautz/dynamic-selectors)
-
-[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core/latest.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
-[![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 
 ## Example
 

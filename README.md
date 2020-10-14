@@ -4,6 +4,8 @@ Selectors with parameters and dynamic dependencies.
 
 **This package is in active development. Things will change rapidly, and it is not yet production-ready. Feedback is welcome.**
 
+**Release `0.1.0` will be the first stable, production-ready version.**
+
 [![build status](https://img.shields.io/travis/com/spautz/dynamic-selectors/main.svg)](https://travis-ci.com/spautz/dynamic-selectors/branches)
 [![test coverage](https://img.shields.io/coveralls/github/spautz/dynamic-selectors/main.svg)](https://coveralls.io/github/spautz/dynamic-selectors?branch=main)
 
