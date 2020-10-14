@@ -31,6 +31,8 @@ export type DynamicSelectorOptions<ReturnType = any, StateType = any> = {
   compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
   /* Used to customize the cache of results */
   createResultCache: () => DynamicSelectorResultCache;
+  /* Verbose output, useful for debugging the library itself */
+  debug?: boolean | string;
   /* Sets the function's displayName */
   displayName?: string;
   /* Generates a unique ID for the selector's params */

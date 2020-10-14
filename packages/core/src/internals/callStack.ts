@@ -11,27 +11,10 @@ import { DynamicSelectorResultEntry } from './resultCache';
  *
  * This single instance is used forever across all selectors.
  */
-const callStack: Array<DynamicSelectorResultEntry | boolean> = [];
-
-const isFullEntry = (
-  entryOrBool: DynamicSelectorResultEntry | boolean,
-): entryOrBool is DynamicSelectorResultEntry => entryOrBool !== !!entryOrBool;
+const callStack: Array<DynamicSelectorResultEntry> = [];
 
 const getTopCallStackEntry = () => callStack[callStack.length - 1];
-const getTopCallStackEntryWithState = (): DynamicSelectorResultEntry | undefined => {
-  let index = callStack.length - 1;
-  while (index >= 0 && !isFullEntry(callStack[index])) {
-    index--;
-  }
-  return callStack[index] as DynamicSelectorResultEntry;
-};
 const pushCallStackEntry = callStack.push.bind(callStack);
 const popCallStackEntry = callStack.pop.bind(callStack);
 
-export {
-  isFullEntry,
-  getTopCallStackEntry,
-  getTopCallStackEntryWithState,
-  pushCallStackEntry,
-  popCallStackEntry,
-};
+export { getTopCallStackEntry, pushCallStackEntry, popCallStackEntry };

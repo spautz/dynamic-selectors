@@ -1,7 +1,7 @@
 import { createDynamicSelector } from '../src';
-import DebugInfoCheckUtil from './debugInfoCheckUtil';
+import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
 
-describe('basic caching with params', () => {
+describe('basic params', () => {
   test('get value from state with params', () => {
     const selector = createDynamicSelector((getState, path: string) => {
       return getState(path);
