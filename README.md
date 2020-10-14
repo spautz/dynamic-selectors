@@ -11,10 +11,16 @@ Selectors with parameters and dynamic dependencies.
 
 ## Packages
 
-**[@dynamic-selectors/core](./packages/core/)**
+#### [@dynamic-selectors/core](./packages/core/)
 
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core/latest.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
 [![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
+
+Core functionality for dynamic selectors, independent of any other libraries.
+
+#### @dynamic-selectors/with-reselect (planned)
+
+![not found](https://img.shields.io/badge/npm-package%20not%20found-red.svg)
 
 (In progress, not published)
 
