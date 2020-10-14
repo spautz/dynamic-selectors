@@ -104,14 +104,15 @@ const hasAnyCallDependencyChanged = (
 
       // Run it and check the result
       const result = dependencySelectorFn._dc(state, dependencyParams, ...otherArgs);
-      const hasReturnValue = result[RESULT_ENTRY__HAS_RETURN_VALUE];
-      const newReturnValue = result[RESULT_ENTRY__RETURN_VALUE];
 
       if (temporarilyBlockExecution) {
         popCallStackEntry();
       }
 
-      if (!hasReturnValue || newReturnValue !== dependencyReturnValue) {
+      if (
+        !result[RESULT_ENTRY__HAS_RETURN_VALUE] ||
+        result[RESULT_ENTRY__RETURN_VALUE] !== dependencyReturnValue
+      ) {
         // It either failed to return a value, or it returned something new.
         // (We use strict equality -- not compareResult -- because compareResult was already used to decide whether to
         //  return the exact prior value)

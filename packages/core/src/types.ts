@@ -38,10 +38,10 @@ export type DynamicSelectorOptions<ReturnType = any, StateType = any> = {
   /* Generates a unique ID for the selector's params */
   getKeyForParams: (params?: DynamicSelectorParams) => string;
   /* Called if the selector function throws an exception */
-  onException:
+  onError:
     | ((
         error: Error,
-        args: DynamicSelectorArgsWithState<StateType>,
+        args: [StateType, DynamicSelectorParams | any, ...Array<any>],
         selectorFn: DynamicSelectorFn,
       ) => void)
     | null;
