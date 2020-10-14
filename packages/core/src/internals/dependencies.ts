@@ -1,6 +1,6 @@
 import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } from '../types';
 import {
-  DynamicSelectorResultEntry,
+  createDepCheckEntry,
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache';
@@ -66,7 +66,7 @@ const hasAnyCallDependencyChanged = (
   const numPreviousCallDependencies = previousCallDependencies.length;
   if (numPreviousCallDependencies) {
     // We're just checking dependencies, not re-registering them, so put a dummy entry on the call stack.
-    pushCallStackEntry(allowExecution);
+    pushCallStackEntry(createDepCheckEntry(allowExecution));
 
     for (let i = 0; i < numPreviousCallDependencies; i += 1) {
       const [
@@ -86,18 +86,11 @@ const hasAnyCallDependencyChanged = (
 
       // Does our dependency have anything new? Let's run it to find out.
       const result = dependencySelectorFn._callDirect(state, dependencyParams, ...otherArgs);
-      const [, , , , hasReturnValue, newReturnValue] = result;
+      const hasReturnValue = result[RESULT_ENTRY__HAS_RETURN_VALUE];
+      const newReturnValue = result[RESULT_ENTRY__RETURN_VALUE];
 
-      /* istanbul ignore next */
-      if (false) {
-        // This block is here ONLY to catch possible errors if the structure of `result` changes
-        const checkType_hasReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] = hasReturnValue;
-        const checkType_newReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__RETURN_VALUE] = newReturnValue;
-        console.log({ checkType_hasReturnValue, checkType_newReturnValue });
-      }
-
-      if (hasReturnValue && newReturnValue !== dependencyReturnValue) {
-        // Something returned a new value: that's a real change.
+      if (!hasReturnValue || newReturnValue !== dependencyReturnValue) {
+        // Something either failed to return a value, or it returned something new.
         // (We use strict equality -- not compareResult -- because compareResult was already used to decide whether to
         //  return the exact prior value)
         popCallStackEntry();

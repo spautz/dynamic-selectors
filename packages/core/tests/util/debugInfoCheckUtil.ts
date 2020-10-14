@@ -80,7 +80,16 @@ class DebugInfoCheckUtil {
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    expect(selector.getDebugInfo(params)).toEqual(this._expectedDebugInfo);
+    // Clone so that we can remove the `_verbose` flag from our checks
+    const selectorInfo = { ...selector.getDebugInfo(params) } as DynamicSelectorDebugInfo;
+    const expectedInfo = { ...this._expectedDebugInfo } as DynamicSelectorDebugInfo;
+    if (selectorInfo) {
+      delete selectorInfo._verbose;
+    }
+    if (expectedInfo) {
+      delete expectedInfo._verbose;
+    }
+    expect(selectorInfo).toEqual(this._expectedDebugInfo);
   }
 
   _logExpectedEntry(entry: ExpectedDebugInfoEntryType) {

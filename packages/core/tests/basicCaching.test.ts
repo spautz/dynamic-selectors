@@ -40,12 +40,18 @@ describe('basic caching', () => {
   });
 
   test('get value from child selector', () => {
-    const childSelector = createDynamicSelector((getState) => {
-      return getState('a');
-    });
-    const parentSelector = createDynamicSelector(() => {
-      return childSelector();
-    });
+    const childSelector = createDynamicSelector(
+      (getState) => {
+        return getState('a');
+      },
+      { displayName: 'child' },
+    );
+    const parentSelector = createDynamicSelector(
+      () => {
+        return childSelector();
+      },
+      { displayName: 'parent' },
+    );
 
     const childSelectorCheck = new DebugInfoCheckUtil(childSelector);
     const parentSelectorCheck = new DebugInfoCheckUtil(parentSelector);
@@ -141,7 +147,7 @@ describe('basic caching', () => {
     expect(topSelector(state)).toEqual(12);
     bottomSelectorCheck.expectMultiple([
       ['depCheck', 'run'],
-      ['invoked', 'skipped'],
+      ['depCheck', 'skipped'],
     ]);
     middleSelectorCheck.expectMultiple([
       ['depCheck', 'run'],
@@ -349,12 +355,12 @@ describe('basic caching', () => {
     rawSelectorCheck.expectMultiple([
       ['invoked', 'run'],
       ['depCheck', 'skipped'],
-      ['invoked', 'skipped'],
+      ['depCheck', 'skipped'],
     ]);
     midSelector1Check.expectMultiple([
       ['invoked', 'run'],
       ['depCheck', 'skipped'],
-      ['invoked', 'skipped'],
+      ['depCheck', 'skipped'],
     ]);
     midSelector2Check.expectMultiple([
       ['invoked', 'run'],
