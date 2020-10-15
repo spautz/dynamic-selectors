@@ -264,6 +264,7 @@ const dynamicSelectorForState = <StateType = any>(
       }
 
       resultCache.set(paramKey, nextResult);
+
       return nextResult;
     };
 
@@ -332,6 +333,13 @@ const dynamicSelectorForState = <StateType = any>(
     ): DynamicSelectorResultEntry => {
       const argsWithState = addStateToArguments(args);
       const rootResult = createResultEntry(stateOptions, argsWithState[0], false, false);
+
+      // const paramKey = getKeyForParams(argsWithState[1]);
+      // const previousResult = resultCache.get(paramKey);
+      // if (!previousResult) {
+      //   // Don't even bother checking if there's _nothing_ to check
+      //   return rootResult;
+      // }
 
       pushCallStackEntry(rootResult);
       const result = evaluateSelector(...argsWithState);
