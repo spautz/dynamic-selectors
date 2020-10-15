@@ -1,15 +1,15 @@
 {
-  "name": "@dynamic-selectors/core",
+  "name": "@dynamic-selectors/with-reselect",
   "version": "0.0.3",
-  "description": "Dynamic selector functions",
+  "description": "Use dynamic selector functions with Reselect",
   "keywords": [],
   "license": "MIT",
-  "homepage": "https://github.com/spautz/dynamic-selectors/packages/core#readme",
+  "homepage": "https://github.com/spautz/dynamic-selectors/packages/with-reselect#readme",
   "bugs": "https://github.com/spautz/dynamic-selectors/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/spautz/dynamic-selectors.git",
-    "directory": "packages/core"
+    "directory": "packages/with-reselect"
   },
   "author": {
     "name": "Steven Pautz",
@@ -23,8 +23,8 @@
   ],
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/dynamic-selectors-core.esm.js",
-  "jsnext:main": "dist/dynamic-selectors-core.esm.js",
+  "module": "dist/dynamic-selectors-with-reselect.esm.js",
+  "jsnext:main": "dist/dynamic-selectors-with-reselect.esm.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
@@ -55,12 +55,7 @@
     "test:watchcoverage": "tsdx test --watchAll --coverage",
     "types": "tsc --p tsconfig.json"
   },
-  "dependencies": {
-    "lodash": "^4.0.0",
-    "shallowequal": "^1.1.0"
-  },
-  "devDependencies": {
-    "@types/lodash": "4.14.162",
-    "@types/shallowequal": "1.1.1"
+  "peerDependencies": {
+    "@dynamic-selectors/core": "^0.0.3"
   }
 }
