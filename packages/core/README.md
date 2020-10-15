@@ -55,3 +55,14 @@ to read from `` `libraries[${libraryName}].id` ``, and it would work the same.
 - Cache controls: "freeze" a selector's output even if it returned a new object.
 - Access state directly from within a selector. This automatically registers a dependency against that location in your `state`.
 - A selector can call other selectors from `if` blocks, loops, or any other controls -- or even recursively.
+
+## How is this different from Reselect and Re-reselect?
+
+[See syntax comparison here](./docs/comparison-with-reselect.md).
+
+Because you call other selectors _within your selector_, instead of listing them up-front, they can be called
+dynamically: Reselect selectors cannot be called conditionally, nor from within loops, nor recursively.
+
+You can also "freeze" a selector whose output isn't significantly different from its prior output -- e.g., an array
+which may contain the same elements, even if it's a new array instance. This prevents cascading updates when a
+selector returns a new value which is not _really_ new: the selectors that called it will not detect a change.
