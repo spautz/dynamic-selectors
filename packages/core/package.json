@@ -60,7 +60,7 @@
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.161",
+    "@types/lodash": "4.14.162",
     "@types/shallowequal": "1.1.1"
   }
 }
