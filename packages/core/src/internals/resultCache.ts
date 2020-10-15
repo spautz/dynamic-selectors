@@ -48,9 +48,6 @@ export const RESULT_ENTRY__DEBUG_INFO = 9 as const;
 export type DynamicSelectorResultCache = {
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  // getAll?: () => Record<string, DynamicSelectorResultEntry>;
-  // has?: (paramKey: string) => boolean;
-  // reset?: () => void;
   [propName: string]: any;
 };
 
