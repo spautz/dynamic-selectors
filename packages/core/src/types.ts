@@ -96,12 +96,13 @@ export type DynamicSelectorFnWithoutState<ReturnType = any> = (
 export type DynamicSelectorFn<ReturnType = any> = ((
   ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
 ) => ReturnType) & {
-  _innerFn: DynamicSelectorInnerFn<ReturnType>;
+  _fn: DynamicSelectorInnerFn<ReturnType>;
   _dc: DynamicSelectorFnWithState<ReturnType>;
-  _resultCache: DynamicSelectorResultCache;
+  _rc: DynamicSelectorResultCache;
   displayName: string;
   getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
   getCachedResult: DynamicSelectorFn<ReturnType>;
   hasCachedResult: DynamicSelectorFn<boolean>;
   isDynamicSelector: true;
+  resetCache: () => void;
 };

@@ -151,4 +151,29 @@ describe('accessing cached results', () => {
     expect(childSelector.hasCachedResult(state)).toEqual(true);
     expect(childSelector.getCachedResult(state)).toEqual(9);
   });
+
+  test('resetCache', () => {
+    const childSelector = createDynamicSelector((getState) => {
+      return getState('a');
+    });
+    const parentSelector = createDynamicSelector((_getState, multiplier?: number) => {
+      return childSelector() * (multiplier == null ? 1 : multiplier);
+    });
+
+    let state = { a: 3 };
+
+    expect(parentSelector(state, 3)).toEqual(9);
+    expect(parentSelector.hasCachedResult(state, 3)).toEqual(true);
+    expect(parentSelector.getCachedResult(state, 3)).toEqual(9);
+    expect(childSelector.hasCachedResult(state)).toEqual(true);
+    expect(childSelector.getCachedResult(state)).toEqual(3);
+
+    childSelector.resetCache();
+    state = { a: 3 };
+
+    // Because the child was reset, the parent isn't cached any more, even though normally the non-change in
+    // state.a would be fine
+    expect(parentSelector.hasCachedResult(state, 3)).toEqual(false);
+    expect(childSelector.hasCachedResult(state)).toEqual(false);
+  });
 });

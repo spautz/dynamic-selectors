@@ -2,6 +2,38 @@ import { createDynamicSelector } from '../src';
 import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
 
 describe('basic params', () => {
+  test('params exist', () => {
+    const selector = createDynamicSelector((getState, path?: string) => {
+      return getState(path || null);
+    });
+
+    let state = { a: 1, b: 2, c: 3 };
+
+    expect(selector(state)).toEqual({ a: 1, b: 2, c: 3 });
+
+    expect(selector.hasCachedResult(state, 'a')).toEqual(false);
+    expect(selector.hasCachedResult(state, 'b')).toEqual(false);
+    expect(selector.hasCachedResult(state, 'c')).toEqual(false);
+    expect(selector.hasCachedResult(state, 'd')).toEqual(false);
+    expect(selector.hasCachedResult(state)).toEqual(true);
+
+    expect(selector(state, 'a')).toEqual(1);
+    expect(selector(state, 'b')).toEqual(2);
+    expect(selector(state, 'c')).toEqual(3);
+
+    expect(selector.hasCachedResult(state, 'a')).toEqual(true);
+    expect(selector.hasCachedResult(state, 'b')).toEqual(true);
+    expect(selector.hasCachedResult(state, 'c')).toEqual(true);
+    expect(selector.hasCachedResult(state, 'd')).toEqual(false);
+    expect(selector.hasCachedResult(state)).toEqual(true);
+
+    expect(selector.getCachedResult(state, 'a')).toEqual(1);
+    expect(selector.getCachedResult(state, 'b')).toEqual(2);
+    expect(selector.getCachedResult(state, 'c')).toEqual(3);
+    expect(selector.getCachedResult(state, 'd')).toEqual(undefined);
+    expect(selector.getCachedResult(state)).toEqual({ a: 1, b: 2, c: 3 });
+  });
+
   test('get value from state with params', () => {
     const selector = createDynamicSelector((getState, path: string) => {
       return getState(path);

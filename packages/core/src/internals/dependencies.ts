@@ -1,10 +1,10 @@
-import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } from '../types';
+import { popCallStackEntry, pushCallStackEntry } from './callStack';
 import {
   createDepCheckEntry,
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache';
-import { popCallStackEntry, pushCallStackEntry } from './callStack';
+import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } from '../types';
 
 /**
  * We track wo types of dependencies:

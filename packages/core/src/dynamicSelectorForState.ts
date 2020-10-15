@@ -83,7 +83,7 @@ const dynamicSelectorForState = <StateType = any>(
       onError,
     } = options ? { ...defaultSelectorOptions, ...options } : defaultSelectorOptions;
 
-    const resultCache: DynamicSelectorResultCache = createResultCache();
+    let resultCache: DynamicSelectorResultCache = createResultCache();
 
     let outerFn: DynamicSelectorFn;
 
@@ -264,6 +264,7 @@ const dynamicSelectorForState = <StateType = any>(
       }
 
       resultCache.set(paramKey, nextResult);
+
       return nextResult;
     };
 
@@ -313,7 +314,7 @@ const dynamicSelectorForState = <StateType = any>(
      * DO NOT USE THIS.
      * This is only for debugging purposes
      */
-    outerFn._innerFn = innerFn;
+    outerFn._fn = innerFn;
 
     outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
       if (process.env.NODE_ENV !== 'production') {
@@ -332,6 +333,13 @@ const dynamicSelectorForState = <StateType = any>(
     ): DynamicSelectorResultEntry => {
       const argsWithState = addStateToArguments(args);
       const rootResult = createResultEntry(stateOptions, argsWithState[0], false, false);
+
+      // const paramKey = getKeyForParams(argsWithState[1]);
+      // const previousResult = resultCache.get(paramKey);
+      // if (!previousResult) {
+      //   // Don't even bother checking if there's _nothing_ to check
+      //   return rootResult;
+      // }
 
       pushCallStackEntry(rootResult);
       const result = evaluateSelector(...argsWithState);
@@ -374,11 +382,22 @@ const dynamicSelectorForState = <StateType = any>(
       return result[RESULT_ENTRY__HAS_RETURN_VALUE];
     }) as DynamicSelectorFn<boolean>;
 
+    outerFn.resetCache = () => {
+      if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
+        // @TODO: Add a way to mute this warning
+        console.warn(
+          'Called resetCache while selectors are running: this will probably cause unexpected results',
+        );
+      }
+
+      outerFn._rc = resultCache = createResultCache();
+    };
+
     /**
      * DO NOT USE THIS.
      * This is only for debugging purposes
      */
-    outerFn._resultCache = resultCache;
+    outerFn._rc = resultCache;
 
     outerFn.isDynamicSelector = true;
 
