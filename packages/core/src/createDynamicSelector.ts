@@ -31,7 +31,7 @@ const createDefaultCache = (): DynamicSelectorResultCache => {
 const defaultSelectorOptions: DynamicSelectorOptions = {
   compareResult: shallowEqual,
   getKeyForParams: JSON.stringify,
-  onException: null,
+  onError: null,
   createResultCache: createDefaultCache,
 };
 

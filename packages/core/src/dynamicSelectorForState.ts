@@ -80,7 +80,7 @@ const dynamicSelectorForState = <StateType = any>(
       debug,
       displayName,
       getKeyForParams,
-      onException,
+      onError,
     } = options ? { ...defaultSelectorOptions, ...options } : defaultSelectorOptions;
 
     const resultCache: DynamicSelectorResultCache = createResultCache();
@@ -209,11 +209,12 @@ const dynamicSelectorForState = <StateType = any>(
           nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] = true;
         } catch (e) {
           nextResult[RESULT_ENTRY__ERROR] = e;
+          debugAbortedRun(debugInfo);
 
-          if (onException) {
-            // If the onException callback returns anything, we'll use that as the return value -- but we still
+          if (onError) {
+            // If the onError callback returns anything, we'll use that as the return value -- but we still
             // track the error.
-            nextResult[RESULT_ENTRY__RETURN_VALUE] = onException(
+            nextResult[RESULT_ENTRY__RETURN_VALUE] = onError(
               e,
               [state, params, ...otherArgs],
               outerFn,
@@ -226,9 +227,7 @@ const dynamicSelectorForState = <StateType = any>(
         popCallStackEntry();
 
         // We were able to run without error -- but is our "new" result actually new?
-        if (!nextResult[RESULT_ENTRY__HAS_RETURN_VALUE]) {
-          debugAbortedRun(debugInfo);
-        } else if (
+        if (
           compareResult &&
           previousResult &&
           previousResult[RESULT_ENTRY__HAS_RETURN_VALUE] &&
@@ -239,10 +238,12 @@ const dynamicSelectorForState = <StateType = any>(
           )
         ) {
           canUsePreviousResult = true;
-          debugPhantomRun(debugInfo);
+          if (!nextResult[RESULT_ENTRY__ERROR]) {
+            debugPhantomRun(debugInfo);
+          }
           // Carry over the *exact* return value we had before
           nextResult[RESULT_ENTRY__RETURN_VALUE] = previousResult[RESULT_ENTRY__RETURN_VALUE];
-        } else {
+        } else if (!nextResult[RESULT_ENTRY__ERROR]) {
           debugFullRun(debugInfo);
         }
       }
@@ -253,7 +254,12 @@ const dynamicSelectorForState = <StateType = any>(
       // We still need to register this selectorFn as a dependency of the parent (if any).
       if (recordDependencies) {
         parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
-          createCallDependency(outerFn, params, nextResult[RESULT_ENTRY__RETURN_VALUE]),
+          createCallDependency(
+            outerFn,
+            params,
+            nextResult[RESULT_ENTRY__RETURN_VALUE],
+            !allowExecution,
+          ),
         );
       }
 
@@ -283,7 +289,7 @@ const dynamicSelectorForState = <StateType = any>(
         popCallStackEntry();
       }
 
-      // It's okay to have *both* an error *and* a return value (although that's rare: it only happens if onException
+      // It's okay to have *both* an error *and* a return value (although that's rare: it only happens if onError
       // returned a value)
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE] && result[RESULT_ENTRY__ERROR]) {
         throw result[RESULT_ENTRY__ERROR];
@@ -298,8 +304,10 @@ const dynamicSelectorForState = <StateType = any>(
      * DO NOT USE THIS.
      * This lets selectors bypass the wrappers internally, when appropriate. It shouldn't be called from outside of
      * this file, except in tests.
+     *
+     * "dc" = "DepCheck"
      */
-    outerFn._callDirect = evaluateSelector;
+    outerFn._dc = evaluateSelector;
 
     /**
      * DO NOT USE THIS.
@@ -322,21 +330,24 @@ const dynamicSelectorForState = <StateType = any>(
     const evaluateSelectorReadOnly = (
       args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState,
     ): DynamicSelectorResultEntry => {
-      const parentCaller = getTopCallStackEntry();
       const argsWithState = addStateToArguments(args);
-
       const rootResult = createResultEntry(stateOptions, argsWithState[0], false, false);
-      if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
-        // If our parent is checking our cache result, record our dependencies onto the parent instead
-        rootResult[RESULT_ENTRY__RECORD_DEPENDENCIES] = true;
-        rootResult[RESULT_ENTRY__STATE_DEPENDENCIES] =
-          parentCaller[RESULT_ENTRY__STATE_DEPENDENCIES];
-        rootResult[RESULT_ENTRY__CALL_DEPENDENCIES] = parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES];
-      }
 
       pushCallStackEntry(rootResult);
       const result = evaluateSelector(...argsWithState);
       popCallStackEntry();
+
+      const parentCaller = getTopCallStackEntry();
+      if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
+        parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
+          createCallDependency(
+            outerFn,
+            argsWithState[1],
+            result[RESULT_ENTRY__RETURN_VALUE],
+            false,
+          ),
+        );
+      }
 
       return result;
     };

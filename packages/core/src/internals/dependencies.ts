@@ -22,18 +22,22 @@ export type DynamicSelectorCallDependency = [
   DynamicSelectorParams,
   /* returnValue */
   any,
+  /* isReadOnly */
+  boolean,
 ];
 
 // These keys just make the CallDependency code easier to read
 export const CALL_DEPENDENCY__SELECTOR_FN = 0 as const;
 export const CALL_DEPENDENCY__PARAMS = 1 as const;
 export const CALL_DEPENDENCY__RETURN_VALUE = 2 as const;
+export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 
 const createCallDependency = (
   selectorFn: DynamicSelectorFn,
   params: DynamicSelectorParams,
   returnValue: any,
-): DynamicSelectorCallDependency => [selectorFn, params, returnValue];
+  isReadOnly: boolean,
+): DynamicSelectorCallDependency => [selectorFn, params, returnValue, isReadOnly];
 
 const hasAnyStateDependencyChanged = (
   getFn: DynamicSelectorStateGetFn,
@@ -73,6 +77,7 @@ const hasAnyCallDependencyChanged = (
         dependencySelectorFn,
         dependencyParams,
         dependencyReturnValue,
+        dependencyIsReadOnly,
       ] = previousCallDependencies[i];
 
       /* istanbul ignore next */
@@ -81,16 +86,34 @@ const hasAnyCallDependencyChanged = (
         const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] = dependencySelectorFn;
         const checkType_params: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__PARAMS] = dependencyParams;
         const checkType_dependencyReturnValue: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__RETURN_VALUE] = dependencyReturnValue;
-        console.log({ checkType_selectorFn, checkType_params, checkType_dependencyReturnValue });
+        const checkType_dependencyIsReadOnly: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__IS_READONLY] = dependencyIsReadOnly;
+        console.log({
+          checkType_selectorFn,
+          checkType_params,
+          checkType_dependencyReturnValue,
+          checkType_dependencyIsReadOnly,
+        });
       }
 
-      // Does our dependency have anything new? Let's run it to find out.
-      const result = dependencySelectorFn._callDirect(state, dependencyParams, ...otherArgs);
-      const hasReturnValue = result[RESULT_ENTRY__HAS_RETURN_VALUE];
-      const newReturnValue = result[RESULT_ENTRY__RETURN_VALUE];
+      // Does our dependency have anything new?
+      const temporarilyBlockExecution = dependencyIsReadOnly && allowExecution;
+      if (temporarilyBlockExecution) {
+        // Temporarily add *another* dummy entry to block execution
+        pushCallStackEntry(createDepCheckEntry(false));
+      }
 
-      if (!hasReturnValue || newReturnValue !== dependencyReturnValue) {
-        // Something either failed to return a value, or it returned something new.
+      // Run it and check the result
+      const result = dependencySelectorFn._dc(state, dependencyParams, ...otherArgs);
+
+      if (temporarilyBlockExecution) {
+        popCallStackEntry();
+      }
+
+      if (
+        !result[RESULT_ENTRY__HAS_RETURN_VALUE] ||
+        result[RESULT_ENTRY__RETURN_VALUE] !== dependencyReturnValue
+      ) {
+        // It either failed to return a value, or it returned something new.
         // (We use strict equality -- not compareResult -- because compareResult was already used to decide whether to
         //  return the exact prior value)
         popCallStackEntry();

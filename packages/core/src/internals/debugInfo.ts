@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 // Because this is ONLY used in dev mode, it's stored as a normal object instead of an array
 export type DynamicSelectorDebugInfo = {
   _verbose?: boolean | string;
