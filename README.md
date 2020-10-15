@@ -18,7 +18,7 @@ Selectors with parameters and dynamic dependencies.
 
 Core functionality for dynamic selectors, independent of any other libraries.
 
-#### @dynamic-selectors/with-reselect (planned)
+#### @dynamic-selectors/with-reselect
 
 ![not found](https://img.shields.io/badge/npm-package%20not%20found-red.svg)
 
