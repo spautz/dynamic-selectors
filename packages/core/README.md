@@ -1,9 +1,5 @@
 # @dynamic-selectors/core
 
-**This package is in active development. Things will change rapidly, and it is not yet production-ready. Feedback is welcome.**
-
-**Release `0.1.0` will be the first stable, production-ready version.**
-
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core/latest.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
 [![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 

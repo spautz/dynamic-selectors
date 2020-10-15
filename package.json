@@ -46,7 +46,7 @@
     "format:verify": "prettier --list-different .",
     "lint": "tsdx lint . --max-warnings 0",
     "release:version": "yarn lerna version --no-changelog --no-push --no-git-tag-version ",
-    "release:tag": "cross-env HUSKY_BYPASS=true yarn lerna version --no-changelog --no-push --sign-git-commit ",
+    "release:tag": "cross-env HUSKY_BYPASS=true yarn lerna version --no-changelog --no-push --sign-git-commit --amend ",
     "release:postpublish": "standard-version --commit-all --sign --skip.changelog --release-as ",
     "test:clean": "rimraf ./coverage",
     "test:nowatch": "tsdx test --coverage",

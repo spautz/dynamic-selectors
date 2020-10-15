@@ -1,8 +1,15 @@
 {
   "name": "@dynamic-selectors/core",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Dynamic selector functions",
-  "keywords": [],
+  "keywords": [
+    "dynamic selector",
+    "selectors",
+    "parameterized selector",
+    "reselect arguments",
+    "memoize",
+    "selector functions"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/spautz/dynamic-selectors/packages/core#readme",
   "bugs": "https://github.com/spautz/dynamic-selectors/issues",
