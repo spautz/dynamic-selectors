@@ -122,7 +122,7 @@ Returns an object with statistics about the selector's activity (runs, cache-che
 
 #### `selector.isDynamicSelector` (always `true`)
 
-The canonical ways to detect that a function is a dynamic selector.
+The canonical way to detect that a function is a dynamic selector.
 
 ### Options
 
