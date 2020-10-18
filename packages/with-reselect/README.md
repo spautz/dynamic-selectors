@@ -10,3 +10,36 @@
 
 Helper functions to make it easy to use [Dynamic Selectors](https://github.com/spautz/dynamic-selectors) and
 [Reselect](https://github.com/reduxjs/reselect) together.
+
+## Usage
+
+```
+import {
+  createReselectSelectorFromDynamic,
+  createDynamicSelectorFromReselect,
+  wrapReselect,
+} from '@dynamic-selectors/with-reselect';
+```
+
+#### `createReselectSelectorFromDynamic(dynamicSelector, params?)`
+
+```javascript
+const originalSelector = createDynamicSelector(...);
+const newSelector = createReselectSelectorFromDynamic(originalSelector);
+```
+
+#### `createDynamicSelectorFromReselect(reselectSelector)`
+
+```javascript
+const originalSelector = createSelector(...);
+const newSelector = createDynamicSelectorFromReselect(originalSelector);
+```
+
+#### `wrapReselect(reselectSelector)`
+
+```javascript
+const myCustomSelectorFactory = dynamicSelectorForState(...);
+
+const originalSelector = createSelector(...);
+const newSelector = myCustomSelectorFactory(wrapSelector(originalSelector));
+```
