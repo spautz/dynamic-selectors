@@ -1,7 +1,7 @@
-# Comparison with Reselect
+# Comparison with other selector libraries
 
 This shows several different ways to write [Reselect's example selector](https://github.com/reduxjs/reselect#example),
-which -- assuming Redux -- filters `state.todos` based on a value in `state.visibilityFilter`.
+which filters `state.todos` based on a value in `state.visibilityFilter`.
 
 #### Plain, unmemoized function
 
@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
 
 #### Using Reselect
 
-Each value in state is wrapped in a function, and `getVisibleTodos` is set to depend on those functions. It will
+Each state value is wrapped in an accessor function, and `getVisibleTodos` is set to depend on those functions. It will
 rerun only when one of the functions returns a new value. The selector's dependencies must be listed ahead of time.
 
 ```javascript
@@ -40,7 +40,7 @@ const getVisibleTodos = createSelector(
 #### Using Dynamic Selectors
 
 `getVisibleTodos` can retrieve values directly from the state, or from other dynamic selectors. It will rerun only when
-one of the functions returns a new value. You can retrieve values dynamically: it works with if/else, loops, etc.
+one of the functions returns a new value. You can retrieve values dynamically, or change the `getState` calls from run to run.
 
 ```javascript
 const getVisibleTodos = createDynamicSelector((getState) => {

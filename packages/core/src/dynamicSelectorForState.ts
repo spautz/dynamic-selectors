@@ -344,6 +344,8 @@ const dynamicSelectorForState = <StateType = any>(
       const result = evaluateSelector(...argsWithState);
       popCallStackEntry();
 
+      // @TODO: If there's a value in cache but it's no longer usable, remove it.
+
       const parentCaller = getTopCallStackEntry();
       if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
         parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
