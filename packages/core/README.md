@@ -1,7 +1,8 @@
 # @dynamic-selectors/core
 
-[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core/latest.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
-[![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
+[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
+[![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/core)](https://david-dm.org/spautz/dynamic-selectors?path=packages/core)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/core.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 
 Selectors with parameters and dynamic dependencies.
 
