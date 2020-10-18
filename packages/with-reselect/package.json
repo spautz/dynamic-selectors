@@ -56,7 +56,7 @@
     "test:watchcoverage": "tsdx test --watchAll --coverage",
     "types": "tsc --p tsconfig.json"
   },
-  "peerDependencies": {
-    "@dynamic-selectors/core": "^0.0.3"
+  "dependencies": {
+    "@dynamic-selectors/core": "^0.1.0"
   }
 }

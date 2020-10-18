@@ -25,6 +25,8 @@ import {
   hasAnyStateDependencyChanged,
   popCallStackEntry,
   pushCallStackEntry,
+  validateOptions,
+  validateStateOptions,
 } from './internals';
 import {
   DynamicSelectorArgsWithoutState,
@@ -40,6 +42,7 @@ import {
 const dynamicSelectorForState = <StateType = any>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
 ) => {
+  validateStateOptions(stateOptions);
   const { compareState, get, defaultSelectorOptions } = stateOptions;
 
   /**
@@ -74,6 +77,11 @@ const dynamicSelectorForState = <StateType = any>(
     innerFn: DynamicSelectorInnerFn<ReturnType>,
     options?: Partial<DynamicSelectorOptions<ReturnType, StateType>>,
   ): DynamicSelectorFn<ReturnType> => {
+    const mergedOptions: DynamicSelectorOptions =
+      defaultSelectorOptions && options
+        ? { ...defaultSelectorOptions, ...options }
+        : (options as DynamicSelectorOptions) || defaultSelectorOptions;
+    validateOptions(mergedOptions);
     const {
       compareResult,
       createResultCache,
@@ -81,7 +89,7 @@ const dynamicSelectorForState = <StateType = any>(
       displayName,
       getKeyForParams,
       onError,
-    } = options ? { ...defaultSelectorOptions, ...options } : defaultSelectorOptions;
+    } = mergedOptions;
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
@@ -118,17 +126,13 @@ const dynamicSelectorForState = <StateType = any>(
       let debugInfo: DynamicSelectorDebugInfo = null;
 
       if (process.env.NODE_ENV !== 'production') {
-        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
-        if (!debugInfo) {
-          console.error('Internal error: no debugInfo for dynamic selector in development mode');
-        } else {
-          debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
+        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO]!;
+        debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
 
-          if (recordDependencies && allowExecution) {
-            debugInvoked(debugInfo);
-          } else {
-            debugDepCheck(debugInfo);
-          }
+        if (recordDependencies && allowExecution) {
+          debugInvoked(debugInfo);
+        } else {
+          debugDepCheck(debugInfo);
         }
       }
 
@@ -344,8 +348,6 @@ const dynamicSelectorForState = <StateType = any>(
       const result = evaluateSelector(...argsWithState);
       popCallStackEntry();
 
-      // @TODO: If there's a value in cache but it's no longer usable, remove it.
-
       const parentCaller = getTopCallStackEntry();
       if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
         parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
@@ -356,6 +358,12 @@ const dynamicSelectorForState = <StateType = any>(
             false,
           ),
         );
+      }
+
+      if (!result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
+        // If there was a value in the cache but it's no longer usable, remove it.
+        // @ts-ignore
+        resultCache.set(paramKey, null);
       }
 
       return result;
