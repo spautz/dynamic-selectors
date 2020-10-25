@@ -37,7 +37,7 @@ to discuss your idea and make sure it is inline with the project goals.
    git checkout -b my-topic-branch
    ```
 
-4. To test your local dev version of `@dynamic-selectors/core` in other projects, [Yalc](https://github.com/whitecolor/yalc)
+4. To test your local dev version of `@dynamic-selectors/with-reselect` in other projects, [Yalc](https://github.com/whitecolor/yalc)
    is an excellent tool.
 
 5. After you have made your changes, submit a pull request. Issues and pull requests are monitored, and you should receive a reply.
