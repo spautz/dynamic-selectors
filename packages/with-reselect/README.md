@@ -15,24 +15,24 @@ Helper functions to make it easy to use [Dynamic Selectors](https://github.com/s
 
 ```
 import {
-  createReselectSelectorFromDynamic,
-  createDynamicSelectorFromReselect,
+  reselectSelectorFromDynamic,
+  dynamicSelectorFromReselect,
   wrapReselect,
 } from '@dynamic-selectors/with-reselect';
 ```
 
-#### `createReselectSelectorFromDynamic(dynamicSelector, params?)`
+#### `reselectSelectorFromDynamic(dynamicSelector, params?)`
 
 ```javascript
 const originalSelector = createDynamicSelector(...);
-const newSelector = createReselectSelectorFromDynamic(originalSelector);
+const newSelector = reselectSelectorFromDynamic(originalSelector);
 ```
 
-#### `createDynamicSelectorFromReselect(reselectSelector)`
+#### `dynamicSelectorFromReselect(reselectSelector)`
 
 ```javascript
 const originalSelector = createSelector(...);
-const newSelector = createDynamicSelectorFromReselect(originalSelector);
+const newSelector = dynamicSelectorFromReselect(originalSelector);
 ```
 
 #### `wrapReselect(reselectSelector)`
