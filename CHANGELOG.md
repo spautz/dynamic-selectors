@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/spautz/dynamic-selectors/compare/v0.1.0...v0.2.0) (2020-10-27)
+
+### Features
+
+- Add `@dynamic-selectors/with-reselect` package ([#7](https://github.com/spautz/dynamic-selectors/issues/7)) ([be26b0c](https://github.com/spautz/dynamic-selectors/commit/be26b0c95f7b0e7df3562d8b7bfc629dbebfbc46))
+- Emit a warning if invalid options are passed in (dev only) ([#6](https://github.com/spautz/dynamic-selectors/issues/6)) ([66d3b48](https://github.com/spautz/dynamic-selectors/commit/66d3b4859679262f198ea2d4ceee49201e7996fd))
+
 ### [0.1.1](https://github.com/spautz/dynamic-selectors/compare/v0.1.0...v0.1.1) (2020-10-18)
 
 - Improve documentation

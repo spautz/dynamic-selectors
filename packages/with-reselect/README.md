@@ -1,9 +1,5 @@
 # @dynamic-selectors/with-reselect
 
-**This package is in active development. Things will change rapidly, and it is not yet production-ready. Feedback is welcome.**
-
-**Release `0.1.0` will be the first stable, production-ready version.**
-
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
 [![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/with-reselect)](https://david-dm.org/spautz/dynamic-selectors?path=packages/with-reselect)
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/with-reselect.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect@latest)
@@ -11,7 +7,7 @@
 Helper functions to make it easy to use [Dynamic Selectors](https://github.com/spautz/dynamic-selectors) and
 [Reselect](https://github.com/reduxjs/reselect) together.
 
-## Usage
+## What's included
 
 ```
 import {
@@ -23,6 +19,9 @@ import {
 
 #### `reselectSelectorFromDynamic(dynamicSelector, params?)`
 
+Create a Reselect selector from any dynamic selector. You can specify the params to use with the dynamic selector,
+if it accepts params.
+
 ```javascript
 const originalSelector = createDynamicSelector(...);
 const newSelector = reselectSelectorFromDynamic(originalSelector);
@@ -30,12 +29,18 @@ const newSelector = reselectSelectorFromDynamic(originalSelector);
 
 #### `dynamicSelectorFromReselect(reselectSelector)`
 
+Creates a normal dynamic selector from any Reselect selector (using `createDynamicSelector`). If you're using a custom
+dynamic selector factory, you should use `wrapReselect` instead.
+
 ```javascript
 const originalSelector = createSelector(...);
 const newSelector = dynamicSelectorFromReselect(originalSelector);
 ```
 
 #### `wrapReselect(reselectSelector)`
+
+Converts any Reselect selector into a function that you can pass to your own customized dynamic selector factory.
+The default `dynamicSelectorFromReselect` helper is just shorthand for `createDynamicSelector(wrapSelector(selectorFn))`
 
 ```javascript
 const myCustomSelectorFactory = dynamicSelectorForState(...);

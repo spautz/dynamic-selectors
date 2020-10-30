@@ -17,9 +17,9 @@ Core functionality for dynamic selectors, independent of any other library.
 
 #### [@dynamic-selectors/with-reselect](./packages/with-reselect/)
 
-![not found](https://img.shields.io/badge/npm-package%20not%20found-red.svg)
-
-_(In progress, not published)_
+[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
+[![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/with-reselect)](https://david-dm.org/spautz/dynamic-selectors?path=packages/with-reselect)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/with-reselect.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect@latest)
 
 Call Reselect selectors from within dynamic selectors, and use dynamic selectors as dependencies for Reselect selectors.
 

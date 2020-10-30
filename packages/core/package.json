@@ -1,6 +1,6 @@
 {
   "name": "@dynamic-selectors/core",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Dynamic selector functions",
   "keywords": [
     "dynamic selector",
@@ -21,6 +21,9 @@
   "author": {
     "name": "Steven Pautz",
     "url": "http://stevenpautz.com/"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist/",
