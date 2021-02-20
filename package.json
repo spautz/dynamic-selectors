@@ -23,6 +23,7 @@
     "____ LIFECYCLE HOOKS _______________________________________________": "",
     "prepare": "yon run packages:prepare",
     "pretest": "yon run test:clean",
+    "postinstall": "husky install",
     "____ INTEGRATION ___________________________________________________": "",
     "clean": "yon run test:clean && rimraf ./node_modules/.cache",
     "test": "yon run test:nowatch",
@@ -46,6 +47,7 @@
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
     "lint": "tsdx lint . --max-warnings 0",
+    "lint-staged": "lint-staged",
     "release:version": "yarn lerna version --no-changelog --no-push --no-git-tag-version ",
     "release:tag": "cross-env HUSKY_BYPASS=true yarn lerna version --no-changelog --no-push --sign-git-commit --amend ",
     "release:postpublish": "standard-version --commit-all --sign --skip.changelog --release-as ",
@@ -59,17 +61,17 @@
   "dependencies": {},
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.9",
-    "@testing-library/react": "11.2.3",
+    "@testing-library/react": "11.2.5",
     "@types/react-dom": "17.0.0",
     "coveralls": "3.1.0",
     "cross-env": "7.0.3",
     "eslint-plugin-prettier": "3.3.1",
     "gh-pages": "3.1.0",
-    "husky": "4.3.8",
+    "husky": "5.0.9",
     "lerna": "3.22.1",
-    "lint-staged": "10.5.3",
+    "lint-staged": "10.5.4",
     "prettier": "2.2.1",
-    "standard-version": "9.1.0",
+    "standard-version": "9.1.1",
     "tsdx": "0.14.1",
     "typescript": "3.9.7",
     "yarn-or-npm": "3.0.1"
@@ -78,12 +80,6 @@
     "**/*.{css,html,js,jsx,json,less,md,scss,ts,tsx}": [
       "prettier --write"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yon run dev:readonly"
-    }
   },
   "standard-version": {
     "scripts": {

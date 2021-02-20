@@ -66,11 +66,11 @@
     "types": "tsc --p tsconfig.json"
   },
   "dependencies": {
-    "lodash": "^4.0.0",
+    "lodash": "^4.17.21",
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.167",
+    "@types/lodash": "4.14.168",
     "@types/shallowequal": "1.1.1"
   }
 }
