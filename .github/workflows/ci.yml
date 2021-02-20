@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --prefer-offline
 
-      - name: Clear caches
+      - name: Clear local caches
         run: yarn clean
 
       - name: Run CI checks
