@@ -2,7 +2,7 @@
 
 Selectors with parameters and dynamic dependencies.
 
-[![build status](https://img.shields.io/github/workflow/status/spautz/dynamic-selectors/ci/main)](https://github.com/spautz/dynamic-selectors/actions)
+[![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://img.shields.io/coveralls/github/spautz/dynamic-selectors/main.svg)](https://coveralls.io/github/spautz/dynamic-selectors?branch=main)
 
 ## Packages
