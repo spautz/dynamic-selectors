@@ -15,6 +15,8 @@ run_command "./scripts/check-environment.sh"
 run_command "yarn install --frozen-lockfile"
 
 ###################################################################################################
-# Run whatever the script in package.json wants to run
+# All functionality is available via package.json scripts
 
-run_command "yarn ci"
+run_command "yarn clean"
+run_command "yarn all:readonly"
+run_command "yarn packages:build"
