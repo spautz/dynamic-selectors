@@ -2,7 +2,7 @@
 
 Selectors with parameters and dynamic dependencies.
 
-[![build status](https://img.shields.io/github/workflow/status/spautz/dynamic-selectors/ci/main)](https://github.com/spautz/dynamic-selectors/actions)
+[![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://img.shields.io/coveralls/github/spautz/dynamic-selectors/main.svg)](https://coveralls.io/github/spautz/dynamic-selectors?branch=main)
 
 ## Packages
@@ -14,6 +14,7 @@ Selectors with parameters and dynamic dependencies.
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/core.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 
 Core functionality for dynamic selectors, independent of any other library.
+**This is the main package: [main docs are here](./packages/core/).**
 
 #### [@dynamic-selectors/with-reselect](./packages/with-reselect/)
 
