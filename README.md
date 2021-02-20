@@ -13,6 +13,8 @@ Selectors with parameters and dynamic dependencies.
 [![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/core)](https://david-dm.org/spautz/dynamic-selectors?path=packages/core)
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/core.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 
+**This is the main package: [main docs are here](./packages/core/).**
+
 Core functionality for dynamic selectors, independent of any other library.
 
 #### [@dynamic-selectors/with-reselect](./packages/with-reselect/)
