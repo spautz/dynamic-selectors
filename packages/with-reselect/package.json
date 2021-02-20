@@ -1,6 +1,6 @@
 {
   "name": "@dynamic-selectors/with-reselect",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Use dynamic selector functions with Reselect",
   "keywords": [],
   "license": "MIT",
@@ -63,7 +63,7 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@dynamic-selectors/core": "0.2.1",
+    "@dynamic-selectors/core": "^0.2.2",
     "reselect": "4.0.0"
   }
 }

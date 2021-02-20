@@ -1,7 +1,7 @@
 {
   "name": "@dynamic-selectors/workspace",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Root workspace for Dynamic-Selectors",
   "license": "MIT",
   "homepage": "https://github.com/spautz/dynamic-selectors#readme",
