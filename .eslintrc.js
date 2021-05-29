@@ -16,5 +16,13 @@ module.exports = {
     ecmaVersion: 2020,
   },
 
-  ignorePatterns: ['build/', 'coverage/', 'coverage-local/', 'dist/', 'lib-dist/', 'node_modules/'],
+  ignorePatterns: [
+    'build/',
+    'coverage/',
+    'coverage-local/',
+    'dist/',
+    'legacy-types/',
+    'lib-dist/',
+    'node_modules/',
+  ],
 };
