@@ -54,8 +54,11 @@
     "all": "yarn run clean && yarn run dev && yarn run test:coverage && yarn run build",
     "all:readonly": "yarn run dev:readonly && yarn run test:coverage",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
-    "build": "tsdx build",
-    "build:clean": "rimraf ./dist",
+    "build": "tsdx build && yon run build:types",
+    "build:clean": "rimraf ./dist ./legacy-types",
+    "build:types": "yon run build:types:3.x && yon run build:types:4.x",
+    "build:types:3.x": "downlevel-dts ./dist ./legacy-types/ts3.x/dist --to=3.0",
+    "build:types:4.x": "downlevel-dts ./dist ./dist --to=4.0",
     "build:watch": "tsdx watch",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
@@ -76,5 +79,12 @@
   "devDependencies": {
     "@types/lodash": "4.14.170",
     "@types/shallowequal": "1.1.1"
+  },
+  "typesVersions": {
+    "<4": {
+      "*": [
+        "legacy-types/ts3.x/*"
+      ]
+    }
   }
 }
