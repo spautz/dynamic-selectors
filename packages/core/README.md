@@ -15,25 +15,42 @@ For more information or related packages, see the [Dynamic Selectors workspace](
 
 ## Example
 
-(This is based on [Re-reselect's example](https://github.com/toomuchdesign/re-reselect#readme).)
-
 ```javascript
 import { createDynamicSelector } from '@dynamic-selectors/core';
 
-const getUsersByLibrary = createDynamicSelector((getState, libraryName) => {
-  const users = getState('users');
-  const libraryId = getState(`libraries[${libraryName}].id`);
-
-  return expensiveComputation(users, libraryId);
+/* Simple selectors can access state, like normal */
+const getAuthor = createDynamicSelector((getState, authorId) => {
+  return getState(`authors[${authorId}]`);
 });
 
-getUsersByLibrary(state, 'react');
-getUsersByLibrary(state, 'vue');
-getUsersByLibrary(state, 'react'); // this hits the cache
+/* Selectors can call other selectors inline -- even in loops */
+const getBooksForAuthor = createDynamicSelector((getState, authorId) => {
+  const author = getAuthor(authorId);
+  if (author) {
+    return author.bookIds.map((bookId) => getState(`books[${bookId}]`));
+  }
+  // Else: throw, return default value, etc
+});
+
+/* Because dependencies are dynamic, selectors are easier to compose together */
+const getBooksForMultipleAuthors = createDynamicSelector((getState, authorIds) => {
+  return authorIds.map(getBooksForAuthor);
+});
+
+getBooksForMultipleAuthors(state, [1, 2, 3]);
+getBooksForMultipleAuthors(state, [4, 5, 6]);
+// This hits the cache
+getBooksForMultipleAuthors(state, [1, 2, 3, 4, 5, 6]);
 ```
 
-`getUsersByLibrary(state, 'react')` will rerun only when its dependencies change: `state.users` or `state.libraries.react.id`.
-Dependencies can be state values (from `getState`), or other dynamic selectors.
+`getBooksForAuthor(authorId)` will be rerun only when its dependencies change: `state.authors[authorId]` or one of the
+`state.books[bookId]` values it accessed.
+
+The result is cached per `authorId`. The same cache is used if you call `getBooksForAuthor(state, authorId)` directly.
+
+`getBooksForMultipleAuthors(state, authorIds)` will be cached the same way: it will rerun only when one of its
+`getBooksForAuthor` dependencies has changed. Dependencies can be state values (from `getState`), or other dynamic
+selectors.
 
 ## Features
 
@@ -165,7 +182,7 @@ Sets the displayName of the returned selector function, and includes it in verbo
 Generates a string cache key that represents the params. To get constant hashes even when object properties are
 in different orders from one call to the next, you would customize this like:
 
-Using [node-object-hash](https://github.com/SkeLLLa/node-object-hash):
+Example using [node-object-hash](https://github.com/SkeLLLa/node-object-hash):
 
 ```javascript
 var hashSortCoerce = hasher({ sort: true, coerce: true });
@@ -174,7 +191,7 @@ createDynamicSelector(myFn, {
 });
 ```
 
-Using [object-hash](https://github.com/puleos/object-hash):
+Example using [object-hash](https://github.com/puleos/object-hash):
 
 ```javascript
 createDynamicSelector(myFn, {

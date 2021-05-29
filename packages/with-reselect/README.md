@@ -23,7 +23,7 @@ Create a Reselect selector from any dynamic selector. You can specify the params
 if it accepts params.
 
 ```javascript
-const originalSelector = createDynamicSelector(...);
+const originalSelector = createDynamicSelector(/* dynamic-selector for use with reselect */);
 const newSelector = reselectSelectorFromDynamic(originalSelector);
 ```
 
@@ -33,7 +33,7 @@ Creates a normal dynamic selector from any Reselect selector (using `createDynam
 dynamic selector factory, you should use `wrapReselect` instead.
 
 ```javascript
-const originalSelector = createSelector(...);
+const originalSelector = createSelector(/* reselect selector for use with dynamic-selectors */);
 const newSelector = dynamicSelectorFromReselect(originalSelector);
 ```
 
@@ -43,8 +43,8 @@ Converts any Reselect selector into a function that you can pass to your own cus
 The default `dynamicSelectorFromReselect` helper is just shorthand for `createDynamicSelector(wrapSelector(selectorFn))`
 
 ```javascript
-const myCustomSelectorFactory = dynamicSelectorForState(...);
+const myCustomSelectorFactory = dynamicSelectorForState(/* custom options */);
 
-const originalSelector = createSelector(...);
+const originalSelector = createSelector(/* custom dynamic-selector for use with reselect */);
 const newSelector = myCustomSelectorFactory(wrapSelector(originalSelector));
 ```
