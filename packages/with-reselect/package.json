@@ -36,8 +36,8 @@
   ],
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/dynamic-selectors-with-reselect.esm.js",
-  "jsnext:main": "dist/dynamic-selectors-with-reselect.esm.js",
+  "module": "dist/with-reselect.esm.js",
+  "jsnext:main": "dist/with-reselect.esm.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
