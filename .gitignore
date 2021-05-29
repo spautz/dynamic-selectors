@@ -8,6 +8,7 @@
 /coverage
 /packages/*/coverage-local
 /packages/*/dist
+/packages/*/legacy-types
 
 # misc
 .idea/

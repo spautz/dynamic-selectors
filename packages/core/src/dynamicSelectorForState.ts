@@ -82,14 +82,8 @@ const dynamicSelectorForState = <StateType = any>(
         ? { ...defaultSelectorOptions, ...options }
         : (options as DynamicSelectorOptions) || defaultSelectorOptions;
     validateOptions(mergedOptions);
-    const {
-      compareResult,
-      createResultCache,
-      debug,
-      displayName,
-      getKeyForParams,
-      onError,
-    } = mergedOptions;
+    const { compareResult, createResultCache, debug, displayName, getKeyForParams, onError } =
+      mergedOptions;
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
@@ -150,12 +144,17 @@ const dynamicSelectorForState = <StateType = any>(
         ] = previousResult;
 
         /* istanbul ignore next */
+        // eslint-disable-next-line no-constant-condition
         if (false) {
           // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
-          const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] = previousState;
-          const checkType_previousStateDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE_DEPENDENCIES] = previousStateDependencies;
-          const checkType_previousCallDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__CALL_DEPENDENCIES] = previousCallDependencies;
-          const checkType_hasPreviousReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] = hasPreviousReturnValue;
+          const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] =
+            previousState;
+          const checkType_previousStateDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE_DEPENDENCIES] =
+            previousStateDependencies;
+          const checkType_previousCallDependencies: DynamicSelectorResultEntry[typeof RESULT_ENTRY__CALL_DEPENDENCIES] =
+            previousCallDependencies;
+          const checkType_hasPreviousReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] =
+            hasPreviousReturnValue;
           console.log({
             checkType_previousState,
             checkType_previousStateDependencies,
