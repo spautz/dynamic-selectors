@@ -46,7 +46,7 @@ const hasAnyStateDependencyChanged = (
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   for (let path in previousStateDependencies) {
-    if (previousStateDependencies.hasOwnProperty(path)) {
+    if (Object.prototype.hasOwnProperty.call(previousStateDependencies, path)) {
       const previousValue = previousStateDependencies[path];
       const currentValue = path ? getFn(state, path) : state;
       if (previousValue !== currentValue) {
@@ -73,20 +73,21 @@ const hasAnyCallDependencyChanged = (
     pushCallStackEntry(createDepCheckEntry(allowExecution));
 
     for (let i = 0; i < numPreviousCallDependencies; i += 1) {
-      const [
-        dependencySelectorFn,
-        dependencyParams,
-        dependencyReturnValue,
-        dependencyIsReadOnly,
-      ] = previousCallDependencies[i];
+      const [dependencySelectorFn, dependencyParams, dependencyReturnValue, dependencyIsReadOnly] =
+        previousCallDependencies[i];
 
       /* istanbul ignore next */
+      // eslint-disable-next-line no-constant-condition
       if (false) {
         // This block is here ONLY to catch possible errors if the structure of `previousCallDependencies` changes
-        const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] = dependencySelectorFn;
-        const checkType_params: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__PARAMS] = dependencyParams;
-        const checkType_dependencyReturnValue: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__RETURN_VALUE] = dependencyReturnValue;
-        const checkType_dependencyIsReadOnly: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__IS_READONLY] = dependencyIsReadOnly;
+        const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] =
+          dependencySelectorFn;
+        const checkType_params: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__PARAMS] =
+          dependencyParams;
+        const checkType_dependencyReturnValue: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__RETURN_VALUE] =
+          dependencyReturnValue;
+        const checkType_dependencyIsReadOnly: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__IS_READONLY] =
+          dependencyIsReadOnly;
         console.log({
           checkType_selectorFn,
           checkType_params,

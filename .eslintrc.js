@@ -1,12 +1,20 @@
 module.exports = {
   root: true,
-  extends: ['react-app', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
+  extends: [
+    'react-app',
+    'eslint:recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
 
   settings: {
     react: {
       version: 'detect',
     },
   },
+  parserOptions: {
+    ecmaVersion: 2020,
+  },
 
-  ignorePatterns: ['dist/', 'coverage/', 'coverage-local/', 'node_modules/'],
+  ignorePatterns: ['build/', 'coverage/', 'coverage-local/', 'dist/', 'lib-dist/', 'node_modules/'],
 };

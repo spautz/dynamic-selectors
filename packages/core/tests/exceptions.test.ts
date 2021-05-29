@@ -37,6 +37,8 @@ describe('exceptions', () => {
   });
 
   test('catch exception thrown by child', () => {
+    const exceptionWasCaught = jest.fn();
+
     const childSelector = createDynamicSelector((getState) => {
       const result = getState('a');
       if (result % 2) {
@@ -49,7 +51,9 @@ describe('exceptions', () => {
         let result = 0;
         try {
           result = childSelector() * multiplier;
-        } catch (e) {}
+        } catch (e) {
+          exceptionWasCaught();
+        }
 
         return result;
       },
@@ -62,6 +66,8 @@ describe('exceptions', () => {
     state = { a: 3 };
 
     expect(parentSelector(state, { multiplier: 10 })).toEqual(0);
+    expect(exceptionWasCaught).toHaveBeenCalledTimes(1);
+
     // Parent is cached, child is not
     expect(parentSelector.hasCachedResult(state, { multiplier: 10 })).toEqual(true);
     expect(parentSelector.getCachedResult(state, { multiplier: 10 })).toEqual(0);

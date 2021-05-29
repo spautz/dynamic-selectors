@@ -2,13 +2,21 @@
   "name": "@dynamic-selectors/with-reselect",
   "version": "0.2.2",
   "description": "Use dynamic selector functions with Reselect",
-  "keywords": [],
+  "keywords": [
+    "dynamic selector",
+    "parameterized selector",
+    "selectors",
+    "reselect arguments",
+    "reselect",
+    "redux",
+    "memoize"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/spautz/dynamic-selectors/packages/with-reselect#readme",
   "bugs": "https://github.com/spautz/dynamic-selectors/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spautz/dynamic-selectors.git",
+    "url": "git+https://github.com/spautz/dynamic-selectors.git",
     "directory": "packages/with-reselect"
   },
   "author": {
@@ -20,6 +28,8 @@
   },
   "files": [
     "dist/",
+    "docs/",
+    "legacy-types/",
     "src/",
     "LICENSE",
     "*.md"
@@ -39,11 +49,10 @@
     "pretest": "yon run test:clean",
     "____ INTEGRATION ___________________________________________________": "",
     "clean": "yon run build:clean && yon run test:clean && rimraf ./node_modules/.cache",
-    "test": "yon run test:nowatch",
     "dev": "yarn run format && yarn run types && yarn run lint",
     "dev:readonly": "yarn run format:verify && yarn run types && yarn run lint",
-    "all": "yarn run clean && yarn run dev && yarn run test:nowatch && yarn run build",
-    "all:readonly": "yarn run dev:readonly && yarn run test:nowatch",
+    "all": "yarn run clean && yarn run dev && yarn run test:coverage && yarn run build",
+    "all:readonly": "yarn run dev:readonly && yarn run test:coverage",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
     "build": "tsdx build",
     "build:clean": "rimraf ./dist",
@@ -52,11 +61,13 @@
     "format:verify": "prettier --list-different .",
     "lint": "tsdx lint . --max-warnings 0",
     "release:changelog": "standard-version --skip.commit --skip.tag --release-as ",
+    "test": "yon run test:coverage",
     "test:clean": "rimraf ./coverage-local",
-    "test:nowatch": "tsdx test --coverage",
+    "test:coverage": "tsdx test --coverage",
+    "test:nowatch": "tsdx test",
     "test:watch": "tsdx test --watch",
     "test:watchcoverage": "tsdx test --watchAll --coverage",
-    "types": "tsc --p tsconfig.json"
+    "types": "tsc --p tsconfig.json --noEmit"
   },
   "peerDependencies": {
     "@dynamic-selectors/core": "^0.2.1",
