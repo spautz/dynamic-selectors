@@ -4,9 +4,10 @@
   "description": "Dynamic selector functions",
   "keywords": [
     "dynamic selector",
-    "selectors",
     "parameterized selector",
+    "selectors",
     "reselect arguments",
+    "reselect",
     "memoize",
     "selector functions"
   ],
@@ -15,7 +16,7 @@
   "bugs": "https://github.com/spautz/dynamic-selectors/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spautz/dynamic-selectors.git",
+    "url": "git+https://github.com/spautz/dynamic-selectors.git",
     "directory": "packages/core"
   },
   "author": {
@@ -27,6 +28,8 @@
   },
   "files": [
     "dist/",
+    "docs/",
+    "legacy-types/",
     "src/",
     "LICENSE",
     "*.md"
@@ -48,8 +51,8 @@
     "clean": "yon run build:clean && yon run test:clean && rimraf ./node_modules/.cache",
     "dev": "yarn run format && yarn run types && yarn run lint",
     "dev:readonly": "yarn run format:verify && yarn run types && yarn run lint",
-    "all": "yarn run clean && yarn run dev && yarn run test:nowatch && yarn run build",
-    "all:readonly": "yarn run dev:readonly && yarn run test:nowatch",
+    "all": "yarn run clean && yarn run dev && yarn run test:coverage && yarn run build",
+    "all:readonly": "yarn run dev:readonly && yarn run test:coverage",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
     "build": "tsdx build",
     "build:clean": "rimraf ./dist",
@@ -64,7 +67,7 @@
     "test:nowatch": "tsdx test",
     "test:watch": "tsdx test --watch",
     "test:watchcoverage": "tsdx test --watchAll --coverage",
-    "types": "tsc --p tsconfig.json"
+    "types": "tsc --p tsconfig.json --noEmit"
   },
   "dependencies": {
     "lodash": "^4.17.21",

@@ -8,27 +8,25 @@
   "bugs": "https://github.com/spautz/dynamic-selectors/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spautz/dynamic-selectors.git"
+    "url": "git+https://github.com/spautz/dynamic-selectors.git"
   },
   "author": {
     "name": "Steven Pautz",
     "url": "http://stevenpautz.com/"
   },
-  "sideEffects": false,
   "engines": {
-    "node": ">=10",
+    "node": "^10 || >=12",
     "yarn": "1.*"
   },
   "scripts": {
     "____ LIFECYCLE HOOKS _______________________________________________": "",
-    "prepare": "yon run packages:prepare",
+    "prepare": "husky install && yon run packages:prepare",
     "pretest": "yon run test:clean",
-    "postinstall": "husky install",
     "____ INTEGRATION ___________________________________________________": "",
-    "clean": "yon run test:clean && rimraf ./node_modules/.cache",
+    "clean": "yon run test:clean && rimraf ./node_modules/.cache && yon run packages:clean",
     "dev": "yon run format && yon run types && yon run lint",
     "dev:readonly": "yon run format:verify && yon run types && yon run lint",
-    "all": "yon run prepare && yon run dev && yon run test:coverage",
+    "all": "yon run bootstrap && yon run dev && yon run test:coverage",
     "all:readonly": "yon run dev:readonly && yon run test:coverage",
     "____ BATCH COMMANDS FOR PACKAGES ___________________________________": "",
     "packages:prepare": "lerna run prepare",
@@ -55,12 +53,13 @@
     "test:nowatch": "tsdx test",
     "test:watch": "tsdx test --watch",
     "test:watchcoverage": "tsdx test --watchAll --coverage",
-    "types": "tsc --p tsconfig.json"
+    "types": "tsc --p tsconfig.json --noEmit"
   },
   "dependencies": {},
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.9",
     "@testing-library/react": "11.2.5",
+    "@tsconfig/recommended": "1.0.1",
     "@types/react-dom": "17.0.1",
     "cross-env": "7.0.3",
     "eslint-plugin-prettier": "3.3.1",
@@ -69,6 +68,7 @@
     "lerna": "3.22.1",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
+    "rimraf": "3.0.2",
     "standard-version": "9.1.1",
     "tsdx": "0.14.1",
     "typescript": "3.9.7",

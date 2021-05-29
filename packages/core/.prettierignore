@@ -16,8 +16,9 @@
 
 # Unless they're somewhere we can ignore
 build/
-dist/
 coverage/
 coverage-local/
+dist/
+lib-dist/
+legacy-types/
 node_modules/
-storybook-static/

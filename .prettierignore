@@ -15,7 +15,10 @@
 !**/*.tsx
 
 # Unless they're somewhere we can ignore
-dist/
+build/
 coverage/
 coverage-local/
+dist/
+lib-dist/
+legacy-types/
 node_modules/
