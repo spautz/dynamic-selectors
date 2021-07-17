@@ -73,7 +73,7 @@
     "types": "tsc --p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "@dynamic-selectors/core": "^0.3.0",
+    "@dynamic-selectors/core": "^0.3.1",
     "reselect": "^4.0.0"
   },
   "devDependencies": {
