@@ -1,7 +1,12 @@
-import { DynamicSelectorArgsWithoutState, DynamicSelectorFn } from '@dynamic-selectors/core';
+import {
+  DefaultReturnType,
+  DefaultStateType,
+  DynamicSelectorArgsWithoutState,
+  DynamicSelectorFn,
+} from '@dynamic-selectors/core';
 import { Selector } from 'reselect';
 
-const reselectSelectorFromDynamic = <StateType = any, ReturnType = unknown>(
+const reselectSelectorFromDynamic = <StateType = DefaultStateType, ReturnType = DefaultReturnType>(
   dynamicSelectorFn: DynamicSelectorFn<ReturnType>,
   ...paramsAndOtherArgs: DynamicSelectorArgsWithoutState
 ): Selector<StateType, ReturnType> => {

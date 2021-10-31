@@ -4,7 +4,13 @@ import {
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache';
-import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } from '../types';
+import {
+  DefaultReturnType,
+  DefaultStateType,
+  DynamicSelectorFn,
+  DynamicSelectorParams,
+  DynamicSelectorStateGetFn,
+} from '../types';
 
 /**
  * We track wo types of dependencies:
@@ -12,7 +18,7 @@ import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } f
  *  - "Call Dependency": the selector called another selector, maybe passing it some params
  */
 
-export type DynamicSelectorStateDependencies = Record<string, any>;
+export type DynamicSelectorStateDependencies = Record<string, unknown>;
 export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependency>;
 
 export type DynamicSelectorCallDependency = [
@@ -21,7 +27,7 @@ export type DynamicSelectorCallDependency = [
   /* params */
   DynamicSelectorParams,
   /* returnValue */
-  any,
+  DefaultReturnType,
   /* isReadOnly */
   boolean,
 ];
@@ -35,13 +41,13 @@ export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 const createCallDependency = (
   selectorFn: DynamicSelectorFn,
   params: DynamicSelectorParams,
-  returnValue: any,
+  returnValue: DefaultReturnType,
   isReadOnly: boolean,
 ): DynamicSelectorCallDependency => [selectorFn, params, returnValue, isReadOnly];
 
 const hasAnyStateDependencyChanged = (
   getFn: DynamicSelectorStateGetFn,
-  state: any,
+  state: DefaultStateType,
   previousStateDependencies: DynamicSelectorStateDependencies,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
@@ -61,10 +67,10 @@ const hasAnyStateDependencyChanged = (
 };
 
 const hasAnyCallDependencyChanged = (
-  state: any,
+  state: DefaultStateType,
   previousCallDependencies: DynamicSelectorCallDependencies,
   allowExecution: boolean,
-  otherArgs: Array<any>,
+  otherArgs: Array<unknown>,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   const numPreviousCallDependencies = previousCallDependencies.length;

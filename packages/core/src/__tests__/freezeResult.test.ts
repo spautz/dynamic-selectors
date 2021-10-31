@@ -1,4 +1,4 @@
-import { createDynamicSelector } from '../index';
+import { createDynamicSelector, DefaultStateType } from '../index';
 import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
 
 describe('freeze result', () => {
@@ -44,7 +44,7 @@ describe('freeze result', () => {
     );
     const checkSortedArraySelector = new DebugInfoCheckUtil(sortedArraySelector);
 
-    let state: any = { list: [] };
+    let state: DefaultStateType = { list: [] };
 
     const result1 = sortedArraySelector(state);
     expect(result1).toEqual([]);

@@ -13,7 +13,7 @@ import { DynamicSelectorResultEntry } from './resultCache';
  */
 const callStack: Array<DynamicSelectorResultEntry> = [];
 
-const getTopCallStackEntry = () => callStack[callStack.length - 1];
+const getTopCallStackEntry = (): DynamicSelectorResultEntry => callStack[callStack.length - 1];
 const pushCallStackEntry = callStack.push.bind(callStack);
 const popCallStackEntry = callStack.pop.bind(callStack);
 

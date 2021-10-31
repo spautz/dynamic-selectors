@@ -1,6 +1,6 @@
 import { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types';
 
-const validateOptions = (options: DynamicSelectorOptions) => {
+const validateOptions = (options: DynamicSelectorOptions): void => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
     const {
@@ -30,7 +30,7 @@ const validateOptions = (options: DynamicSelectorOptions) => {
   }
 };
 
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions) => {
+const validateStateOptions = (stateOptions: DynamicSelectorStateOptions): void => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
     const { compareState, get, defaultSelectorOptions, ...unrecognizedStateOptions } = stateOptions;

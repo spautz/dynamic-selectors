@@ -62,7 +62,7 @@
     "build:watch": "tsdx watch",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
-    "lint": "tsdx lint . --max-warnings 99",
+    "lint": "tsdx lint . --max-warnings 0",
     "release:changelog": "standard-version --skip.commit --skip.tag --release-as ",
     "test": "yon run test:coverage",
     "test:clean": "rimraf ./coverage-local",

@@ -42,9 +42,12 @@ import {
   DynamicSelectorStateOptions,
 } from './types';
 
-const dynamicSelectorForState = <StateType = DefaultStateType>(
+const dynamicSelectorForState = <StateType = DefaultStateType, ReturnType = DefaultReturnType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
-) => {
+): ((
+  innerFn: DynamicSelectorInnerFn<ReturnType>,
+  options?: Partial<DynamicSelectorOptions<ReturnType, StateType>>,
+) => DynamicSelectorFn<ReturnType>) => {
   validateStateOptions(stateOptions);
   const { compareState, get, defaultSelectorOptions } = stateOptions;
 
@@ -124,7 +127,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       let debugInfo: DynamicSelectorDebugInfo = null;
 
       if (process.env.NODE_ENV !== 'production') {
-        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO]!;
+        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO] as NonNullable<DynamicSelectorDebugInfo>;
         debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
 
         if (recordDependencies && allowExecution) {

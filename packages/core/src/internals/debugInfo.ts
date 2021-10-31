@@ -28,50 +28,50 @@ const createDebugInfo = (): DynamicSelectorDebugInfo => {
 const debugLogVerbose = (
   debugInfo: DynamicSelectorDebugInfo,
   label: string,
-  ...moreInfo: Array<any>
-) => {
+  ...moreInfo: Array<unknown>
+): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo && debugInfo._verbose) {
     const labelPrefix = typeof debugInfo._verbose === 'string' ? `${debugInfo._verbose}: ` : '';
     console.log(labelPrefix + label, ...moreInfo, debugInfo);
   }
 };
 
-const debugDepCheck = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugDepCheck = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.depCheckCount++;
     debugLogVerbose(debugInfo, 'Begin DepCheck');
   }
 };
 
-const debugInvoked = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugInvoked = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.invokeCount++;
     debugLogVerbose(debugInfo, 'Begin Invoke');
   }
 };
 
-const debugSkippedRun = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugSkippedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.skippedRunCount++;
     debugLogVerbose(debugInfo, 'Skipped!');
   }
 };
 
-const debugPhantomRun = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugPhantomRun = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.phantomRunCount++;
     debugLogVerbose(debugInfo, 'Phantom!');
   }
 };
 
-const debugFullRun = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugFullRun = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.fullRunCount++;
     debugLogVerbose(debugInfo, 'Full run!');
   }
 };
 
-const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo) => {
+const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.abortedRunCount++;
     debugLogVerbose(debugInfo, 'Aborted!');

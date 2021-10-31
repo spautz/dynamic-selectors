@@ -1,7 +1,7 @@
 import { getTopCallStackEntry } from './callStack';
 import { createDebugInfo, DynamicSelectorDebugInfo } from './debugInfo';
 import { DynamicSelectorCallDependencies, DynamicSelectorStateDependencies } from './dependencies';
-import { DynamicSelectorStateOptions } from '../types';
+import { DefaultReturnType, DefaultStateType, DynamicSelectorStateOptions } from '../types';
 
 /**
  * This is where things happen: this tracks everything about a single Dynamic Selector call: what was called,
@@ -14,7 +14,7 @@ export type DynamicSelectorResultEntry = [
   /* stateOptions (used to indicate the 'universe' this selector lives in) */
   DynamicSelectorStateOptions,
   /* state/lastState */
-  any,
+  DefaultStateType,
   /* allow execution? */
   boolean,
   /* record dependencies? */
@@ -26,7 +26,7 @@ export type DynamicSelectorResultEntry = [
   /* hasReturnValue/hasLastReturnValue */
   boolean,
   /* returnValue/lastReturnValue */
-  any,
+  DefaultReturnType,
   /* error/lastError thrown by innerFn */
   Error | null,
   /* debugInfo */
@@ -48,12 +48,12 @@ export const RESULT_ENTRY__DEBUG_INFO = 9 as const;
 export type DynamicSelectorResultCache = {
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  [propName: string]: any;
+  [propName: string]: unknown;
 };
 
 const createResultEntry = (
   stateOptions: DynamicSelectorStateOptions,
-  state: any,
+  state: DefaultStateType,
   allowExecution: boolean,
   recordDependencies: boolean,
   myPreviousResult?: DynamicSelectorResultEntry,
@@ -63,7 +63,7 @@ const createResultEntry = (
     state,
     allowExecution,
     recordDependencies,
-    [],
+    {},
     [],
     false,
     undefined,

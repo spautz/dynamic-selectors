@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
-import { DebugInfoCheckUtil } from '@dynamic-selectors/core';
+import { DebugInfoCheckUtil, DefaultStateType } from '@dynamic-selectors/core';
 
 import { dynamicSelectorFromReselect } from '../index';
 
 describe('dynamicSelectorFromReselect', () => {
   test('handles simple selector functions', () => {
-    const reselectSelector = (state: any) => state.a;
+    const reselectSelector = (state: DefaultStateType) => state.a;
     const dynamicSelector = dynamicSelectorFromReselect(reselectSelector);
     const selectorCheck = new DebugInfoCheckUtil(dynamicSelector);
 
@@ -41,7 +41,7 @@ describe('dynamicSelectorFromReselect', () => {
   });
 
   test('handles normal selector functions', () => {
-    const reselectorDependency = (state: any) => state.a;
+    const reselectorDependency = (state: DefaultStateType) => state.a;
     const reselectSelector = createSelector(reselectorDependency, (depResult) => depResult);
     const dynamicSelector = dynamicSelectorFromReselect(reselectSelector);
 
