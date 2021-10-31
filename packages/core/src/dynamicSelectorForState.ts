@@ -211,14 +211,14 @@ const dynamicSelectorForState = <StateType = any>(
           nextResult[RESULT_ENTRY__RETURN_VALUE] = innerFn(getState, params, ...otherArgs);
           nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] = true;
         } catch (e) {
-          nextResult[RESULT_ENTRY__ERROR] = e;
+          nextResult[RESULT_ENTRY__ERROR] = e as Error;
           debugAbortedRun(debugInfo);
 
           if (onError) {
             // If the onError callback returns anything, we'll use that as the return value -- but we still
             // track the error.
             nextResult[RESULT_ENTRY__RETURN_VALUE] = onError(
-              e,
+              e as Error,
               [state, params, ...otherArgs],
               outerFn,
             );

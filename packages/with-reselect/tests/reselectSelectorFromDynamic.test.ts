@@ -54,15 +54,15 @@ describe('reselectSelectorFromDynamic', () => {
       return getState(path);
     });
     const reselectSelectorA = createSelector(
-      reselectSelectorFromDynamic(dynamicSelector, 'a'),
+      [reselectSelectorFromDynamic(dynamicSelector, 'a')],
       (depResult) => depResult,
     );
     const reselectSelectorB = createSelector(
-      reselectSelectorFromDynamic(dynamicSelector, 'b'),
+      [reselectSelectorFromDynamic(dynamicSelector, 'b')],
       (depResult) => depResult,
     );
     const reselectSelectorC = createSelector(
-      reselectSelectorFromDynamic(dynamicSelector, 'c'),
+      [reselectSelectorFromDynamic(dynamicSelector, 'c')],
       (depResult) => depResult,
     );
     const dynamicSelectorCheckA = new DebugInfoCheckUtil(dynamicSelector, 'a');
