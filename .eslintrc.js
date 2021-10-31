@@ -12,6 +12,14 @@ module.exports = {
   },
   overrides: [
     {
+      // Allow `require` in dev configs
+      files: ['./*.config.*', './packages/*/*.config.*'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+    {
+      // Test files are test files
       files: ['**/*.test.*', '**/__tests__/*.*'],
       env: {
         jest: true,

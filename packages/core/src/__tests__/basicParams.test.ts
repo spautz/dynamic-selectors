@@ -7,7 +7,7 @@ describe('basic params', () => {
       return getState(path || null);
     });
 
-    let state = { a: 1, b: 2, c: 3 };
+    const state = { a: 1, b: 2, c: 3 };
 
     expect(selector(state)).toEqual({ a: 1, b: 2, c: 3 });
 

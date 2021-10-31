@@ -10,7 +10,7 @@ import { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
  */
 const createDefaultCache = (): DynamicSelectorResultCache => {
   // @TODO: use LimitedCache
-  let resultCache: Record<string, DynamicSelectorResultEntry> = {};
+  const resultCache: Record<string, DynamicSelectorResultEntry> = {};
 
   return {
     get: (paramKey) => resultCache[paramKey],

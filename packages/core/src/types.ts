@@ -1,12 +1,16 @@
 import { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internals';
 
 type AnyPrimitive = boolean | number | string | null | undefined;
+export type DefaultStateType = any;
+// @TODO for 1.0: `undefined`
+export type DefaultReturnType = any;
+// @TODO for 1.0: `AnyPrimitive | Array<AnyPrimitive> | Record<string, AnyPrimitive | Array<AnyPrimitive>>`
+export type DefaultParamsType = any;
 
-export type DynamicSelectorStateGetFn<StateType = any, ReturnType = any> = (
-  state: StateType,
-  path: string | null,
-  defaultValue?: ReturnType,
-) => ReturnType;
+export type DynamicSelectorStateGetFn<
+  StateType = DefaultStateType,
+  ReturnType = DefaultReturnType,
+> = (state: StateType, path: string | null, defaultValue?: ReturnType) => ReturnType;
 
 /**
  * Options for how to interact with the state.
@@ -14,7 +18,7 @@ export type DynamicSelectorStateGetFn<StateType = any, ReturnType = any> = (
  * State options represent an original source of state -- like Redux, a Context value, or some other 'universe'
  * that delivers a value we need to filter or transform.
  */
-export type DynamicSelectorStateOptions<StateType = any> = {
+export type DynamicSelectorStateOptions<StateType = DefaultStateType> = {
   /* State equality checking: if this returns true then the states will be considered the same */
   compareState: (oldState: StateType, newState: StateType) => boolean;
   /* Accessor to retrieve a value from the state */
@@ -26,7 +30,7 @@ export type DynamicSelectorStateOptions<StateType = any> = {
 /**
  * Options for how an individual selector behaves.
  */
-export type DynamicSelectorOptions<ReturnType = any, StateType = any> = {
+export type DynamicSelectorOptions<ReturnType = DefaultReturnType, StateType = DefaultStateType> = {
   /* Output equality checking: if this returns true then the selector will be considered unchanged */
   compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
   /* Used to customize the cache of results */
@@ -59,7 +63,7 @@ export type DynamicSelectorParams =
 /**
  * The `getState` function that's available within each Dynamic Selector.
  */
-export type DynamicSelectorStateAccessor<ReturnType = any> = (
+export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = (
   path: string | null,
   defaultValue?: ReturnType,
 ) => ReturnType;
@@ -67,7 +71,7 @@ export type DynamicSelectorStateAccessor<ReturnType = any> = (
 /**
  * The 'inner' or 'seed' function that a Dynamic Selector is created from.
  */
-export type DynamicSelectorInnerFn<ReturnType = any> = ((
+export type DynamicSelectorInnerFn<ReturnType = DefaultReturnType> = ((
   stateAccessor: DynamicSelectorStateAccessor,
   params?: DynamicSelectorParams | any,
   ...extraArgs: Array<any>
@@ -75,25 +79,25 @@ export type DynamicSelectorInnerFn<ReturnType = any> = ((
   displayName?: string;
 };
 
-export type DynamicSelectorArgsWithState<StateType = any> = [
+export type DynamicSelectorArgsWithState<StateType = DefaultStateType> = [
   StateType,
   DynamicSelectorParams?,
   ...Array<any>
 ];
 export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams?, ...Array<any>];
 
-export type DynamicSelectorFnWithState<ReturnType = any> = (
+export type DynamicSelectorFnWithState<ReturnType = DefaultReturnType> = (
   ...args: DynamicSelectorArgsWithState
 ) => ReturnType;
 
-export type DynamicSelectorFnWithoutState<ReturnType = any> = (
+export type DynamicSelectorFnWithoutState<ReturnType = DefaultReturnType> = (
   ...args: DynamicSelectorArgsWithoutState
 ) => ReturnType;
 
 /**
  * The Dynamic Selector function returned by this library.
  */
-export type DynamicSelectorFn<ReturnType = any> = ((
+export type DynamicSelectorFn<ReturnType = DefaultReturnType> = ((
   ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
 ) => ReturnType) & {
   _fn: DynamicSelectorInnerFn<ReturnType>;

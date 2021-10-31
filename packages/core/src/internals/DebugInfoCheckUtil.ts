@@ -24,6 +24,7 @@ class DebugInfoCheckUtil {
 
   constructor(defaultSelector?: DynamicSelectorFn, defaultParams?: DynamicSelectorParams) {
     this._expectedDebugInfo = createDebugInfo();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: We don't care if this is undefined, because it can be provided later
     this._defaultSelector = defaultSelector;
     this._defaultParams = defaultParams;

@@ -45,7 +45,7 @@ const hasAnyStateDependencyChanged = (
   previousStateDependencies: DynamicSelectorStateDependencies,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
-  for (let path in previousStateDependencies) {
+  for (const path in previousStateDependencies) {
     if (Object.prototype.hasOwnProperty.call(previousStateDependencies, path)) {
       const previousValue = previousStateDependencies[path];
       const currentValue = path ? getFn(state, path) : state;
