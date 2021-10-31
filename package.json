@@ -42,7 +42,7 @@
     "bootstrap": "lerna bootstrap",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
-    "lint": "tsdx lint . --max-warnings 0",
+    "lint": "tsdx lint . --max-warnings 99",
     "lint-staged": "lint-staged",
     "release:version": "yarn lerna version --no-changelog --no-push --no-git-tag-version ",
     "release:tag": "cross-env HUSKY_BYPASS=true yarn lerna version --no-changelog --no-push --sign-git-commit --amend ",

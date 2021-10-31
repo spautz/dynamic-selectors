@@ -1,22 +1,34 @@
+/* eslint-env node */
+
 module.exports = {
   root: true,
-  extends: [
-    'react-app',
-    'eslint:recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'react'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'react-app', 'prettier'],
+
+  rules: {
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
+  },
+  overrides: [
+    {
+      // Allow `require` in dev configs
+      files: ['./*.config.*', './packages/*/*.config.*'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+    {
+      // Test files are test files
+      files: ['**/*.test.*', '**/__tests__/*.*'],
+      env: {
+        jest: true,
+      },
+    },
   ],
 
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-  parserOptions: {
-    ecmaVersion: 2020,
-  },
-
   ignorePatterns: [
+    '!.storybook/',
     'build/',
     'coverage/',
     'coverage-local/',
@@ -24,5 +36,6 @@ module.exports = {
     'legacy-types/',
     'lib-dist/',
     'node_modules/',
+    'storybook-static/',
   ],
 };

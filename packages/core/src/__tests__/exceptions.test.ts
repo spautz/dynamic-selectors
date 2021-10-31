@@ -1,5 +1,5 @@
-import { createDynamicSelector } from '../src';
-import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
+import { createDynamicSelector } from '../index';
+import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
 
 describe('exceptions', () => {
   test('throws exceptions when uncaught', () => {
@@ -20,7 +20,7 @@ describe('exceptions', () => {
     const parentSelectorCheck10 = new DebugInfoCheckUtil(parentSelector, { multiplier: 10 });
     const parentSelectorCheck11 = new DebugInfoCheckUtil(parentSelector, { multiplier: 11 });
 
-    let state = { a: 1 };
+    const state = { a: 1 };
 
     expect(parentSelector(state, { multiplier: 10 })).toEqual(10);
     parentSelectorCheck10.expectInvoked('run');
@@ -98,7 +98,7 @@ describe('exceptions', () => {
     const parentSelectorCheck10 = new DebugInfoCheckUtil(parentSelector, { multiplier: 10 });
     const parentSelectorCheck11 = new DebugInfoCheckUtil(parentSelector, { multiplier: 11 });
 
-    let state = { a: 3 };
+    const state = { a: 3 };
 
     expect(parentSelector(state, { multiplier: 10 })).toEqual(30);
     parentSelectorCheck10.expectInvoked('run');

@@ -29,6 +29,9 @@ import {
   validateStateOptions,
 } from './internals';
 import {
+  DefaultParamsType,
+  DefaultReturnType,
+  DefaultStateType,
   DynamicSelectorArgsWithoutState,
   DynamicSelectorArgsWithState,
   DynamicSelectorFn,
@@ -39,7 +42,7 @@ import {
   DynamicSelectorStateOptions,
 } from './types';
 
-const dynamicSelectorForState = <StateType = any>(
+const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
 ) => {
   validateStateOptions(stateOptions);
@@ -73,7 +76,7 @@ const dynamicSelectorForState = <StateType = any>(
     return args as DynamicSelectorArgsWithState;
   };
 
-  const createDynamicSelector = <ReturnType = any>(
+  const createDynamicSelector = <ReturnType = DefaultReturnType>(
     innerFn: DynamicSelectorInnerFn<ReturnType>,
     options?: Partial<DynamicSelectorOptions<ReturnType, StateType>>,
   ): DynamicSelectorFn<ReturnType> => {
@@ -87,6 +90,7 @@ const dynamicSelectorForState = <StateType = any>(
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
+    // eslint-disable-next-line prefer-const
     let outerFn: DynamicSelectorFn;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -98,7 +102,7 @@ const dynamicSelectorForState = <StateType = any>(
     const evaluateSelector = (
       state: StateType,
       params: DynamicSelectorParams,
-      ...otherArgs: Array<any>
+      ...otherArgs: DefaultParamsType
     ): DynamicSelectorResultEntry => {
       const paramKey = getKeyForParams(params);
       const previousResult = resultCache.get(paramKey);
@@ -361,6 +365,7 @@ const dynamicSelectorForState = <StateType = any>(
 
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
         // If there was a value in the cache but it's no longer usable, remove it.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         resultCache.set(paramKey, null);
       }

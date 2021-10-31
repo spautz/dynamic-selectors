@@ -1,5 +1,5 @@
-import { createDynamicSelector, DynamicSelectorFn } from '../src';
-import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
+import { createDynamicSelector, DynamicSelectorFn } from '../index';
+import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
 
 describe('recursion', () => {
   test('Fibonacci(3)', () => {
@@ -16,7 +16,7 @@ describe('recursion', () => {
     const fibonacciSelectorCheck2 = new DebugInfoCheckUtil(fibonacciSelector, 2);
     const fibonacciSelectorCheck3 = new DebugInfoCheckUtil(fibonacciSelector, 3);
 
-    let state = {};
+    const state = {};
 
     expect(fibonacciSelector(state, 3)).toEqual(2);
 
@@ -45,7 +45,7 @@ describe('recursion', () => {
     const fibonacciSelectorCheck5 = new DebugInfoCheckUtil(fibonacciSelector, 5);
     const fibonacciSelectorCheck6 = new DebugInfoCheckUtil(fibonacciSelector, 6);
 
-    let state = {};
+    const state = {};
 
     expect(fibonacciSelector(state, 6)).toEqual(8);
 
