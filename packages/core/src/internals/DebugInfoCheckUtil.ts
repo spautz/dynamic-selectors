@@ -7,8 +7,8 @@ import {
   debugInvoked,
   debugPhantomRun,
   debugSkippedRun,
-} from '../../src/internals';
-import { DynamicSelectorFn, DynamicSelectorParams } from '../../src';
+} from './index';
+import { DynamicSelectorFn, DynamicSelectorParams } from '../index';
 
 type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
@@ -133,4 +133,4 @@ class DebugInfoCheckUtil {
   }
 }
 
-export default DebugInfoCheckUtil;
+export { DebugInfoCheckUtil };

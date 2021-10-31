@@ -1,5 +1,5 @@
-import { createDynamicSelector } from '../src';
-import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
+import { createDynamicSelector } from '../index';
+import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
 
 describe('basic caching', () => {
   test('get value from state', () => {

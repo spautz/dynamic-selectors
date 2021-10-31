@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
-import { createDynamicSelector } from '@dynamic-selectors/core';
+import { DebugInfoCheckUtil, createDynamicSelector } from '@dynamic-selectors/core';
 
-import { reselectSelectorFromDynamic } from '../src';
-import DebugInfoCheckUtil from '../../core/tests/util/debugInfoCheckUtil';
+import { reselectSelectorFromDynamic } from '../index';
 
 describe('reselectSelectorFromDynamic', () => {
   test('dynamic selector as a Reselect dependency', () => {

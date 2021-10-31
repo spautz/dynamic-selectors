@@ -1,4 +1,4 @@
-import { createDynamicSelector } from '../src';
+import { createDynamicSelector } from '../index';
 
 describe('accessing cached results', () => {
   test('without params, from outside', () => {

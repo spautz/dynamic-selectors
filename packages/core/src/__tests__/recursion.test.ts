@@ -1,5 +1,5 @@
-import { createDynamicSelector, DynamicSelectorFn } from '../src';
-import DebugInfoCheckUtil from './util/debugInfoCheckUtil';
+import { createDynamicSelector, DynamicSelectorFn } from '../index';
+import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
 
 describe('recursion', () => {
   test('Fibonacci(3)', () => {
