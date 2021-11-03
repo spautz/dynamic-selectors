@@ -39,6 +39,7 @@ jobs:
         run: |
           cd packages/core
           yarn run test:coverage
+          cat packages/core/coverage-local/lcov.info
 
       - name: Report package test coverage to coveralls.io
         uses: coverallsapp/github-action@1.1.3
@@ -80,6 +81,7 @@ jobs:
         run: |
           cd packages/with-reselect
           yarn run test:coverage
+          cat packages/with-reselect/coverage-local/lcov.info
 
       - name: Report package test coverage to coveralls.io
         uses: coverallsapp/github-action@1.1.3
