@@ -29,10 +29,7 @@ const dynamicSelectorFromReselect = <StateType = any, ReturnType = unknown>(
   reselectSelectorFn: Selector<StateType, ReturnType>,
   dynamicSelectorOptions?: Parameters<typeof createDynamicSelector>[1],
 ): DynamicSelectorFn<ReturnType> => {
-  return createDynamicSelector<ReturnType>(
-    wrapReselect(reselectSelectorFn),
-    dynamicSelectorOptions,
-  );
+  return createDynamicSelector(wrapReselect(reselectSelectorFn), dynamicSelectorOptions);
 };
 
 export { wrapReselect, dynamicSelectorFromReselect };
