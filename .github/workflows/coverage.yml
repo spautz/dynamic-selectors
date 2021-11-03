@@ -41,11 +41,11 @@ jobs:
           yarn run test:coverage
 
       - name: Report package test coverage to coveralls.io
-        uses: coverallsapp/github-action@v1.1.2
+        uses: coverallsapp/github-action@1.1.3
         with:
-          git-branch: x-cov-core
           github-token: ${{ github.token }}
-          path-to-lcov: ./coverage-local/lcov.info
+          path-to-lcov: packages/core/coverage-local/lcov.info
+          git-branch: x-cov-core
 
   test-with-reselect:
     name: Test coverage for @dynamic-selectors/with-reselect
@@ -82,8 +82,8 @@ jobs:
           yarn run test:coverage
 
       - name: Report package test coverage to coveralls.io
-        uses: coverallsapp/github-action@v1.1.2
+        uses: coverallsapp/github-action@1.1.3
         with:
-          git-branch: x-cov-with-reselect
           github-token: ${{ github.token }}
-          path-to-lcov: ./coverage-local/lcov.info
+          path-to-lcov: packages/with-reselect/coverage-local/lcov.info
+          git-branch: x-cov-with-reselect
