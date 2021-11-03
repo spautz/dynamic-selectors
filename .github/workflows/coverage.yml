@@ -49,6 +49,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           path-to-lcov: packages/core/coverage-local/lcov.info
+          base-path: packages/core
           git-branch: x-cov-core
 
   test-with-reselect:
@@ -94,4 +95,5 @@ jobs:
         with:
           github-token: ${{ github.token }}
           path-to-lcov: packages/with-reselect/coverage-local/lcov.info
+          base-path: packages/with-reselect
           git-branch: x-cov-with-reselect
