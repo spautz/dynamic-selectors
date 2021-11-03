@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/spautz/dynamic-selectors/compare/v0.3.1...v0.4.0) (2021-11-03)
+
+- Confirm support for Node 17 ([#24](https://github.com/spautz/dynamic-selectors/issues/24)) ([cc80c38](https://github.com/spautz/dynamic-selectors/commit/cc80c38afc70b42f5715a03e78507eba7aeb7b8f))
+- Internal package updates ([#25](https://github.com/spautz/dynamic-selectors/issues/25)) ([aaca930](https://github.com/spautz/dynamic-selectors/commit/aaca93092391991deb4f630707d2ac3583c85a59))
+
 ### [0.3.1](https://github.com/spautz/dynamic-selectors/compare/v0.3.0...v0.3.1) (2021-05-29)
 
 - Fix an invalid peerDependency in `@dynamic-selectors/with-reselect`

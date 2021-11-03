@@ -1,6 +1,6 @@
 {
   "name": "@dynamic-selectors/with-reselect",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Use dynamic selector functions with Reselect",
   "keywords": [
     "dynamic selector",
@@ -73,11 +73,11 @@
     "types": "tsc --p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "@dynamic-selectors/core": "^0.3.1",
+    "@dynamic-selectors/core": "^0.4.0",
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@dynamic-selectors/core": "^0.3.1",
+    "@dynamic-selectors/core": "^0.4.0",
     "reselect": "4.1.1"
   },
   "typesVersions": {
