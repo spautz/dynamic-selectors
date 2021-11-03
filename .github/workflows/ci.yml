@@ -34,12 +34,12 @@ jobs:
         run: yarn install --prefer-offline
 
       - name: Run CI checks
-        run: yarn all:readonly
+        run: yarn run all:readonly
 
       - name: Build all packages
-        run: yarn packages:build
+        run: yarn run packages:build
 
-      - name: Report test coverage to coveralls.io
+      - name: Report overall test coverage to coveralls.io
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ github.token }}
