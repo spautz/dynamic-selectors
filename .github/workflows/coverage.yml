@@ -6,7 +6,8 @@ on:
       - branch-coverage
 
 jobs:
-  setup: Common setup
+  setup:
+    name: Common setup
     runs-on: ubuntu-latest
 
     steps:
