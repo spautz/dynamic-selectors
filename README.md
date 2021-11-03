@@ -10,7 +10,8 @@ Selectors with parameters and dynamic dependencies.
 #### [@dynamic-selectors/core](./packages/core/)
 
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
-[![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/core)](https://david-dm.org/spautz/dynamic-selectors?path=packages/core)
+[![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-core)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-core)
+[![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/core.svg)](https://libraries.io/github/spautz/dynamic-selectors)
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/core.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
 
 Core functionality for dynamic selectors, independent of any other library.<br/>
@@ -19,7 +20,8 @@ Core functionality for dynamic selectors, independent of any other library.<br/>
 #### [@dynamic-selectors/with-reselect](./packages/with-reselect/)
 
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
-[![dependencies status](https://img.shields.io/david/spautz/dynamic-selectors.svg?path=packages/with-reselect)](https://david-dm.org/spautz/dynamic-selectors?path=packages/with-reselect)
+[![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-with-reselect)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-with-reselect)
+[![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/with-reselect.svg)](https://libraries.io/github/spautz/dynamic-selectors)
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/with-reselect.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect@latest)
 
 Call Reselect selectors from within dynamic selectors, and use dynamic selectors as dependencies for Reselect selectors.
