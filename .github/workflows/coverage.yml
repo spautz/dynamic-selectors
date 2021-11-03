@@ -39,13 +39,16 @@ jobs:
         run: |
           cd packages/core
           yarn run test:coverage
+
+      - name: Temp debug
+        run: |
           cat packages/core/coverage-local/lcov.info
 
       - name: Report package test coverage to coveralls.io
         uses: coverallsapp/github-action@1.1.3
         with:
           github-token: ${{ github.token }}
-          path-to-lcov: 'packages/core/coverage-local/lcov.info'
+          path-to-lcov: packages/core/coverage-local/lcov.info
           git-branch: x-cov-core
 
   test-with-reselect:
@@ -81,11 +84,14 @@ jobs:
         run: |
           cd packages/with-reselect
           yarn run test:coverage
+
+      - name: Temp debug
+        run: |
           cat packages/with-reselect/coverage-local/lcov.info
 
       - name: Report package test coverage to coveralls.io
         uses: coverallsapp/github-action@1.1.3
         with:
           github-token: ${{ github.token }}
-          path-to-lcov: 'packages/with-reselect/coverage-local/lcov.info'
+          path-to-lcov: packages/with-reselect/coverage-local/lcov.info
           git-branch: x-cov-with-reselect
