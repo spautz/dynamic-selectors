@@ -124,7 +124,12 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       let debugInfo: DynamicSelectorDebugInfo = null;
 
       if (process.env.NODE_ENV !== 'production') {
-        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO]!;
+        debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
+        if (!debugInfo) {
+          throw new Error(
+            'Internal consistency error: expected to find debugInfo in the nextResultEntry. Please report this bug.',
+          );
+        }
         debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
 
         if (recordDependencies && allowExecution) {
@@ -168,7 +173,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         }
 
         if (hasPreviousReturnValue) {
-          if (compareState && compareState(previousState, state)) {
+          if (compareState && compareState(previousState as StateType, state)) {
             // We've already run with these params and this state
             canUsePreviousResult = true;
           } else {
@@ -302,7 +307,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE] && result[RESULT_ENTRY__ERROR]) {
         throw result[RESULT_ENTRY__ERROR];
       }
-      return result[RESULT_ENTRY__RETURN_VALUE];
+      return result[RESULT_ENTRY__RETURN_VALUE] as ReturnType;
     }) as DynamicSelectorFn;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -383,7 +388,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       const result = evaluateSelectorReadOnly(args);
 
       if (result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
-        return result[RESULT_ENTRY__RETURN_VALUE];
+        return result[RESULT_ENTRY__RETURN_VALUE] as ReturnType;
       }
       return;
     }) as DynamicSelectorFn<ReturnType | undefined>;

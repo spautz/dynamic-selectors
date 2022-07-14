@@ -28,7 +28,7 @@ const createDebugInfo = (): DynamicSelectorDebugInfo => {
 const debugLogVerbose = (
   debugInfo: DynamicSelectorDebugInfo,
   label: string,
-  ...moreInfo: Array<any>
+  ...moreInfo: Array<unknown>
 ) => {
   if (process.env.NODE_ENV !== 'production' && debugInfo && debugInfo._verbose) {
     const labelPrefix = typeof debugInfo._verbose === 'string' ? `${debugInfo._verbose}: ` : '';

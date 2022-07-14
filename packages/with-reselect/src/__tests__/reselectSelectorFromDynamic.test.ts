@@ -1,7 +1,12 @@
 import { createSelector } from 'reselect';
-import { DebugInfoCheckUtil, createDynamicSelector } from '@dynamic-selectors/core';
+import { describe, expect, test } from 'vitest';
+
+import { createDynamicSelector } from '@dynamic-selectors/core';
+import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dist/index.devOnly';
 
 import { reselectSelectorFromDynamic } from '../index';
+
+type MockState = { a: number; b?: number; c?: number };
 
 describe('reselectSelectorFromDynamic', () => {
   test('dynamic selector as a Reselect dependency', () => {
@@ -11,7 +16,7 @@ describe('reselectSelectorFromDynamic', () => {
     const reselectSelector = createSelector(dynamicSelector, (depResult) => depResult);
     const selectorCheck = new DebugInfoCheckUtil(dynamicSelector);
 
-    let state = { a: 1 };
+    let state: MockState = { a: 1 };
 
     // Normal run
     expect(reselectSelector(state)).toEqual(1);
@@ -68,7 +73,7 @@ describe('reselectSelectorFromDynamic', () => {
     const dynamicSelectorCheckB = new DebugInfoCheckUtil(dynamicSelector, 'b');
     const dynamicSelectorCheckC = new DebugInfoCheckUtil(dynamicSelector, 'c');
 
-    let state = { a: 1, b: 1, c: 1 };
+    let state: MockState = { a: 1, b: 1, c: 1 };
 
     // Normal runs
     expect(reselectSelectorA(state)).toEqual(1);

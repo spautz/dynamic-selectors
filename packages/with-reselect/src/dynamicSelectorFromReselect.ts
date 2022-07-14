@@ -8,7 +8,7 @@ import { Selector } from 'reselect';
 /**
  * Wraps a Reselect selector in a new function, which can be passed to createDynamicSelector()
  */
-const wrapReselect = <StateType = any, ReturnType = unknown>(
+const wrapReselect = <StateType = unknown, ReturnType = unknown>(
   reselectSelectorFn: Selector<StateType, ReturnType>,
 ): DynamicSelectorInnerFn<ReturnType> => {
   const innerFn: DynamicSelectorInnerFn = (getState) => {
@@ -25,7 +25,7 @@ const wrapReselect = <StateType = any, ReturnType = unknown>(
  * If you make your own selector creator (via `dynamicSelectorForState`), you would create a similar "create..."
  * function around it.
  */
-const dynamicSelectorFromReselect = <StateType = any, ReturnType = unknown>(
+const dynamicSelectorFromReselect = <StateType = unknown, ReturnType = unknown>(
   reselectSelectorFn: Selector<StateType, ReturnType>,
   dynamicSelectorOptions?: Parameters<typeof createDynamicSelector>[1],
 ): DynamicSelectorFn<ReturnType> => {

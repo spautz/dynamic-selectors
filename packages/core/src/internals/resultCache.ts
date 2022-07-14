@@ -14,7 +14,7 @@ export type DynamicSelectorResultEntry = [
   /* stateOptions (used to indicate the 'universe' this selector lives in) */
   DynamicSelectorStateOptions,
   /* state/lastState */
-  any,
+  unknown,
   /* allow execution? */
   boolean,
   /* record dependencies? */
@@ -26,7 +26,7 @@ export type DynamicSelectorResultEntry = [
   /* hasReturnValue/hasLastReturnValue */
   boolean,
   /* returnValue/lastReturnValue */
-  any,
+  unknown,
   /* error/lastError thrown by innerFn */
   Error | null,
   /* debugInfo */
@@ -48,12 +48,12 @@ export const RESULT_ENTRY__DEBUG_INFO = 9 as const;
 export type DynamicSelectorResultCache = {
   get: (paramKey: string) => DynamicSelectorResultEntry | undefined;
   set: (paramKey: string, newEntry: DynamicSelectorResultEntry) => void;
-  [propName: string]: any;
+  [propName: string]: unknown;
 };
 
 const createResultEntry = (
   stateOptions: DynamicSelectorStateOptions,
-  state: any,
+  state: unknown,
   allowExecution: boolean,
   recordDependencies: boolean,
   myPreviousResult?: DynamicSelectorResultEntry,

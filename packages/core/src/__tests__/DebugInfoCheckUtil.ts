@@ -1,3 +1,5 @@
+import { expect } from 'vitest';
+
 import {
   DynamicSelectorDebugInfo,
   createDebugInfo,
@@ -7,8 +9,8 @@ import {
   debugInvoked,
   debugPhantomRun,
   debugSkippedRun,
-} from './index';
-import { DynamicSelectorFn, DynamicSelectorParams } from '../index';
+} from '../internals/debugInfo';
+import { DynamicSelectorFn, DynamicSelectorParams } from '../types';
 
 type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
@@ -68,7 +70,7 @@ class DebugInfoCheckUtil {
     selector: DynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
-    if (this._expectedDebugInfo!.invokeCount) {
+    if (this._expectedDebugInfo?.invokeCount) {
       return this._checkLogs(selector, params);
     }
     // If it's never been invoked, there should be nothing at all

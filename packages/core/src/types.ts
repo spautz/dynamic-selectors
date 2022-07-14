@@ -1,10 +1,13 @@
 import { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internals';
 
 type AnyPrimitive = boolean | number | string | null | undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DefaultStateType = any;
 // @TODO for 1.0: `undefined`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DefaultReturnType = any;
 // @TODO for 1.0: `AnyPrimitive | Array<AnyPrimitive> | Record<string, AnyPrimitive | Array<AnyPrimitive>>`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DefaultParamsType = any;
 
 export type DynamicSelectorStateGetFn<
@@ -45,6 +48,7 @@ export type DynamicSelectorOptions<ReturnType = DefaultReturnType, StateType = D
   onError:
     | ((
         error: Error,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         args: [StateType, DynamicSelectorParams | any, ...Array<any>],
         selectorFn: DynamicSelectorFn,
       ) => void)
@@ -73,7 +77,9 @@ export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = (
  */
 export type DynamicSelectorInnerFn<ReturnType = DefaultReturnType> = ((
   stateAccessor: DynamicSelectorStateAccessor,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: DynamicSelectorParams | any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...extraArgs: Array<any>
 ) => ReturnType) & {
   displayName?: string;
@@ -82,8 +88,10 @@ export type DynamicSelectorInnerFn<ReturnType = DefaultReturnType> = ((
 export type DynamicSelectorArgsWithState<StateType = DefaultStateType> = [
   StateType,
   DynamicSelectorParams?,
-  ...Array<any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ...Array<any>,
 ];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams?, ...Array<any>];
 
 export type DynamicSelectorFnWithState<ReturnType = DefaultReturnType> = (

@@ -12,6 +12,7 @@ import { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } f
  *  - "Call Dependency": the selector called another selector, maybe passing it some params
  */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DynamicSelectorStateDependencies = Record<string, any>;
 export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependency>;
 
@@ -21,6 +22,7 @@ export type DynamicSelectorCallDependency = [
   /* params */
   DynamicSelectorParams,
   /* returnValue */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   any,
   /* isReadOnly */
   boolean,
@@ -35,12 +37,14 @@ export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 const createCallDependency = (
   selectorFn: DynamicSelectorFn,
   params: DynamicSelectorParams,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   returnValue: any,
   isReadOnly: boolean,
 ): DynamicSelectorCallDependency => [selectorFn, params, returnValue, isReadOnly];
 
 const hasAnyStateDependencyChanged = (
   getFn: DynamicSelectorStateGetFn,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   state: any,
   previousStateDependencies: DynamicSelectorStateDependencies,
 ): boolean => {
@@ -61,9 +65,11 @@ const hasAnyStateDependencyChanged = (
 };
 
 const hasAnyCallDependencyChanged = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   state: any,
   previousCallDependencies: DynamicSelectorCallDependencies,
   allowExecution: boolean,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   otherArgs: Array<any>,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure

@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest';
+
 import { createDynamicSelector } from '../index';
 
 describe('accessing cached results', () => {

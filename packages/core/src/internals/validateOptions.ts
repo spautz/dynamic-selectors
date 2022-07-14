@@ -4,12 +4,12 @@ const validateOptions = (options: DynamicSelectorOptions) => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
     const {
-      compareResult,
+      compareResult: _compareResult,
       createResultCache,
-      debug,
-      displayName,
+      debug: _debug,
+      displayName: _displayName,
       getKeyForParams,
-      onError,
+      onError: _onError,
       ...unrecognizedOptions
     } = options;
 
@@ -33,7 +33,12 @@ const validateOptions = (options: DynamicSelectorOptions) => {
 const validateStateOptions = (stateOptions: DynamicSelectorStateOptions) => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
-    const { compareState, get, defaultSelectorOptions, ...unrecognizedStateOptions } = stateOptions;
+    const {
+      compareState: _compareState,
+      get,
+      defaultSelectorOptions,
+      ...unrecognizedStateOptions
+    } = stateOptions;
 
     const unrecognizedStateOptionKeys = Object.keys(unrecognizedStateOptions);
     if (unrecognizedStateOptionKeys.length) {

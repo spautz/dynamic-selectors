@@ -1,5 +1,7 @@
+import { describe, expect, test, vitest } from 'vitest';
+
 import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
 
 describe('exceptions', () => {
   test('throws exceptions when uncaught', () => {
@@ -37,7 +39,7 @@ describe('exceptions', () => {
   });
 
   test('catch exception thrown by child', () => {
-    const exceptionWasCaught = jest.fn();
+    const exceptionWasCaught = vitest.fn();
 
     const childSelector = createDynamicSelector((getState) => {
       const result = getState('a');

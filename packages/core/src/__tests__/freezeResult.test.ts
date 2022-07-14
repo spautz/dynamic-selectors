@@ -1,5 +1,9 @@
+import { describe, expect, test } from 'vitest';
+
 import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from '../internals/DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
+
+type MockState = { list?: Array<number> };
 
 describe('freeze result', () => {
   test('sorted array', () => {
@@ -9,7 +13,7 @@ describe('freeze result', () => {
     });
     const checkSortedArraySelector = new DebugInfoCheckUtil(sortedArraySelector);
 
-    let state = { list: [1, 4, 7, 3, 2, 6, 9, 8, 5] };
+    let state: MockState = { list: [1, 4, 7, 3, 2, 6, 9, 8, 5] };
 
     const result1 = sortedArraySelector(state);
     expect(result1).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -44,7 +48,7 @@ describe('freeze result', () => {
     );
     const checkSortedArraySelector = new DebugInfoCheckUtil(sortedArraySelector);
 
-    let state: any = { list: [] };
+    let state: MockState = { list: [] };
 
     const result1 = sortedArraySelector(state);
     expect(result1).toEqual([]);

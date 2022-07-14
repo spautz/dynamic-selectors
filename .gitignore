@@ -6,7 +6,7 @@
 
 # outputs
 /coverage
-/packages/*/coverage-local
+/packages/*/coverage
 /packages/*/dist
 /packages/*/legacy-types
 
