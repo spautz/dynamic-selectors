@@ -37,8 +37,10 @@
   "source": "src/index.ts",
   "type": "module",
   "exports": {
-    "import": "./dist/with-reselect.esm.js",
-    "require": "./dist/index.js",
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
@@ -71,7 +73,7 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --max-warnings 0 --fix",
     "release:changelog": "standard-version --skip.commit --skip.tag --release-as ",
-    "test:clean": "rimraf ./coverage-local",
+    "test:clean": "rimraf ./coverage",
     "test:coverage": "pnpm run test:clean      && vitest run --coverage",
     "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
     "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
@@ -100,6 +102,16 @@
     "<4.7": {
       "*": [
         "legacy-types/ts4.5/index.d.ts"
+      ]
+    },
+    "<4.7": {
+      "*": [
+        "legacy-types/ts4.5/index.d.ts"
+      ]
+    },
+    "*": {
+      "*": [
+        "dist/index.d.ts"
       ]
     }
   }
