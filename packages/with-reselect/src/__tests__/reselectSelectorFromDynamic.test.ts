@@ -6,7 +6,7 @@ import { createDynamicSelector } from '@dynamic-selectors/core';
 // @ts-ignore
 import { DebugInfoCheckUtil } from '@dynamic-selectors/core/devOnly';
 
-import { reselectSelectorFromDynamic } from '../index';
+import { reselectSelectorFromDynamic } from '../reselectSelectorFromDynamic';
 
 type MockState = { a: number; b?: number; c?: number };
 

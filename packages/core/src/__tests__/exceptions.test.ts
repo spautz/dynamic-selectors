@@ -1,7 +1,7 @@
 import { describe, expect, test, vitest } from 'vitest';
 
 import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
 
 describe('exceptions', () => {
   test('throws exceptions when uncaught', () => {

@@ -1,4 +1,4 @@
-import { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internals';
+import type { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internals';
 
 type AnyPrimitive = boolean | number | string | null | undefined;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

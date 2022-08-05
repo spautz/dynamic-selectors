@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import { createDynamicSelector, DynamicSelectorFn } from '../index';
-import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
 
 describe('recursion', () => {
   test('Fibonacci(3)', () => {

@@ -1,7 +1,11 @@
 import { getTopCallStackEntry } from './callStack';
-import { createDebugInfo, DynamicSelectorDebugInfo } from './debugInfo';
-import { DynamicSelectorCallDependencies, DynamicSelectorStateDependencies } from './dependencies';
-import { DynamicSelectorStateOptions } from '../types';
+import type { DynamicSelectorDebugInfo } from './debugInfo';
+import { createDebugInfo } from './debugInfo';
+import type {
+  DynamicSelectorCallDependencies,
+  DynamicSelectorStateDependencies,
+} from './dependencies';
+import type { DynamicSelectorStateOptions } from '../types';
 
 /**
  * This is where things happen: this tracks everything about a single Dynamic Selector call: what was called,
