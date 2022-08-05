@@ -1,4 +1,4 @@
-name: Coverage
+name: Per-Package Test Coverage
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  coverage:
-    name: Test coverage for package
+  package-test-coverage:
+    name: Package test coverage
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,7 +49,7 @@ jobs:
           pnpm run test:coverage
 
       - name: Report package test coverage to coveralls.io
-        uses: coverallsapp/github-action@1.1.2
+        uses: coverallsapp/github-action@master
         with:
           github-token: ${{ github.token }}
           path-to-lcov: packages/${{ matrix.package-name }}/coverage/lcov.info
