@@ -1,3 +1,8 @@
+import type {
+  DynamicSelectorDebugInfo,
+  DynamicSelectorResultCache,
+  DynamicSelectorResultEntry,
+} from './internals';
 import {
   RESULT_ENTRY__STATE_OPTIONS,
   RESULT_ENTRY__STATE,
@@ -9,9 +14,6 @@ import {
   RESULT_ENTRY__RETURN_VALUE,
   RESULT_ENTRY__ERROR,
   RESULT_ENTRY__DEBUG_INFO,
-  DynamicSelectorDebugInfo,
-  DynamicSelectorResultCache,
-  DynamicSelectorResultEntry,
   createCallDependency,
   createResultEntry,
   debugAbortedRun,
@@ -28,7 +30,7 @@ import {
   validateOptions,
   validateStateOptions,
 } from './internals';
-import {
+import type {
   DefaultParamsType,
   DefaultReturnType,
   DefaultStateType,

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
 
 describe('basic params', () => {
   test('params exist', () => {

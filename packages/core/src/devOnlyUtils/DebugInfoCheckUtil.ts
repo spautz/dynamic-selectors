@@ -1,7 +1,5 @@
-import { expect } from 'vitest';
-
+import type { DynamicSelectorDebugInfo } from '../internals/debugInfo';
 import {
-  DynamicSelectorDebugInfo,
   createDebugInfo,
   debugAbortedRun,
   debugDepCheck,
@@ -10,16 +8,26 @@ import {
   debugPhantomRun,
   debugSkippedRun,
 } from '../internals/debugInfo';
-import { DynamicSelectorFn, DynamicSelectorParams } from '../types';
+import type { DynamicSelectorFn, DynamicSelectorParams } from '../types';
 
 type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
+
+// @FIXME
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ExpectFn = any;
 
 /**
  * Accumulates the expected results for a selector over time. This avoids having to write out a long-form
  * check between every single selector call in the tests.
  */
 class DebugInfoCheckUtil {
+  static _defaultExpectFn: ExpectFn;
+  static setDefaultExpectFn = (expectFn: ExpectFn): void => {
+    DebugInfoCheckUtil._defaultExpectFn = expectFn;
+  };
+
+  _expectFn: ExpectFn;
   _expectedDebugInfo: DynamicSelectorDebugInfo;
   _defaultSelector: DynamicSelectorFn;
   _defaultParams: DynamicSelectorParams;
@@ -30,6 +38,17 @@ class DebugInfoCheckUtil {
     // @ts-ignore: We don't care if this is undefined, because it can be provided later
     this._defaultSelector = defaultSelector;
     this._defaultParams = defaultParams;
+  }
+
+  setExpectFn(expectFn: ExpectFn): void {
+    this._expectFn = expectFn;
+  }
+  getExpectFn(): ExpectFn {
+    const expect = this._expectFn || DebugInfoCheckUtil._defaultExpectFn;
+    if (!expect) {
+      throw new Error('DebugInfoCheckUtil must be given an `expect` function');
+    }
+    return expect;
   }
 
   // User- and Test-friendly API
@@ -74,6 +93,7 @@ class DebugInfoCheckUtil {
       return this._checkLogs(selector, params);
     }
     // If it's never been invoked, there should be nothing at all
+    const expect = this.getExpectFn();
     expect(selector.getDebugInfo(params)).toEqual(null);
   }
 
@@ -92,6 +112,7 @@ class DebugInfoCheckUtil {
     if (expectedInfo) {
       delete expectedInfo._verbose;
     }
+    const expect = this.getExpectFn();
     expect(selectorInfo).toEqual(this._expectedDebugInfo);
   }
 

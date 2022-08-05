@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from './DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
 
 describe('basic caching', () => {
   test('get value from state', () => {

@@ -2,8 +2,8 @@ import { get as lodashGet } from 'lodash-es';
 import shallowEqual from 'shallowequal';
 
 import { dynamicSelectorForState } from './dynamicSelectorForState';
-import { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
-import { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
+import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
+import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
 
 /**
  * Default cache

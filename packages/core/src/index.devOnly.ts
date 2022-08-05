@@ -1,2 +1,2 @@
-export * from './__tests__/DebugInfoCheckUtil';
+export * from './devOnlyUtils/DebugInfoCheckUtil';
 export * from './types';

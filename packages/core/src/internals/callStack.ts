@@ -1,4 +1,4 @@
-import { DynamicSelectorResultEntry } from './resultCache';
+import type { DynamicSelectorResultEntry } from './resultCache';
 
 /**
  * The CallStack tracks Results which aren't yet finished: when any Dynamic Selector is run, its (pending) Result

@@ -1,4 +1,4 @@
-import { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types';
+import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types';
 
 const validateOptions = (options: DynamicSelectorOptions) => {
   /* istanbul ignore next */

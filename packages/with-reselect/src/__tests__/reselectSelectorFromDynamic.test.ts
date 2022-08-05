@@ -2,9 +2,11 @@ import { createSelector } from 'reselect';
 import { describe, expect, test } from 'vitest';
 
 import { createDynamicSelector } from '@dynamic-selectors/core';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { DebugInfoCheckUtil } from '@dynamic-selectors/core/devOnly';
 
-import { reselectSelectorFromDynamic } from '../index';
+import { reselectSelectorFromDynamic } from '../reselectSelectorFromDynamic';
 
 type MockState = { a: number; b?: number; c?: number };
 
