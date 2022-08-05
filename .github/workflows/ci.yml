@@ -4,8 +4,8 @@ on:
   push
 
 jobs:
-  workspace-ci:
-    name: Workspace CI
+  ci:
+    name: CI
     runs-on: ubuntu-latest
     strategy:
       matrix:
