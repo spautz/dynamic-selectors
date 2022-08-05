@@ -1,4 +1,4 @@
-import {configDefaults,defineConfig} from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
@@ -6,11 +6,7 @@ export default defineConfig({
       inline: [/dynamic-selectors/],
     },
     coverage: {
-      exclude: [
-        ...configDefaults.exclude,
-        '**/__tests__/**',
-        '**/legacy-types/**'
-      ]
+      exclude: [...configDefaults.exclude, '**/__tests__/**', '**/legacy-types/**'],
     },
   },
 });
