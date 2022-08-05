@@ -34,18 +34,19 @@
     "LICENSE",
     "*.md"
   ],
-  "source": "src/index.ts",
+  "source": "./src/index.ts",
   "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "types": "./dist/index.d.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/with-reselect.esm.js",
-  "jsnext:main": "./dist/with-reselect.esm.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "jsnext:main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
@@ -62,12 +63,12 @@
     "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
     "build:clean": "rimraf ./dist ./legacy-types",
-    "build:main": "tsc",
-    "build:types": "pnpm run build:types:3.5 && pnpm run build:types:4.0 && pnpm run build:types:4.5",
+    "build:main": "tsup ./src/index.ts --format esm,cjs",
+    "build:types": "tsc --declaration --emitDeclarationOnly && pnpm run build:types:3.5 && pnpm run build:types:4.0 && pnpm run build:types:4.5",
     "build:types:3.5": "downlevel-dts ./dist ./legacy-types/ts3.5 --to=3.5",
     "build:types:4.0": "downlevel-dts ./dist ./legacy-types/ts4.0 --to=4.0",
     "build:types:4.5": "downlevel-dts ./dist ./legacy-types/ts4.5 --to=4.5",
-    "build:watch": "microbundle watch",
+    "build:watch": "tsup ./src/index.ts --format esm --watch",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
     "lint": "eslint . --max-warnings 0",
@@ -78,7 +79,7 @@
     "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
     "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
     "test:watchcoverage": "pnpm run test:clean && vitest watch --coverage",
-    "types": "tsc --p tsconfig.json --noEmit"
+    "types": "tsc --noEmit"
   },
   "peerDependencies": {
     "@dynamic-selectors/core": "workspace:^",
@@ -97,11 +98,6 @@
     "<4.5": {
       "*": [
         "legacy-types/ts4.0/index.d.ts"
-      ]
-    },
-    "<4.7": {
-      "*": [
-        "legacy-types/ts4.5/index.d.ts"
       ]
     },
     "<4.7": {

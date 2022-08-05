@@ -49,7 +49,7 @@
     "lint:fix": "eslint . --max-warnings 0 --fix",
     "lint-staged": "lint-staged",
     "release:changelog": "standard-version --skip.commit --skip.tag --release-as ",
-    "test:clean": "rimraf ./coverage-local",
+    "test:clean": "rimraf ./coverage",
     "test:coverage": "pnpm run test:clean      && vitest run --coverage",
     "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
     "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
@@ -70,6 +70,7 @@
     "lint-staged": "13.0.3",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
+    "tsup": "6.2.1",
     "typescript": "4.7.4",
     "vitest": "0.20.3"
   },
