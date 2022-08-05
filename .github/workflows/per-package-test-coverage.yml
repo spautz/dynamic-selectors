@@ -1,7 +1,9 @@
 name: Per-Package Test Coverage
 
 on:
-  push
+  push:
+    branches:
+      - main
 
 jobs:
   package-test-coverage:
