@@ -35,6 +35,13 @@
     "*.md"
   ],
   "source": "src/index.ts",
+  "type": "module",
+  "exports": {
+    "import": "./dist/core.esm.js",
+    "require": "./dist/index.js",
+    "./devOnly": "./dist/index.devOnly.js",
+    "./package.json": "./package.json"
+  },
   "main": "dist/index.js",
   "module": "dist/core.esm.js",
   "jsnext:main": "dist/core.esm.js",
@@ -52,7 +59,6 @@
     "all": "pnpm run format                 && pnpm run types && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
     "all:readonly": "pnpm run format:verify && pnpm run types && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
-    "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
     "build:clean": "rimraf ./dist ./legacy-types",
     "build:main": "tsc",
@@ -79,9 +85,9 @@
   },
   "devDependencies": {
     "@types/lodash-es": "4.17.6",
-    "@types/node": "16.11.44",
+    "@types/node": "16.11.47",
     "@types/shallowequal": "1.1.1",
-    "vitest": "0.18.0"
+    "vitest": "0.20.3"
   },
   "typesVersions": {
     "<4.0": {

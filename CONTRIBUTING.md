@@ -27,8 +27,8 @@ to discuss your idea and make sure it is inline with the project goals.
 2. Install the dependencies and ensure everything runs properly:
 
    ```
-   yarn install
-   yarn all
+   pnpm install
+   pnpm run all
    ```
 
 3. Create a new topic branch:
@@ -46,10 +46,10 @@ to discuss your idea and make sure it is inline with the project goals.
 
 Eslint, Typescript, and Prettier enforce most code standards. A pre-push hook will validate the project against those standards.
 
-Running `yarn test` will check the code against unit tests and generate a code coverage report (in `coverage/`).
+Running `pnpm test` will check the code against unit tests and generate a code coverage report (in `coverage/`).
 This project's goal is to be near 100% code coverage.
 
-Running `yarn all` will check _everything_: tests, code standards, and all packages' builds.
+Running `pnpm run all` will check _everything_: tests, code standards, and all packages' builds.
 Your pull request is more likely to be accepted if this passes for your branch.
 
 ## Overall Process

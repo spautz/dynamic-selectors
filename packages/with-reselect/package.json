@@ -35,10 +35,16 @@
     "*.md"
   ],
   "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/with-reselect.esm.js",
-  "jsnext:main": "dist/with-reselect.esm.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "import": "./dist/with-reselect.esm.js",
+    "require": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/with-reselect.esm.js",
+  "jsnext:main": "./dist/with-reselect.esm.js",
+  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "____ HOOKS _________________________________________________________": "",
@@ -52,7 +58,6 @@
     "all": "pnpm run format                 && pnpm run types && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
     "all:readonly": "pnpm run format:verify && pnpm run types && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
-    "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
     "build:clean": "rimraf ./dist ./legacy-types",
     "build:main": "tsc",

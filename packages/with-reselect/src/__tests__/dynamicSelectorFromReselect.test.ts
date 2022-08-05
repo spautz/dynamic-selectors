@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { describe, expect, test } from 'vitest';
 
-import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dist/index.devOnly';
+import { DebugInfoCheckUtil } from '@dynamic-selectors/core/devOnly';
 
 import { dynamicSelectorFromReselect } from '../index';
 

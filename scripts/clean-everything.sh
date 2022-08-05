@@ -23,17 +23,16 @@ fi
 # Clear caches
 
 if [ -d "./node_modules/" ]; then
-  run_command yarn clean
+  run_command pnpm run clean
   run_npm_command jest --clearCache
 else
   run_npm_command jest --clearCache --config={}
 fi
 
-if command_exists yarn; then
-  run_command yarn cache clean
+if command_exists pnpm; then
+  run_command pnpm store prune
+  run_command rm -rf $(pnpm store path)
 fi
-
-run_command npm cache clean --force
 
 if command_exists watchman; then
   run_command watchman watch-del-all
@@ -57,6 +56,7 @@ for DIRECTORY in '.' 'packages/*' ; do
     $DIRECTORY/lib-dist/
     $DIRECTORY/node_modules/
     $DIRECTORY/storybook-static/
+    $directory/.pnpm-debug.log*
     $DIRECTORY/lerna-debug.log*
     $DIRECTORY/npm-debug.log*
     $DIRECTORY/yarn-debug.log*
