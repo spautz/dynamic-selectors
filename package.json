@@ -43,8 +43,10 @@
     "all": "pnpm run format                 && pnpm run types && pnpm run lint:fix && pnpm run test:coverage && pnpm run packages:build",
     "all:readonly": "pnpm run format:verify && pnpm run types && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
-    "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint     && pnpm run test:ci && pnpm run packages:build",
+    "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint     && pnpm run test:ci && pnpm run packages:build && pnpm run changelog status --since=main",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
+    "changelog": "changeset",
+    "changelog:write": "changeset version",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
     "lint": "eslint . --max-warnings 0",
@@ -60,6 +62,7 @@
     "types": "tsc --p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@changesets/cli": "2.24.2",
     "@dynamic-selectors/core": "workspace:*",
     "@dynamic-selectors/with-reselect": "workspace:*",
     "@tsconfig/recommended": "1.0.1",
