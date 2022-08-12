@@ -68,6 +68,7 @@
     "@typescript-eslint/eslint-plugin": "5.32.0",
     "@typescript-eslint/parser": "5.32.0",
     "c8": "7.12.0",
+    "changesets-format-with-git-links": "0.0.3",
     "downlevel-dts": "0.10.0",
     "eslint": "8.21.0",
     "eslint-config-prettier": "8.5.0",

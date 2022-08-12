@@ -50,8 +50,8 @@
     "./package.json": "./package.json"
   },
   "main": "./dist/index.cjs",
-  "module": "./dist/core.js",
-  "jsnext:main": "./dist/core.js",
+  "module": "./dist/index.js",
+  "jsnext:main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
