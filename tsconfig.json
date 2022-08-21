@@ -3,13 +3,13 @@
 
   "compilerOptions": {
     /* Basic Options */
-    "target": "es6",
-    "module": "commonjs",
-    "lib": ["dom", "es2019"],
+    "target": "ES2019",
+    "module": "esnext",
+    "lib": ["dom", "ES2019"],
     "allowJs": true,
     "declaration": true,
     "jsx": "react",
-    "noEmit": false,
+    "noEmit": true,
     "sourceMap": true,
     "removeComments": false,
     /* Strict Type-Checking Options */
@@ -34,7 +34,6 @@
   },
   // The "include" for the root is for typechecking the entire project (it includes directories like "tests" which
   // the package-level tsconfigs don't include)
-  //  "include": ["packages/*/src"],
-  "include": ["format-changelog.ts"],
+  "include": ["packages/*/src"],
   "exclude": ["node_modules"]
 }
