@@ -1,0 +1,21 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@2.1.1/schema.json",
+  "changelog": [
+    "changesets-format-with-git-links",
+    {
+      "repoBaseUrl": "https://github.com/spautz/dynamic-selectors"
+    }
+  ],
+  "commit": false,
+  "fixed": [],
+  "linked": [
+    [
+      "@dynamic-selectors/with-reselect",
+      "@dynamic-selectors/core"
+    ]
+  ],
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
