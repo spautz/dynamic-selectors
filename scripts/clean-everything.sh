@@ -15,8 +15,8 @@ if command_exists killall; then
   run_command killall -v node || true
 fi
 
-if command_exists xcrun; then
-  run_command xcrun simctl shutdown all || true
+if command_exists watchman; then
+  run_command watchman watch-del-all
 fi
 
 ##################################################################################################
@@ -26,20 +26,9 @@ if [ -d "./node_modules/" ]; then
   run_command pnpm run clean
 fi
 
-if command_exists jest; then
-  run_npm_command jest --clearCache
-fi
-
 if command_exists pnpm; then
   run_command "pnpm store prune" || true
-  run_command "rm -rf $(pnpm store path)"
 fi
-
-if command_exists watchman; then
-  run_command watchman watch-del-all
-fi
-
-run_command npm cache clean --force
 
 run_command "rm -rf
   $TMPDIR/react-*
@@ -48,7 +37,7 @@ run_command "rm -rf
 ##################################################################################################
 # Remove generated files
 
-for DIRECTORY in '.' 'packages/*' ; do
+for DIRECTORY in '.' 'demos/*' 'packages/*' ; do
   run_command "rm -rf
     $DIRECTORY/.yarn
     $DIRECTORY/build/

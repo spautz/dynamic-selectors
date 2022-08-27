@@ -1,11 +1,12 @@
 # @dynamic-selectors/core
 
+Selectors with parameters and dynamic dependencies. See [Selector Comparison](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md).
+
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
+[![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-core)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-core)
 [![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/core.svg)](https://libraries.io/github/spautz/dynamic-selectors)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/core.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core@latest)
-
-Selectors with parameters and dynamic dependencies.
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/index.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core)
 
 Dynamic selectors can access state and call each other dynamically, even conditionally or within loops, without needing
 to register dependencies up-front. As with Reselect and Re-reselect, functions are only re-run when necessary.
@@ -19,12 +20,12 @@ For more information or related packages, see the [Dynamic Selectors workspace](
 ```javascript
 import { createDynamicSelector } from '@dynamic-selectors/core';
 
-/* Simple selectors can access state, like normal */
+// Simple selectors can access state, like normal
 const getAuthor = createDynamicSelector((getState, authorId) => {
   return getState(`authors[${authorId}]`);
 });
 
-/* Selectors can call other selectors inline -- even in loops */
+// Selectors can call other selectors inline -- even in loops
 const getBooksForAuthor = createDynamicSelector((getState, authorId) => {
   const author = getAuthor(authorId);
   if (author) {
@@ -33,14 +34,15 @@ const getBooksForAuthor = createDynamicSelector((getState, authorId) => {
   // Else: throw, return default value, etc
 });
 
-/* Because dependencies are dynamic, selectors are easier to compose together */
+// Because selector-to-selector calls are dynamic, it's easier to compose and reuse them
 const getBooksForMultipleAuthors = createDynamicSelector((getState, authorIds) => {
   return authorIds.map(getBooksForAuthor);
 });
 
+// Each selector in the stack maintains its own cache
 getBooksForMultipleAuthors(state, [1, 2, 3]);
 getBooksForMultipleAuthors(state, [4, 5, 6]);
-// This hits the cache
+// This reuses the cached values from the earlier calls
 getBooksForMultipleAuthors(state, [1, 2, 3, 4, 5, 6]);
 ```
 
@@ -103,7 +105,7 @@ const getRawList = createDynamicSelector((getState, { listId }) => {
 });
 
 const getSortedList = createDynamicSelector((getState, { listId, sortField }) => {
-  // `state` is not pased when one selector calls another
+  // `state` is automatically pased through when one selector calls another
   const rawList = getRawList({ listId });
   if (rawList && sortField) {
     return sortBy(rawList, sortField);
@@ -111,7 +113,6 @@ const getSortedList = createDynamicSelector((getState, { listId, sortField }) =>
   return rawList;
 });
 
-// `state` is passed in when you call the outermost selector
 getSortedList(state, { listId: 123, sortField: 'title' });
 ```
 
