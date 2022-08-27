@@ -1,6 +1,6 @@
 # @dynamic-selectors/core
 
-Selectors with parameters and dynamic dependencies.
+Selectors with parameters and dynamic dependencies. See [Selector Comparison](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md).
 
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/core.svg)](https://www.npmjs.com/package/@dynamic-selectors/core)
 [![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
@@ -20,12 +20,12 @@ For more information or related packages, see the [Dynamic Selectors workspace](
 ```javascript
 import { createDynamicSelector } from '@dynamic-selectors/core';
 
-/* Simple selectors can access state, like normal */
+// Simple selectors can access state, like normal
 const getAuthor = createDynamicSelector((getState, authorId) => {
   return getState(`authors[${authorId}]`);
 });
 
-/* Selectors can call other selectors inline -- even in loops */
+// Selectors can call other selectors inline -- even in loops
 const getBooksForAuthor = createDynamicSelector((getState, authorId) => {
   const author = getAuthor(authorId);
   if (author) {
@@ -34,14 +34,15 @@ const getBooksForAuthor = createDynamicSelector((getState, authorId) => {
   // Else: throw, return default value, etc
 });
 
-/* Because dependencies are dynamic, selectors are easier to compose together */
+// Because selector-to-selector calls are dynamic, it's easier to compose and reuse them
 const getBooksForMultipleAuthors = createDynamicSelector((getState, authorIds) => {
   return authorIds.map(getBooksForAuthor);
 });
 
+// Each selector in the stack maintains its own cache
 getBooksForMultipleAuthors(state, [1, 2, 3]);
 getBooksForMultipleAuthors(state, [4, 5, 6]);
-// This hits the cache
+// This reuses the cached values from the earlier calls
 getBooksForMultipleAuthors(state, [1, 2, 3, 4, 5, 6]);
 ```
 
@@ -104,7 +105,7 @@ const getRawList = createDynamicSelector((getState, { listId }) => {
 });
 
 const getSortedList = createDynamicSelector((getState, { listId, sortField }) => {
-  // `state` is not pased when one selector calls another
+  // `state` is automatically pased through when one selector calls another
   const rawList = getRawList({ listId });
   if (rawList && sortField) {
     return sortBy(rawList, sortField);
@@ -112,7 +113,6 @@ const getSortedList = createDynamicSelector((getState, { listId, sortField }) =>
   return rawList;
 });
 
-// `state` is passed in when you call the outermost selector
 getSortedList(state, { listId: 123, sortField: 'title' });
 ```
 

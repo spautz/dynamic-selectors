@@ -1,6 +1,6 @@
 # Dynamic Selectors
 
-Selectors with parameters and dynamic dependencies.
+Selectors with parameters and dynamic dependencies. See [Selector Comparison](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md).
 
 [![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://img.shields.io/coveralls/github/spautz/dynamic-selectors/main.svg)](https://coveralls.io/github/spautz/dynamic-selectors?branch=main)
