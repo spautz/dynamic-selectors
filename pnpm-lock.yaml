@@ -12,7 +12,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.32.0
       '@typescript-eslint/parser': 5.32.0
       c8: 7.12.0
-      changesets-format-with-git-links: 0.2.0
+      changesets-format-with-issue-links: 0.3.0
       downlevel-dts: 0.10.0
       eslint: 8.21.0
       eslint-config-prettier: 8.5.0
@@ -33,7 +33,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.32.0_iosr3hrei2tubxveewluhu5lhy
       '@typescript-eslint/parser': 5.32.0_qugx7qdu5zevzvxaiqyxfiwquq
       c8: 7.12.0
-      changesets-format-with-git-links: 0.2.0_@changesets+cli@2.24.2
+      changesets-format-with-issue-links: 0.3.0_@changesets+cli@2.24.2
       downlevel-dts: 0.10.0
       eslint: 8.21.0
       eslint-config-prettier: 8.5.0_eslint@8.21.0
@@ -828,8 +828,8 @@ packages:
       supports-color: 7.2.0
     dev: true
 
-  /changesets-format-with-git-links/0.2.0_@changesets+cli@2.24.2:
-    resolution: {integrity: sha512-f6zed5E4q/lwUtv+3N0hq8DGr3V692GxXDogtHuopR0CZthbQd1OxfBDxLewbtScv4GtMPWiMSNj5aiWkzqO9g==}
+  /changesets-format-with-issue-links/0.3.0_@changesets+cli@2.24.2:
+    resolution: {integrity: sha512-+GmelydJ+bYPVQyapFIELe/bM2+98cBIG7gb9raBxzx5MiBY0cDZnj4ii7xkrgpQLx96PWH3O9VA7Mhag0gs3w==}
     peerDependencies:
       '@changesets/cli': ^2.0.0
     dependencies:
@@ -1075,7 +1075,7 @@ packages:
     dependencies:
       semver: 7.3.7
       shelljs: 0.8.5
-      typescript: 4.9.0-dev.20220821
+      typescript: 4.9.0-dev.20220827
     dev: true
 
   /eastasianwidth/0.2.0:
@@ -3322,8 +3322,8 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript/4.9.0-dev.20220821:
-    resolution: {integrity: sha512-fbyWCHTzhcKE54GF2lajI5h7GrdLUkCEgzqQOT1cf+IPqVwcM9Bk1/d+NjJKrMoroOPztYvEat0b8pxn3+/XJw==}
+  /typescript/4.9.0-dev.20220827:
+    resolution: {integrity: sha512-Of9SP0wOOfWGO01cCtTO8YB+KAr+D7I056X/Ne9ZuQtVNUZJ6YT97JM2+IUDtzYgHKpK3WNdTi9XZHDc3mSvLg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true

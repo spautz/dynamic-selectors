@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.1.1/schema.json",
   "changelog": [
-    "changesets-format-with-git-links",
+    "changesets-format-with-issue-links",
     {
       "repoBaseUrl": "https://github.com/spautz/dynamic-selectors"
     }

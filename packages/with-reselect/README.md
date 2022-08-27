@@ -1,12 +1,13 @@
 # @dynamic-selectors/with-reselect
 
-[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
-[![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-with-reselect)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-with-reselect)
-[![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/with-reselect.svg)](https://libraries.io/github/spautz/dynamic-selectors)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/with-reselect.cjs.production.min.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect@latest)
-
 Helper functions to make it easy to use [Dynamic Selectors](https://github.com/spautz/dynamic-selectors) and
 [Reselect](https://github.com/reduxjs/reselect) together.
+
+[![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
+[![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
+[![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-with-reselect)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-with-reselect)
+[![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/with-reselect.svg)](https://libraries.io/github/spautz/dynamic-selectors)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/index.js?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect)
 
 ## What's included
 
