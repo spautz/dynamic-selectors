@@ -1,4 +1,4 @@
-import { createDynamicSelector } from '@dynamic-selectors/core';
+import { createDynamicSelector, DynamicSelectorOptions } from '@dynamic-selectors/core';
 import type { DynamicSelectorFn, DynamicSelectorInnerFn } from '@dynamic-selectors/core';
 import type { Selector } from 'reselect';
 
@@ -24,7 +24,7 @@ const wrapReselect = <StateType = unknown, ReturnType = unknown>(
  */
 const dynamicSelectorFromReselect = <StateType = unknown, ReturnType = unknown>(
   reselectSelectorFn: Selector<StateType, ReturnType>,
-  dynamicSelectorOptions?: Parameters<typeof createDynamicSelector>[1],
+  dynamicSelectorOptions?: DynamicSelectorOptions<ReturnType, StateType>,
 ): DynamicSelectorFn<ReturnType> => {
   return createDynamicSelector(wrapReselect(reselectSelectorFn), dynamicSelectorOptions);
 };

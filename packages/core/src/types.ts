@@ -105,8 +105,8 @@ export type DynamicSelectorFnWithoutState<ReturnType = DefaultReturnType> = (
 /**
  * The Dynamic Selector function returned by this library.
  */
-export type DynamicSelectorFn<ReturnType = DefaultReturnType> = ((
-  ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
+export type DynamicSelectorFn<ReturnType = DefaultReturnType, StateType = DefaultStateType> = ((
+  ...args: DynamicSelectorArgsWithState<StateType> | DynamicSelectorArgsWithoutState
 ) => ReturnType) & {
   _fn: DynamicSelectorInnerFn<ReturnType>;
   _dc: DynamicSelectorFnWithState<ReturnType>;

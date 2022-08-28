@@ -1,9 +1,14 @@
-import { get as lodashGet } from 'lodash-es';
+import get from 'lodash/get';
 import shallowEqual from 'shallowequal';
 
 import { dynamicSelectorForState } from './dynamicSelectorForState';
 import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
-import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
+import type {
+  DefaultStateType,
+  DynamicSelectorFn,
+  DynamicSelectorOptions,
+  DynamicSelectorStateOptions,
+} from './types';
 
 /**
  * Default cache
@@ -36,13 +41,17 @@ const defaultSelectorOptions: DynamicSelectorOptions = {
  */
 const defaultStateOptions: DynamicSelectorStateOptions = {
   compareState: (oldReturnValue, newReturnValue) => oldReturnValue === newReturnValue,
-  get: lodashGet,
+  get,
   defaultSelectorOptions,
 };
 
 /**
  * The default createDynamicSelector: this uses reasonable defaults that work out of the box.
  */
-const createDynamicSelector = dynamicSelectorForState(defaultStateOptions);
+const createDynamicSelector: <ReturnType, StateType = DefaultStateType>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  selectorFn: (getState: any, params: any, ...extraArgs: any[]) => ReturnType,
+  options?: Partial<DynamicSelectorOptions<ReturnType, StateType>>,
+) => DynamicSelectorFn<ReturnType, StateType> = dynamicSelectorForState(defaultStateOptions);
 
 export { createDefaultCache, defaultStateOptions, defaultSelectorOptions, createDynamicSelector };
