@@ -7,11 +7,14 @@ import type {
   DefaultStateType,
   DynamicSelectorFn,
   DynamicSelectorOptions,
+  DefaultParamsType,
+  DynamicSelectorStateAccessor,
   DynamicSelectorStateOptions,
+  DynamicSelectorInnerFn,
 } from './types';
 
 /**
- * Default cache
+ * Default cache for dynamic-selector call results
  */
 const createDefaultCache = (): DynamicSelectorResultCache => {
   // @TODO: use LimitedCache
@@ -46,12 +49,26 @@ const defaultStateOptions: DynamicSelectorStateOptions = {
 };
 
 /**
+ * An easier-to-read version of the return type of dynamicSelectorForState
+ */
+type CreateDynamicSelectorFn<
+  ReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DefaultParamsType,
+  ExtraArgsType extends Array<any> = Array<unknown>,
+> = (
+  // selectorFn: (
+  //   getState: DynamicSelectorStateAccessor<ReturnType, StateType>,
+  //   params: ParamsType,
+  //   ...extraArgs: ExtraArgsType
+  // ) => ReturnType,
+  selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
+  options?: Partial<DynamicSelectorOptions<ReturnType, StateType, ParamsType, ExtraArgsType>>,
+) => DynamicSelectorFn<ReturnType, StateType, ParamsType, ExtraArgsType>;
+
+/**
  * The default createDynamicSelector: this uses reasonable defaults that work out of the box.
  */
-const createDynamicSelector: <ReturnType, StateType = DefaultStateType>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectorFn: (getState: any, params: any, ...extraArgs: any[]) => ReturnType,
-  options?: Partial<DynamicSelectorOptions<ReturnType, StateType>>,
-) => DynamicSelectorFn<ReturnType, StateType> = dynamicSelectorForState(defaultStateOptions);
+const createDynamicSelector: CreateDynamicSelectorFn = dynamicSelectorForState(defaultStateOptions);
 
 export { createDefaultCache, defaultStateOptions, defaultSelectorOptions, createDynamicSelector };

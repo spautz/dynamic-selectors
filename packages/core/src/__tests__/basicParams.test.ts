@@ -106,7 +106,7 @@ describe('basic params', () => {
   });
 
   test('get value from child selector', () => {
-    const childSelector = createDynamicSelector((getState, params) => {
+    const childSelector = createDynamicSelector((getState, params: { path: string }) => {
       const { path } = params;
       return getState(path);
     });
