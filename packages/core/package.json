@@ -87,12 +87,12 @@
     "types": "tsc -p ./tsconfig.json --noEmit"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.184",
-    "@types/node": "18.7.13",
+    "@types/lodash-es": "4.17.6",
+    "@types/node": "18.7.16",
     "@types/shallowequal": "1.1.1"
   },
   "typesVersions123": {
