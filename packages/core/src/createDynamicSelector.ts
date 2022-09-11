@@ -7,11 +7,12 @@ import type {
   DefaultStateType,
   DynamicSelectorFn,
   DynamicSelectorOptions,
-  DefaultParamsType,
+  DynamicSelectorParams,
   DynamicSelectorStateAccessor,
   DynamicSelectorStateOptions,
-  DynamicSelectorInnerFn,
+  InternalExtraArgsType,
 } from './types';
+import { DynamicSelectorInnerFn } from './types';
 
 /**
  * Default cache for dynamic-selector call results
@@ -51,20 +52,11 @@ const defaultStateOptions: DynamicSelectorStateOptions = {
 /**
  * An easier-to-read version of the return type of dynamicSelectorForState
  */
-type CreateDynamicSelectorFn<
-  ReturnType,
-  StateType = DefaultStateType,
-  ParamsType = DefaultParamsType,
-  ExtraArgsType extends Array<any> = Array<unknown>,
-> = (
-  // selectorFn: (
-  //   getState: DynamicSelectorStateAccessor<ReturnType, StateType>,
-  //   params: ParamsType,
-  //   ...extraArgs: ExtraArgsType
-  // ) => ReturnType,
-  selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
-  options?: Partial<DynamicSelectorOptions<ReturnType, StateType, ParamsType, ExtraArgsType>>,
-) => DynamicSelectorFn<ReturnType, StateType, ParamsType, ExtraArgsType>;
+type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn<any>>(
+  selectorFn: InnerFn,
+  // selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
+  options?: Partial<DynamicSelectorOptions<ReturnType<InnerFn>>>,
+) => DynamicSelectorFn<DefaultStateType, InnerFn>;
 
 /**
  * The default createDynamicSelector: this uses reasonable defaults that work out of the box.

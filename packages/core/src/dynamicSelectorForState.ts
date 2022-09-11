@@ -31,8 +31,6 @@ import {
   validateStateOptions,
 } from './internals';
 import type {
-  DefaultExtraArgsType,
-  DefaultParamsType,
   DefaultReturnType,
   DefaultStateType,
   DynamicSelectorArgsWithoutState,
@@ -47,16 +45,6 @@ import type {
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
 ) => {
-  // To make arguments more readable, these aliases use StateType + defaults, so that we don't have to keep repeating
-  // them every time a function takes in `...args`
-  type ArgsWithState = DynamicSelectorArgsWithState<
-    StateType,
-    DefaultParamsType,
-    DefaultExtraArgsType
-  >;
-  type ArgsWithoutState = DynamicSelectorArgsWithoutState<DefaultParamsType, DefaultExtraArgsType>;
-  type ArgsWithOrWithoutState = ArgsWithState | ArgsWithoutState;
-
   validateStateOptions(stateOptions);
   const { compareState, get, defaultSelectorOptions } = stateOptions;
 

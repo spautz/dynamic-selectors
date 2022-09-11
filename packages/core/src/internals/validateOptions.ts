@@ -30,7 +30,7 @@ const validateOptions = (options: DynamicSelectorOptions) => {
   }
 };
 
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions) => {
+const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
     const {

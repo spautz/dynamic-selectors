@@ -101,7 +101,7 @@ describe('basic caching', () => {
 
   test('get value from stacked child selectors', () => {
     const bottomSelector = createDynamicSelector((getState) => {
-      return getState('a');
+      return getState<number>('a');
     });
     const middleSelector = createDynamicSelector(() => {
       return bottomSelector() + 10;
@@ -175,7 +175,7 @@ describe('basic caching', () => {
     //      - midSelector1
     //        - rawSelector
     const rawSelector = createDynamicSelector((getState) => {
-      return getState('a');
+      return getState('a') as number;
     });
 
     const midSelector1 = createDynamicSelector(() => {
@@ -282,7 +282,7 @@ describe('basic caching', () => {
     //      - rawSelector
     //    - rawSelector
     const rawSelector = createDynamicSelector((getState) => {
-      return getState('a');
+      return getState('a') as number;
     });
 
     const midSelector1 = createDynamicSelector(() => {
