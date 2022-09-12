@@ -1,7 +1,7 @@
 import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types';
 
 const validateOptions = (options: DynamicSelectorOptions) => {
-  /* istanbul ignore next */
+  /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     const {
       compareResult: _compareResult,
@@ -28,11 +28,12 @@ const validateOptions = (options: DynamicSelectorOptions) => {
       console.error('Selector options must provide `getKeyForParams`', options);
     }
   }
+  /* c8 ignore stop */
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) => {
-  /* istanbul ignore next */
+  /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     const {
       compareState: _compareState,
@@ -59,6 +60,7 @@ const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) =>
       validateOptions(defaultSelectorOptions);
     }
   }
+  /* c8 ignore stop */
 };
 
 export { validateStateOptions, validateOptions };

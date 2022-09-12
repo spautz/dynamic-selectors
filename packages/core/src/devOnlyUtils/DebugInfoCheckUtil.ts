@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 import type { DynamicSelectorDebugInfo } from '../internals/debugInfo';
 import {
   createDebugInfo,
@@ -158,3 +160,5 @@ class DebugInfoCheckUtil {
 }
 
 export { DebugInfoCheckUtil };
+
+/* c8 ignore stop */
