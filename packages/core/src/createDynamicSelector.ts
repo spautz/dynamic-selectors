@@ -50,7 +50,6 @@ const defaultStateOptions: DynamicSelectorStateOptions = {
  */
 type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn>(
   selectorFn: InnerFn,
-  // selectorFn: DynamicSelectorInnerFn, //<ReturnType, StateType, ParamsType, ExtraArgsType>,
   options?: Partial<
     DynamicSelectorOptions<
       ReturnType<InnerFn>,

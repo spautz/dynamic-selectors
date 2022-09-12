@@ -99,23 +99,6 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     >,
   ) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
 
-  // type CreateDynamicSelectorFn<
-  //   ReturnType,
-  //   StateTypeOverride = StateType,
-  //   ParamsType = DefaultParamsType,
-  //   ExtraArgsType extends Array<any> = DefaultExtraArgsType,
-  // > = (
-  //   // selectorFn: (
-  //   //   getState: DynamicSelectorStateAccessor<ReturnType, StateTypeOverride>,
-  //   //   params: ParamsType,
-  //   //   ...extraArgs: ExtraArgsType
-  //   // ) => ReturnType,
-  //   selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
-  //   options?: Partial<
-  //     DynamicSelectorOptions<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>
-  //   >,
-  // ) => DynamicSelectorFn<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>;
-
   const createDynamicSelector: CreateDynamicSelectorFnForState = ((
     innerFn: DynamicSelectorInnerFn<StateType>,
     options,
@@ -245,6 +228,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         // If we reach this point, the previousResult could not be used: we MUST run
 
         // Any calls to getState while run will register a state dependency on ourselves / our result
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const getState = (path: StatePath, defaultValue: unknown): any => {
           let stateValue;
           if (path) {
@@ -407,10 +391,8 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       }
 
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
-        // If there was a value in the cache but it's no longer usable, remove it.
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        resultCache.set(paramKey, null);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        resultCache.set(paramKey, null as any);
       }
 
       return result;
@@ -420,21 +402,19 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
      * This is just like the main outerFn, except it prohibits all selectors (this and its dependencies) from
      * re-executing.
      */
-    // @ts-ignore
-    outerFn.getCachedResult = (...args: ArgsWithOrWithoutState) => {
+    outerFn.getCachedResult = ((...args: ArgsWithOrWithoutState) => {
       const result = evaluateSelectorReadOnly(args);
 
       if (result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
         return result[RESULT_ENTRY__RETURN_VALUE];
       }
       return;
-    };
+    }) as () => DefaultReturnType | undefined;
 
-    // @ts-ignore
-    outerFn.hasCachedResult = (...args: ArgsWithOrWithoutState): boolean => {
+    outerFn.hasCachedResult = ((...args: ArgsWithOrWithoutState): boolean => {
       const result = evaluateSelectorReadOnly(args);
       return result[RESULT_ENTRY__HAS_RETURN_VALUE];
-    };
+    }) as () => boolean;
 
     outerFn.resetCache = () => {
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
