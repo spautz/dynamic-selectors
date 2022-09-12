@@ -15,13 +15,18 @@ export type DefaultReturnType = unknown;
  * This type alias is for readability only.
  * Any state shape is valid, and we can't make assumptions about it.
  */
-export type DefaultStateType = unknown;
+export type DefaultStateType = any;
+
+/**
+ * A lodash.get-style path into State
+ */
+export type StatePath = number | string | Array<number | string> | null;
 
 /**
  * This type alias is for readability only.
  * Each selector allows any number of additional arguments after the params.
  */
-export type InternalExtraArgsType = Array<unknown>;
+export type DefaultExtraArgsType = Array<any>;
 
 /**
  * Params may be a primitive or a simple set of primitives: a flat object or a simple array. Complex types and
@@ -34,7 +39,7 @@ export type DynamicSelectorParams =
 
 export type DynamicSelectorStateGetFn<StateType = DefaultStateType> = (
   state: StateType,
-  path: number | string | Array<number | string> | null,
+  path: StatePath,
   defaultValue?: unknown,
 ) => unknown;
 
@@ -56,7 +61,12 @@ export type DynamicSelectorStateOptions<StateType = DefaultStateType> = {
 /**
  * Options for how an individual selector behaves.
  */
-export type DynamicSelectorOptions<ReturnType = DefaultReturnType> = {
+export type DynamicSelectorOptions<
+  ReturnType = DefaultReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DynamicSelectorParams,
+  ExtraArgsType extends Array<any> = DefaultExtraArgsType,
+> = {
   /* Output equality checking: if this returns true then the selector will be considered unchanged */
   compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
   /* Used to customize the cache of results */
@@ -66,13 +76,13 @@ export type DynamicSelectorOptions<ReturnType = DefaultReturnType> = {
   /* Sets the function's displayName */
   displayName?: string;
   /* Generates a unique ID for the selector's params */
-  getKeyForParams: (params?: DynamicSelectorParams) => string;
+  getKeyForParams: (params?: ParamsType) => string;
   /* Called if the selector function throws an exception */
   onError:
     | ((
         error: Error,
-        args: [DefaultStateType, DynamicSelectorParams, ...InternalExtraArgsType],
-        selectorFn: DynamicSelectorFn<unknown, (...args: Array<unknown>) => unknown>,
+        args: [StateType, ParamsType, ...ExtraArgsType],
+        selectorFn: DynamicSelectorFnFromTypes,
       ) => void)
     | null;
 };
@@ -80,131 +90,113 @@ export type DynamicSelectorOptions<ReturnType = DefaultReturnType> = {
 /**
  * The `getState` function that's available within each Dynamic Selector.
  */
-export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = <ReturnType>(
+export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = <
+  InnerReturnType = ReturnType,
+>(
   path: number | string | Array<number | string> | null,
-  defaultValue?: ReturnType,
-) => ReturnType | (ReturnType extends undefined ? undefined : never);
+  defaultValue?: InnerReturnType,
+) => InnerReturnType;
 
 /**
  * The plain, 'inner' function that a Dynamic Selector is created from.
  */
-export type DynamicSelectorInnerFn<ReturnType> = ((
-  getStateFn: DynamicSelectorStateAccessor<ReturnType>,
-  params?: DynamicSelectorParams,
-  ...extraArgs: InternalExtraArgsType
-) => ReturnType) & {
-  displayName?: string;
-};
-
-// const doSomething = <ReturnType extends number, Arg0 extends any, Arg1 extends string>(
-//   testFn: (arg0: Arg0, arg1: Arg1) => ReturnType,
-// ): (() => number) => {
-//   return 3 as any;
-// };
-//
-// type DoSomethingType = <ReturnType extends number, Arg0 extends any, Arg1 extends string>(
-//   testFn: (arg0: Arg0, arg1: Arg1) => ReturnType,
-// ) => () => number;
-//
-// const doSomething2: DoSomethingType = <
-//   ReturnType extends number,
-//   Arg0 extends any,
-//   Arg1 extends string,
-// >(
-//   testFn: (arg0: Arg0, arg1: Arg1) => ReturnType,
-// ): (() => number) => {
-//   return 3 as any;
-// };
-//
-// export const foo = doSomething2((_state: Record<string, number>, _path: string) => {
-//   return 3;
-// });
-//
-// export const bar: number = foo;
-// export const bar2: string = foo;
-//
-// export type DynamicSelectorFnCallWithState = (state: StateType) => ReturnType;
-
-export type DynamicSelectorArgsWithState<StateType> = [
-  StateType,
-  DynamicSelectorParams?,
-  ...InternalExtraArgsType,
-];
-
-export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams?, ...InternalExtraArgsType];
-
-export type DynamicSelectorArgsWithOrWithoutState<StateType> =
-  | DynamicSelectorArgsWithState<StateType>
-  | DynamicSelectorArgsWithoutState;
-
-/**
- * The Dynamic Selector function returned by this library.
- */
-// export type DynamicSelectorFn<ReturnType = DefaultReturnType, StateType = DefaultStateType> = ((
-//   ...args: DynamicSelectorArgsWithOrWithoutState<StateType>
+// export type DynamicSelectorInnerFn<ReturnType> = ((
+//   getStateFn: DynamicSelectorStateAccessor<ReturnType>,
+//   params?: DynamicSelectorParams,
+//   ...extraArgs: Array<unknown>
 // ) => ReturnType) & {
-//   _fn: DynamicSelectorInnerFn<ReturnType>;
-//   _dc: (...args: DynamicSelectorArgsWithState<StateType>) => DynamicSelectorResultEntry;
-//   _rc: DynamicSelectorResultCache;
-//   displayName: string;
-//   getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
-//   // getCachedResult and hasCachedResult don't care about or make use of extraArgs
-//   getCachedResult: DynamicSelectorFn<ReturnType | undefined, StateType>;
-//   hasCachedResult: DynamicSelectorFn<boolean, StateType>;
-//   isDynamicSelector: true;
-//   resetCache: () => void;
+//   displayName?: string;
 // };
-
-export type DynamicSelectorFn_Old<StateType, InnerFn extends DynamicSelectorInnerFn<any>> = (
-  | ReplaceFirstArg<InnerFn, StateType>
-  | RemoveFirstArg<InnerFn>
-) & {
-  _fn: InnerFn;
-  _dc: ReplaceFirstArg<InnerFn, StateType>;
-  _rc: DynamicSelectorResultCache;
-  displayName: string;
-  getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
-  getCachedResult: ReplaceReturnType<InnerFn, ReturnType<InnerFn> | undefined>;
-  hasCachedResult: ReplaceReturnType<InnerFn, boolean>;
-  isDynamicSelector: true;
-  resetCache: () => void;
-};
+export interface DynamicSelectorInnerFn<
+  StateType = DefaultStateType,
+  // ParamsType extends DynamicSelectorParams = DynamicSelectorParams,
+> {
+  (
+    getStateFn: DynamicSelectorStateAccessor<StateType>,
+    params?: any,
+    ...extraArgs: Array<any>
+  ): any;
+  displayName?: string;
+}
 
 /**
  * Main typing for a dynamic-selector function, autogenerated from the typings of its internal function.
  */
-export interface DynamicSelectorFn<StateType, InnerFn extends DynamicSelectorInnerFn<any>> {
+export interface DynamicSelectorFnFromInnerFn<
+  StateType,
+  InnerFn extends DynamicSelectorInnerFn<any>,
+> {
   /** Call signature when invoked from inside another selector: no state argument */
   (...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn>;
   /** Call signature when invoked from outside any selector: state is first argument */
   (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn>;
 
   _fn: InnerFn;
-  _dc: ReplaceFirstArg<InnerFn, StateType>;
+  _dc: ReplaceReturnType<ReplaceFirstArg<InnerFn, StateType>, DynamicSelectorResultEntry>;
   _rc: DynamicSelectorResultCache;
   displayName: string;
   getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
-  getCachedResult: ReplaceReturnType<InnerFn, ReturnType<InnerFn> | undefined>;
-  hasCachedResult: ReplaceReturnType<InnerFn, boolean>;
+  // getCachedResult and hasCachedResult work just like the main function, except with different return types
+  // getCachedResult: ReplaceReturnType<
+  //   DynamicSelectorFnFromInnerFn<StateType, InnerFn>,
+  //   ReturnType<InnerFn> | undefined
+  // >;
+  getCachedResult: {
+    /** Call signature when invoked from inside another selector: no state argument */
+    (...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn> | undefined;
+    /** Call signature when invoked from outside any selector: state is first argument */
+    (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>):
+      | ReturnType<InnerFn>
+      | undefined;
+  };
+  // hasCachedResult: ReplaceReturnType<DynamicSelectorFnFromInnerFn<StateType, InnerFn>, boolean>;
+  hasCachedResult: {
+    /** Call signature when invoked from inside another selector: no state argument */
+    (...args: RemoveFirstElement<Parameters<InnerFn>>): boolean;
+    /** Call signature when invoked from outside any selector: state is first argument */
+    (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>): boolean;
+  };
   isDynamicSelector: true;
   resetCache: () => void;
 }
 
+export type DynamicSelectorFnFromTypes<
+  ReturnType = DefaultReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DynamicSelectorParams,
+  ExtraArgsType extends Array<any> = DefaultExtraArgsType,
+> = DynamicSelectorFnFromInnerFn<
+    StateType,
+    undefined extends ParamsType
+      ? (
+          getStateFn: DynamicSelectorStateAccessor<StateType>,
+          params?: ParamsType,
+          ...extraArgs: ExtraArgsType | any
+        ) => ReturnType
+      : (
+          getStateFn: DynamicSelectorStateAccessor<StateType>,
+          params: ParamsType,
+          ...extraArgs: ExtraArgsType | any
+        ) => ReturnType
+  >
+
+export type AnyDynamicSelectorFn = DynamicSelectorFnFromTypes<any, any, any, Array<any>>;
+
 /**
  * Backup typing for a dynamic-selector function, generated manually from specific types.
  */
-export interface DynamicSelectorFnFromTypes<
-  ReturnType,
-  StateType,
-  ParamsType,
-  ExtraArgsType extends Array<any> = InternalExtraArgsType,
+export interface DynamicSelectorFnFromTypes2<
+  ReturnType = DefaultReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DynamicSelectorParams,
+  ExtraArgsType extends Array<any> = DefaultExtraArgsType,
 > {
   /** Call signature when invoked from inside another selector: no state argument */
   (params: ParamsType, ...extraArgs: ExtraArgsType): ReturnType;
   /** Call signature when invoked from outside any selector: state is first argument */
   (state: StateType, params: ParamsType, ...extraArgs: ExtraArgsType): ReturnType;
 
-  _fn: DynamicSelectorInnerFn<ReturnType>;
+  _fn: DynamicSelectorInnerFn;
   _dc: (
     state: StateType,
     params: ParamsType,
@@ -213,25 +205,30 @@ export interface DynamicSelectorFnFromTypes<
   _rc: DynamicSelectorResultCache;
   displayName: string;
   getDebugInfo: (params: ParamsType) => DynamicSelectorDebugInfo;
-  // getCachedResult and hasCachedResult don't care about or make use of extraArgs
-  getCachedResult: DynamicSelectorFnFromTypes<
-    ReturnType | undefined,
+  // getCachedResult and hasCachedResult work just like the main function, except with different return types
+
+  getCachedResult: DynamicSelectorFnFromInnerFn<
     StateType,
-    ParamsType,
-    ExtraArgsType | Array<undefined>
-  >;
-  hasCachedResult: DynamicSelectorFnFromTypes<
-    boolean,
+    DynamicSelectorInnerFn<StateType>
+  >['getCachedResult'];
+  hasCachedResult: DynamicSelectorFnFromInnerFn<
     StateType,
-    ParamsType,
-    ExtraArgsType | Array<undefined>
-  >;
+    DynamicSelectorInnerFn<StateType>
+  >['hasCachedResult'];
+  //
+  // getCachedResult: DynamicSelectorFnFromTypes<
+  //   ReturnType | undefined,
+  //   StateType,
+  //   ParamsType,
+  //   ExtraArgsType
+  // >;
+  // hasCachedResult: DynamicSelectorFnFromTypes<boolean, StateType, ParamsType, ExtraArgsType>;
   isDynamicSelector: true;
   resetCache: () => void;
 }
 
-type RemoveFirstElement<List extends Array<unknown>> = List extends [
-  infer FirstType,
+export type RemoveFirstElement<List extends Array<unknown>> = List extends [
+  infer _FirstType,
   ...infer AllTypesAfterFirst,
 ]
   ? AllTypesAfterFirst
@@ -252,20 +249,3 @@ export type ReplaceFirstArg<
 export type ReplaceReturnType<FnType extends (...args: any) => any, NewReturnType> = (
   ...args: Parameters<FnType>
 ) => NewReturnType;
-
-/////
-
-interface WithOrWithoutState<FnType extends (firstArg: any, ...otherArgs: any) => any, StateType> {
-  (...args: RemoveFirstElement<Parameters<FnType>>): ReturnType<FnType>;
-  (state: StateType, ...args: RemoveFirstElement<Parameters<FnType>>): ReturnType<FnType>;
-}
-
-const plainFn = (getState: (path: string) => number) => {
-  return getState('a');
-};
-type FnWithNoArgs = WithOrWithoutState<typeof plainFn, Record<string, number>>;
-export const asdf: FnWithNoArgs = () => 3;
-asdf();
-asdf(3);
-asdf({ foo: 3 });
-asdf({ foo: '3' });

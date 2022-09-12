@@ -31,20 +31,26 @@ import {
   validateStateOptions,
 } from './internals';
 import type {
+  DefaultExtraArgsType,
   DefaultReturnType,
   DefaultStateType,
-  DynamicSelectorArgsWithoutState,
-  DynamicSelectorArgsWithState,
-  DynamicSelectorFn,
+  DynamicSelectorFnFromTypes,
   DynamicSelectorInnerFn,
   DynamicSelectorOptions,
-  DynamicSelectorStateAccessor,
+  DynamicSelectorParams,
   DynamicSelectorStateOptions,
+  StatePath,
 } from './types';
+import { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types';
 
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
 ) => {
+  // Internally we use the default types to keep things simple
+  type ArgsWithState = [StateType, DynamicSelectorParams, []];
+  type ArgsWithoutState = [DynamicSelectorParams, []];
+  type ArgsWithOrWithoutState = ArgsWithState | ArgsWithoutState;
+
   validateStateOptions(stateOptions);
   const { compareState, get, defaultSelectorOptions } = stateOptions;
 
@@ -75,31 +81,43 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     return args as ArgsWithState;
   };
 
-  // This is duplicated from the default `createDynamicSelector` typing, but with StateTypeOverride instead of StateType
-  type CreateDynamicSelectorFn<
-    ReturnType,
-    StateTypeOverride = StateType,
-    ParamsType = DefaultParamsType,
-    ExtraArgsType extends Array<any> = DefaultExtraArgsType,
-  > = (
-    // selectorFn: (
-    //   getState: DynamicSelectorStateAccessor<ReturnType, StateTypeOverride>,
-    //   params: ParamsType,
-    //   ...extraArgs: ExtraArgsType
-    // ) => ReturnType,
-    selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
+  /**
+   * Constructor for dynamic selectors, using the state provided
+   */
+  type CreateDynamicSelectorFnForState = <InnerFn extends DynamicSelectorInnerFn<StateType>>(
+    selectorFn: InnerFn,
     options?: Partial<
-      DynamicSelectorOptions<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>
+      DynamicSelectorOptions<
+        ReturnType<InnerFn>,
+        // Arg0 = state = StateType
+        Parameters<InnerFn>[0],
+        // Arg1 = params = ParamsType
+        Parameters<InnerFn>[1],
+        // ...otherArgs = ExtraArgsType
+        RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
+      >
     >,
-  ) => DynamicSelectorFn<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>;
+  ) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
 
-  const createDynamicSelector: CreateDynamicSelectorFn = (
-    innerFn: DynamicSelectorInnerFn<
-      DefaultReturnType,
-      StateType,
-      DefaultParamsType,
-      DefaultExtraArgsType
-    >,
+  // type CreateDynamicSelectorFn<
+  //   ReturnType,
+  //   StateTypeOverride = StateType,
+  //   ParamsType = DefaultParamsType,
+  //   ExtraArgsType extends Array<any> = DefaultExtraArgsType,
+  // > = (
+  //   // selectorFn: (
+  //   //   getState: DynamicSelectorStateAccessor<ReturnType, StateTypeOverride>,
+  //   //   params: ParamsType,
+  //   //   ...extraArgs: ExtraArgsType
+  //   // ) => ReturnType,
+  //   selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
+  //   options?: Partial<
+  //     DynamicSelectorOptions<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>
+  //   >,
+  // ) => DynamicSelectorFn<ReturnType, StateTypeOverride, ParamsType, ExtraArgsType>;
+
+  const createDynamicSelector: CreateDynamicSelectorFnForState = ((
+    innerFn: DynamicSelectorInnerFn<StateType>,
     options,
   ) => {
     const mergedOptions = (
@@ -114,12 +132,8 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
-    let outerFn: DynamicSelectorFn<
-      DefaultReturnType,
-      StateType,
-      DefaultParamsType,
-      DefaultExtraArgsType
-    >;
+    // eslint-disable-next-line prefer-const
+    let outerFn: DynamicSelectorFnFromTypes<DefaultReturnType, StateType>;
 
     ///////////////////////////////////////////////////////////////////////////
     // The main algorithm
@@ -129,7 +143,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
      */
     const evaluateSelector = (
       state: StateType,
-      params: DefaultParamsType,
+      params: DynamicSelectorParams,
       ...otherArgs: DefaultExtraArgsType
     ): DynamicSelectorResultEntry => {
       const paramKey = getKeyForParams(params);
@@ -231,10 +245,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         // If we reach this point, the previousResult could not be used: we MUST run
 
         // Any calls to getState while run will register a state dependency on ourselves / our result
-        const getState: DynamicSelectorStateAccessor<DefaultReturnType, StateType> = (
-          path,
-          defaultValue,
-        ) => {
+        const getState = (path: StatePath, defaultValue: unknown): any => {
           let stateValue;
           if (path) {
             stateValue = get(state, path, defaultValue);
@@ -337,7 +348,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         throw result[RESULT_ENTRY__ERROR];
       }
       return result[RESULT_ENTRY__RETURN_VALUE];
-    }) as DynamicSelectorFn;
+    }) as DynamicSelectorFnFromTypes;
 
     ///////////////////////////////////////////////////////////////////////////
     // Additional properties attached to the 'public' selector function
@@ -357,7 +368,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
      */
     outerFn._fn = innerFn;
 
-    outerFn.getDebugInfo = (params: DefaultParamsType): DynamicSelectorDebugInfo => {
+    outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
       if (process.env.NODE_ENV !== 'production') {
         const paramKey = getKeyForParams(params);
         const resultEntry = resultCache.get(paramKey);
@@ -409,19 +420,21 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
      * This is just like the main outerFn, except it prohibits all selectors (this and its dependencies) from
      * re-executing.
      */
-    outerFn.getCachedResult = ((...args: ArgsWithOrWithoutState) => {
+    // @ts-ignore
+    outerFn.getCachedResult = (...args: ArgsWithOrWithoutState) => {
       const result = evaluateSelectorReadOnly(args);
 
       if (result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
         return result[RESULT_ENTRY__RETURN_VALUE];
       }
       return;
-    }) as DynamicSelectorFn<DefaultReturnType | undefined, StateType, DefaultParamsType, any>;
+    };
 
-    outerFn.hasCachedResult = ((...args: ArgsWithOrWithoutState): boolean => {
+    // @ts-ignore
+    outerFn.hasCachedResult = (...args: ArgsWithOrWithoutState): boolean => {
       const result = evaluateSelectorReadOnly(args);
       return result[RESULT_ENTRY__HAS_RETURN_VALUE];
-    }) as DynamicSelectorFn<boolean, StateType, DefaultParamsType, any>;
+    };
 
     outerFn.resetCache = () => {
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
@@ -444,8 +457,8 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     outerFn.displayName = displayName || innerFn.displayName || innerFn.name;
 
-    return outerFn as CreateDynamicSelectorFn;
-  };
+    return outerFn;
+  }) as CreateDynamicSelectorFnForState;
 
   return createDynamicSelector;
 };

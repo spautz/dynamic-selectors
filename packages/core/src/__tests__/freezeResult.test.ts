@@ -8,7 +8,7 @@ type MockState = { list?: Array<number> };
 describe('freeze result', () => {
   test('sorted array', () => {
     const sortedArraySelector = createDynamicSelector((getState) => {
-      const rawArray = getState('list');
+      const rawArray = getState<Array<number>>('list');
       return [...rawArray].sort((a, b) => a - b);
     });
     const checkSortedArraySelector = new DebugInfoCheckUtil(sortedArraySelector);
@@ -39,7 +39,7 @@ describe('freeze result', () => {
   test('recovery after exception', () => {
     const sortedArraySelector = createDynamicSelector(
       (getState) => {
-        const rawArray = getState('list');
+        const rawArray = getState<Array<number>>('list');
         return [...rawArray].sort((a, b) => a - b);
       },
       {

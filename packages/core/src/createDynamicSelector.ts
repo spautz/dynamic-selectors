@@ -5,14 +5,10 @@ import { dynamicSelectorForState } from './dynamicSelectorForState';
 import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
 import type {
   DefaultStateType,
-  DynamicSelectorFn,
   DynamicSelectorOptions,
-  DynamicSelectorParams,
-  DynamicSelectorStateAccessor,
   DynamicSelectorStateOptions,
-  InternalExtraArgsType,
 } from './types';
-import { DynamicSelectorInnerFn } from './types';
+import { DynamicSelectorFnFromInnerFn, DynamicSelectorInnerFn, RemoveFirstElement } from './types';
 
 /**
  * Default cache for dynamic-selector call results
@@ -52,11 +48,21 @@ const defaultStateOptions: DynamicSelectorStateOptions = {
 /**
  * An easier-to-read version of the return type of dynamicSelectorForState
  */
-type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn<any>>(
+type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn>(
   selectorFn: InnerFn,
-  // selectorFn: DynamicSelectorInnerFn<ReturnType, StateType, ParamsType, ExtraArgsType>,
-  options?: Partial<DynamicSelectorOptions<ReturnType<InnerFn>>>,
-) => DynamicSelectorFn<DefaultStateType, InnerFn>;
+  // selectorFn: DynamicSelectorInnerFn, //<ReturnType, StateType, ParamsType, ExtraArgsType>,
+  options?: Partial<
+    DynamicSelectorOptions<
+      ReturnType<InnerFn>,
+      // Arg0 = state = StateType
+      Parameters<InnerFn>[0],
+      // Arg1 = params = ParamsType
+      Parameters<InnerFn>[1],
+      // ...otherArgs = ExtraArgsType
+      RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
+    >
+  >,
+) => DynamicSelectorFnFromInnerFn<DefaultStateType, InnerFn>;
 
 /**
  * The default createDynamicSelector: this uses reasonable defaults that work out of the box.

@@ -42,7 +42,7 @@ describe('exceptions', () => {
     const exceptionWasCaught = vitest.fn();
 
     const childSelector = createDynamicSelector((getState) => {
-      const result = getState('a');
+      const result = getState<number>('a');
       if (result % 2) {
         throw new Error('Odd number!');
       }
