@@ -85,7 +85,7 @@ const hasAnyCallDependencyChanged = (
       const [dependencySelectorFn, dependencyParams, dependencyReturnValue, dependencyIsReadOnly] =
         previousCallDependencies[i];
 
-      /* istanbul ignore next */
+      /* c8 ignore start */
       // eslint-disable-next-line no-constant-condition
       if (false) {
         // This block is here ONLY to catch possible errors if the structure of `previousCallDependencies` changes
@@ -104,6 +104,7 @@ const hasAnyCallDependencyChanged = (
           checkType_dependencyIsReadOnly,
         });
       }
+      /* c8 ignore stop */
 
       // Does our dependency have anything new?
       const temporarilyBlockExecution = dependencyIsReadOnly && allowExecution;

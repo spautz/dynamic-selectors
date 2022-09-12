@@ -148,6 +148,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       // a full invoke and result
       let debugInfo: DynamicSelectorDebugInfo = null;
 
+      /* c8 ignore start */
       if (process.env.NODE_ENV !== 'production') {
         debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
         if (!debugInfo) {
@@ -163,6 +164,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
           debugDepCheck(debugInfo);
         }
       }
+      /* c8 ignore stop */
 
       // Do we have a prior result we can use?
       let canUsePreviousResult = false;
@@ -177,7 +179,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
           hasPreviousReturnValue,
         ] = previousResult;
 
-        /* istanbul ignore next */
+        /* c8 ignore start */
         // eslint-disable-next-line no-constant-condition
         if (false) {
           // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
@@ -196,6 +198,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
             checkType_hasPreviousReturnValue,
           });
         }
+        /* c8 ignore stop */
 
         if (hasPreviousReturnValue) {
           if (compareState && compareState(previousState as StateType, state)) {
@@ -353,6 +356,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     outerFn._fn = innerFn;
 
     outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
+      /* c8 ignore start */
       if (process.env.NODE_ENV !== 'production') {
         const paramKey = getKeyForParams(params);
         const resultEntry = resultCache.get(paramKey);
@@ -360,6 +364,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
           return resultEntry[RESULT_ENTRY__DEBUG_INFO];
         }
       }
+      /* c8 ignore stop */
       return null;
     };
 
@@ -417,12 +422,14 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     }) as () => boolean;
 
     outerFn.resetCache = () => {
+      /* c8 ignore start */
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
         // @TODO: Add a way to mute this warning
         console.warn(
           'Called resetCache while selectors are running: this will probably cause unexpected results',
         );
       }
+      /* c8 ignore stop */
 
       outerFn._rc = resultCache = createResultCache();
     };

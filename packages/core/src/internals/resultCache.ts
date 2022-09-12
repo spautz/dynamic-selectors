@@ -75,11 +75,13 @@ const createResultEntry = (
     null,
   ];
 
+  /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = myPreviousResult
       ? myPreviousResult[RESULT_ENTRY__DEBUG_INFO]
       : createDebugInfo();
   }
+  /* c8 ignore stop */
   return newResultEntry;
 };
 
@@ -88,9 +90,11 @@ const createDepCheckEntry = (allowExecution: boolean): DynamicSelectorResultEntr
   const newResultEntry: DynamicSelectorResultEntry = [...getTopCallStackEntry()];
   newResultEntry[RESULT_ENTRY__ALLOW_EXECUTION] = allowExecution;
   newResultEntry[RESULT_ENTRY__RECORD_DEPENDENCIES] = false;
+  /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = null;
   }
+  /* c8 ignore stop */
   return newResultEntry;
 };
 

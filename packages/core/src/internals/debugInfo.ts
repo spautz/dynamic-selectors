@@ -1,4 +1,4 @@
-/* istanbul ignore file */
+/* c8 ignore start */
 
 // Because this is ONLY used in dev mode, it's stored as a normal object instead of an array
 export type DynamicSelectorDebugInfo = {
@@ -88,3 +88,5 @@ export {
   debugFullRun,
   debugAbortedRun,
 };
+
+/* c8 ignore stop */
