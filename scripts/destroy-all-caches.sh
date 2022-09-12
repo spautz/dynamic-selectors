@@ -22,9 +22,9 @@ if command_exists pnpm; then
   run_command "rm -rf $(pnpm store path)"
 fi
 
-if command_exists yarn; then
-  run_command "yarn cache clean --all"
-fi
+#if command_exists yarn; then
+#  run_command "yarn cache clean --all"
+#fi
 
 run_command npm cache clean --force
 

@@ -8,7 +8,7 @@ import {
   debugPhantomRun,
   debugSkippedRun,
 } from '../internals/debugInfo';
-import type { DynamicSelectorFn, DynamicSelectorParams } from '../types';
+import type { AnyDynamicSelectorFn, DynamicSelectorParams } from '../types';
 
 type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
@@ -29,10 +29,10 @@ class DebugInfoCheckUtil {
 
   _expectFn: ExpectFn;
   _expectedDebugInfo: DynamicSelectorDebugInfo;
-  _defaultSelector: DynamicSelectorFn;
+  _defaultSelector: AnyDynamicSelectorFn;
   _defaultParams: DynamicSelectorParams;
 
-  constructor(defaultSelector?: DynamicSelectorFn, defaultParams?: DynamicSelectorParams) {
+  constructor(defaultSelector?: AnyDynamicSelectorFn, defaultParams?: DynamicSelectorParams) {
     this._expectedDebugInfo = createDebugInfo();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore: We don't care if this is undefined, because it can be provided later
@@ -55,7 +55,7 @@ class DebugInfoCheckUtil {
 
   expectDepChecked(
     result: ExpectedDebugInfoResultType,
-    selector: DynamicSelectorFn = this._defaultSelector,
+    selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     this._logExpectedEntry('depCheck');
@@ -65,7 +65,7 @@ class DebugInfoCheckUtil {
 
   expectInvoked(
     result: ExpectedDebugInfoResultType,
-    selector: DynamicSelectorFn = this._defaultSelector,
+    selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     this._logExpectedEntry('invoked');
@@ -75,7 +75,7 @@ class DebugInfoCheckUtil {
 
   expectMultiple(
     results: Array<[ExpectedDebugInfoEntryType, ExpectedDebugInfoResultType]>,
-    selector: DynamicSelectorFn = this._defaultSelector,
+    selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     results.forEach(([entry, result]) => {
@@ -86,7 +86,7 @@ class DebugInfoCheckUtil {
   }
 
   expectUntouched(
-    selector: DynamicSelectorFn = this._defaultSelector,
+    selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     if (this._expectedDebugInfo?.invokeCount) {
@@ -100,7 +100,7 @@ class DebugInfoCheckUtil {
   // Lower-level API
 
   _checkLogs(
-    selector: DynamicSelectorFn = this._defaultSelector,
+    selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ) {
     // Clone so that we can remove the `_verbose` flag from our checks

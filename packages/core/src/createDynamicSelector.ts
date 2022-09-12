@@ -1,12 +1,17 @@
-import { get as lodashGet } from 'lodash-es';
+import { get } from 'lodash-es';
 import shallowEqual from 'shallowequal';
 
 import { dynamicSelectorForState } from './dynamicSelectorForState';
 import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
-import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from './types';
+import type {
+  DefaultStateType,
+  DynamicSelectorOptions,
+  DynamicSelectorStateOptions,
+} from './types';
+import { DynamicSelectorFnFromInnerFn, DynamicSelectorInnerFn, RemoveFirstElement } from './types';
 
 /**
- * Default cache
+ * Default cache for dynamic-selector call results
  */
 const createDefaultCache = (): DynamicSelectorResultCache => {
   // @TODO: use LimitedCache
@@ -36,13 +41,31 @@ const defaultSelectorOptions: DynamicSelectorOptions = {
  */
 const defaultStateOptions: DynamicSelectorStateOptions = {
   compareState: (oldReturnValue, newReturnValue) => oldReturnValue === newReturnValue,
-  get: lodashGet,
+  get,
   defaultSelectorOptions,
 };
 
 /**
+ * An easier-to-read version of the return type of dynamicSelectorForState
+ */
+type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn>(
+  selectorFn: InnerFn,
+  options?: Partial<
+    DynamicSelectorOptions<
+      ReturnType<InnerFn>,
+      // Arg0 = state = StateType
+      Parameters<InnerFn>[0],
+      // Arg1 = params = ParamsType
+      Parameters<InnerFn>[1],
+      // ...otherArgs = ExtraArgsType
+      RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
+    >
+  >,
+) => DynamicSelectorFnFromInnerFn<DefaultStateType, InnerFn>;
+
+/**
  * The default createDynamicSelector: this uses reasonable defaults that work out of the box.
  */
-const createDynamicSelector = dynamicSelectorForState(defaultStateOptions);
+const createDynamicSelector: CreateDynamicSelectorFn = dynamicSelectorForState(defaultStateOptions);
 
 export { createDefaultCache, defaultStateOptions, defaultSelectorOptions, createDynamicSelector };

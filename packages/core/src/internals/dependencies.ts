@@ -4,7 +4,11 @@ import {
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache';
-import type { DynamicSelectorFn, DynamicSelectorParams, DynamicSelectorStateGetFn } from '../types';
+import type {
+  DynamicSelectorFnFromTypes,
+  DynamicSelectorParams,
+  DynamicSelectorStateGetFn,
+} from '../types';
 
 /**
  * We track wo types of dependencies:
@@ -18,12 +22,11 @@ export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependenc
 
 export type DynamicSelectorCallDependency = [
   /* selectorFn  */
-  DynamicSelectorFn,
+  DynamicSelectorFnFromTypes,
   /* params */
   DynamicSelectorParams,
   /* returnValue */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any,
+  unknown,
   /* isReadOnly */
   boolean,
 ];
@@ -35,7 +38,7 @@ export const CALL_DEPENDENCY__RETURN_VALUE = 2 as const;
 export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 
 const createCallDependency = (
-  selectorFn: DynamicSelectorFn,
+  selectorFn: DynamicSelectorFnFromTypes,
   params: DynamicSelectorParams,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   returnValue: any,

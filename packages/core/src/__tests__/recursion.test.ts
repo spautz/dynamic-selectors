@@ -1,24 +1,25 @@
 import { describe, expect, test } from 'vitest';
 
-import { createDynamicSelector, DynamicSelectorFn } from '../index';
+import { createDynamicSelector, DynamicSelectorFnFromTypes } from '../index';
 import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
 
 describe('recursion', () => {
   test('Fibonacci(3)', () => {
-    const fibonacciSelector: DynamicSelectorFn = createDynamicSelector((_getState, num: number) => {
-      if (num < 1) {
-        return 0;
-      } else if (num === 1) {
-        return 1;
-      }
-      return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);
-    });
+    const fibonacciSelector: DynamicSelectorFnFromTypes<number, null, number> =
+      createDynamicSelector((_getState, num: number) => {
+        if (num < 1) {
+          return 0;
+        } else if (num === 1) {
+          return 1;
+        }
+        return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);
+      });
 
     const fibonacciSelectorCheck1 = new DebugInfoCheckUtil(fibonacciSelector, 1);
     const fibonacciSelectorCheck2 = new DebugInfoCheckUtil(fibonacciSelector, 2);
     const fibonacciSelectorCheck3 = new DebugInfoCheckUtil(fibonacciSelector, 3);
 
-    const state = {};
+    const state = null;
 
     expect(fibonacciSelector(state, 3)).toEqual(2);
 
@@ -31,14 +32,15 @@ describe('recursion', () => {
   });
 
   test('Fibonacci(6)', () => {
-    const fibonacciSelector: DynamicSelectorFn = createDynamicSelector((_getState, num: number) => {
-      if (num < 1) {
-        return 0;
-      } else if (num === 1) {
-        return 1;
-      }
-      return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);
-    });
+    const fibonacciSelector: DynamicSelectorFnFromTypes<number, null, number> =
+      createDynamicSelector((_getState, num: number) => {
+        if (num < 1) {
+          return 0;
+        } else if (num === 1) {
+          return 1;
+        }
+        return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);
+      });
 
     const fibonacciSelectorCheck1 = new DebugInfoCheckUtil(fibonacciSelector, 1);
     const fibonacciSelectorCheck2 = new DebugInfoCheckUtil(fibonacciSelector, 2);
@@ -47,7 +49,7 @@ describe('recursion', () => {
     const fibonacciSelectorCheck5 = new DebugInfoCheckUtil(fibonacciSelector, 5);
     const fibonacciSelectorCheck6 = new DebugInfoCheckUtil(fibonacciSelector, 6);
 
-    const state = {};
+    const state = null;
 
     expect(fibonacciSelector(state, 6)).toEqual(8);
 

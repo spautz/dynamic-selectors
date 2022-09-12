@@ -92,40 +92,40 @@
   },
   "devDependencies": {
     "@types/lodash-es": "4.17.6",
-    "@types/node": "18.7.13",
+    "@types/node": "18.7.16",
     "@types/shallowequal": "1.1.1"
   },
   "typesVersions123": {
     "<4.0": {
       "devOnly": [
-        "legacy-types/ts3.5/index.devOnly.d.ts"
+        "./legacy-types/ts3.5/index.devOnly.d.ts"
       ],
       "*": [
-        "legacy-types/ts3.5/index.d.ts"
+        "./legacy-types/ts3.5/index.d.ts"
       ]
     },
     "<4.5": {
       "devOnly": [
-        "legacy-types/ts4.0/index.devOnly.d.ts"
+        "./legacy-types/ts4.0/index.devOnly.d.ts"
       ],
       "*": [
-        "legacy-types/ts4.0/index.d.ts"
+        "./legacy-types/ts4.0/index.d.ts"
       ]
     },
     "<4.7": {
       "devOnly": [
-        "legacy-types/ts4.5/index.devOnly.d.ts"
+        "./legacy-types/ts4.5/index.devOnly.d.ts"
       ],
       "*": [
-        "legacy-types/ts4.5/index.d.ts"
+        "./legacy-types/ts4.5/index.d.ts"
       ]
     },
     "*": {
       "devOnly": [
-        "dist/index.devOnly.d.ts"
+        "./dist/index.devOnly.d.ts"
       ],
       "*": [
-        "dist/index.d.ts"
+        "./dist/index.d.ts"
       ]
     }
   }

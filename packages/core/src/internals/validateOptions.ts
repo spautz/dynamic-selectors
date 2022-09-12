@@ -30,7 +30,8 @@ const validateOptions = (options: DynamicSelectorOptions) => {
   }
 };
 
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) => {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production') {
     const {

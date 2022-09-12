@@ -1,25 +1,55 @@
-import type { DynamicSelectorDebugInfo, DynamicSelectorResultCache } from './internals';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import type {
+  DynamicSelectorDebugInfo,
+  DynamicSelectorResultCache,
+  DynamicSelectorResultEntry,
+} from './internals';
 
 type AnyPrimitive = boolean | number | string | null | undefined;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DefaultStateType = any;
-// @TODO for 1.0: `undefined`
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DefaultReturnType = any;
-// @TODO for 1.0: `AnyPrimitive | Array<AnyPrimitive> | Record<string, AnyPrimitive | Array<AnyPrimitive>>`
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DefaultParamsType = any;
 
-export type DynamicSelectorStateGetFn<
-  StateType = DefaultStateType,
-  ReturnType = DefaultReturnType,
-> = (state: StateType, path: string | null, defaultValue?: ReturnType) => ReturnType;
+/**
+ * This type alias is for readability only.
+ */
+export type DefaultReturnType = unknown;
+
+/**
+ * This type alias is for readability only.
+ * Any state shape is valid, and we can't make assumptions about it.
+ */
+export type DefaultStateType = any;
+
+/**
+ * A lodash.get-style path into State
+ */
+export type StatePath = number | string | Array<number | string> | null;
+
+/**
+ * This type alias is for readability only.
+ * Each selector allows any number of additional arguments after the params.
+ */
+export type DefaultExtraArgsType = Array<any>;
+
+/**
+ * Params may be a primitive or a simple set of primitives: a flat object or a simple array. Complex types and
+ * deeply-nested objects should not be used as selector params -- just like they shouldn't be used as route params.
+ */
+export type DynamicSelectorParams =
+  | AnyPrimitive
+  | Array<AnyPrimitive>
+  | Record<string, AnyPrimitive | Array<AnyPrimitive>>;
+
+export type DynamicSelectorStateGetFn<StateType = DefaultStateType> = (
+  state: StateType,
+  path: StatePath,
+  defaultValue?: unknown,
+) => unknown;
 
 /**
  * Options for how to interact with the state.
  *
  * State options represent an original source of state -- like Redux, a Context value, or some other 'universe'
- * that delivers a value we need to filter or transform.
+ * that we want to transform via a selector.
  */
 export type DynamicSelectorStateOptions<StateType = DefaultStateType> = {
   /* State equality checking: if this returns true then the states will be considered the same */
@@ -33,7 +63,12 @@ export type DynamicSelectorStateOptions<StateType = DefaultStateType> = {
 /**
  * Options for how an individual selector behaves.
  */
-export type DynamicSelectorOptions<ReturnType = DefaultReturnType, StateType = DefaultStateType> = {
+export type DynamicSelectorOptions<
+  ReturnType = DefaultReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DynamicSelectorParams,
+  ExtraArgsType extends Array<any> = DefaultExtraArgsType,
+> = {
   /* Output equality checking: if this returns true then the selector will be considered unchanged */
   compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
   /* Used to customize the cache of results */
@@ -43,78 +78,116 @@ export type DynamicSelectorOptions<ReturnType = DefaultReturnType, StateType = D
   /* Sets the function's displayName */
   displayName?: string;
   /* Generates a unique ID for the selector's params */
-  getKeyForParams: (params?: DynamicSelectorParams) => string;
+  getKeyForParams: (params?: ParamsType) => string;
   /* Called if the selector function throws an exception */
   onError:
     | ((
         error: Error,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        args: [StateType, DynamicSelectorParams | any, ...Array<any>],
-        selectorFn: DynamicSelectorFn,
+        args: [StateType, ParamsType, ...ExtraArgsType],
+        selectorFn: DynamicSelectorFnFromTypes,
       ) => void)
     | null;
 };
 
 /**
- * Params may be a primitive or a simple set of primitives: a flat object or a simple array. Complex types and
- * deeply-nested objects should not be used as selector params -- just like they shouldn't be used as route params.
- */
-export type DynamicSelectorParams =
-  | AnyPrimitive
-  | Array<AnyPrimitive>
-  | Record<string, AnyPrimitive | Array<AnyPrimitive>>;
-
-/**
  * The `getState` function that's available within each Dynamic Selector.
  */
-export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = (
-  path: string | null,
-  defaultValue?: ReturnType,
-) => ReturnType;
+export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = <
+  InnerReturnType = ReturnType,
+>(
+  path: number | string | Array<number | string> | null,
+  defaultValue?: InnerReturnType,
+) => InnerReturnType;
 
 /**
- * The 'inner' or 'seed' function that a Dynamic Selector is created from.
+ * The plain, 'inner' function that a Dynamic Selector is created from.
  */
-export type DynamicSelectorInnerFn<ReturnType = DefaultReturnType> = ((
-  stateAccessor: DynamicSelectorStateAccessor,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  params?: DynamicSelectorParams | any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...extraArgs: Array<any>
-) => ReturnType) & {
+export interface DynamicSelectorInnerFn<StateType = DefaultStateType> {
+  (
+    getStateFn: DynamicSelectorStateAccessor<StateType>,
+    params?: any,
+    ...extraArgs: Array<any>
+  ): any;
   displayName?: string;
-};
-
-export type DynamicSelectorArgsWithState<StateType = DefaultStateType> = [
-  StateType,
-  DynamicSelectorParams?,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...Array<any>,
-];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DynamicSelectorArgsWithoutState = [DynamicSelectorParams?, ...Array<any>];
-
-export type DynamicSelectorFnWithState<ReturnType = DefaultReturnType> = (
-  ...args: DynamicSelectorArgsWithState
-) => ReturnType;
-
-export type DynamicSelectorFnWithoutState<ReturnType = DefaultReturnType> = (
-  ...args: DynamicSelectorArgsWithoutState
-) => ReturnType;
+  // eslint-enable @typescript-eslint/no-explicit-any
+}
 
 /**
- * The Dynamic Selector function returned by this library.
+ * Main typing for a dynamic-selector function, autogenerated from the typings of its internal function.
  */
-export type DynamicSelectorFn<ReturnType = DefaultReturnType> = ((
-  ...args: DynamicSelectorArgsWithState | DynamicSelectorArgsWithoutState
-) => ReturnType) & {
-  _fn: DynamicSelectorInnerFn<ReturnType>;
-  _dc: DynamicSelectorFnWithState<ReturnType>;
+export interface DynamicSelectorFnFromInnerFn<
+  StateType,
+  InnerFn extends DynamicSelectorInnerFn<any>,
+> {
+  /** Call signature when invoked from inside another selector: no state argument */
+  (...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn>;
+  /** Call signature when invoked from outside any selector: state is first argument */
+  (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn>;
+
+  _fn: DynamicSelectorInnerFn<any>; // InnerFn;
+  _dc: ReplaceReturnType<ReplaceFirstArg<InnerFn, StateType>, DynamicSelectorResultEntry>;
   _rc: DynamicSelectorResultCache;
   displayName: string;
   getDebugInfo: (params?: DynamicSelectorParams) => DynamicSelectorDebugInfo;
-  getCachedResult: DynamicSelectorFn<ReturnType>;
-  hasCachedResult: DynamicSelectorFn<boolean>;
+  getCachedResult: {
+    /** Call signature when invoked from inside another selector: no state argument */
+    (...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn> | undefined;
+    /** Call signature when invoked from outside any selector: state is first argument */
+    (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>):
+      | ReturnType<InnerFn>
+      | undefined;
+  };
+  hasCachedResult: {
+    /** Call signature when invoked from inside another selector: no state argument */
+    (...args: RemoveFirstElement<Parameters<InnerFn>>): boolean;
+    /** Call signature when invoked from outside any selector: state is first argument */
+    (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>): boolean;
+  };
   isDynamicSelector: true;
   resetCache: () => void;
-};
+}
+
+export type DynamicSelectorFnFromTypes<
+  ReturnType = DefaultReturnType,
+  StateType = DefaultStateType,
+  ParamsType = DynamicSelectorParams,
+  ExtraArgsType extends Array<any> = DefaultExtraArgsType,
+> = DynamicSelectorFnFromInnerFn<
+  StateType,
+  undefined extends ParamsType
+    ? (
+        getStateFn: DynamicSelectorStateAccessor<StateType>,
+        params?: ParamsType,
+        ...extraArgs: ExtraArgsType | any
+      ) => ReturnType
+    : (
+        getStateFn: DynamicSelectorStateAccessor<StateType>,
+        params: ParamsType,
+        ...extraArgs: ExtraArgsType | any
+      ) => ReturnType
+>;
+
+export type AnyDynamicSelectorFn = DynamicSelectorFnFromTypes<any, any, any, Array<any>>;
+
+export type RemoveFirstElement<List extends Array<unknown>> = List extends [
+  infer _FirstType,
+  ...infer AllTypesAfterFirst,
+]
+  ? AllTypesAfterFirst
+  : [];
+
+export type RemoveFirstArg<FnType extends (firstArg: any, ...otherArgs: any) => any> = (
+  ...args: RemoveFirstElement<Parameters<FnType>>
+) => ReturnType<FnType>;
+
+export type ReplaceFirstArg<
+  FnType extends (firstArg: any, ...otherArgs: any) => any,
+  NewFirstArgType,
+> = (
+  firstArg: NewFirstArgType,
+  ...args: RemoveFirstElement<Parameters<FnType>>
+) => ReturnType<FnType>;
+
+export type ReplaceReturnType<FnType extends (...args: any) => any, NewReturnType> = (
+  ...args: Parameters<FnType>
+) => NewReturnType;
