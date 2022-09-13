@@ -1,6 +1,20 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## [1.0.0](https://github.com/spautz/dynamic-selectors/compare/v0.4.0...v1.0.0) (2022-09-12)
+
+Typescript typings for Dynamic-Selectors have been rewritten from the ground up: the typings for a dynamic selector are
+now inferred from the typings of the internal function you pass to `createDynamicSelector`. This includes the return
+type, any key params, and any extra args.
+
+Aside from these typing changes, there are no changes to the overall algorithm or functionality: everything should work
+the same now as before.
+
+- Selector parameter and return-type typings are now inferred based on the function you
+  provide ([#37](https://github.com/spautz/dynamic-selectors/issues/37)) ([c36ba19](https://github.com/spautz/dynamic-selectors/commit/c36ba19bfd964a05c6e6847184e6e1ec19eabc81))
+- Update build system and supported Node
+  versions ([#35](https://github.com/spautz/dynamic-selectors/issues/35)) ([42dfbc2](https://github.com/spautz/dynamic-selectors/commit/42dfbc2a7a856aaf82d400e08220d3f09c7c38b0))
+- Clean up
+  docs ([#36](https://github.com/spautz/dynamic-selectors/issues/36)) ([1a1ffe4](https://github.com/spautz/dynamic-selectors/commit/1a1ffe40c8e8efd672e3d11c2a4115dc3a1541e0))
 
 ## [0.4.0](https://github.com/spautz/dynamic-selectors/compare/v0.3.1...v0.4.0) (2021-11-03)
 
