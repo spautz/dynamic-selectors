@@ -48,16 +48,16 @@ importers:
 
   packages/core:
     specifiers:
-      '@types/lodash.get': ^4.4.7
+      '@types/lodash': ^4.14.185
       '@types/node': 18.7.17
       '@types/shallowequal': 1.1.1
-      lodash.get: ^4.4.2
+      lodash: ^4.17.21
       shallowequal: ^1.1.0
     dependencies:
-      lodash.get: 4.4.2
+      lodash: 4.17.21
       shallowequal: 1.1.0
     devDependencies:
-      '@types/lodash.get': 4.4.7
+      '@types/lodash': 4.14.185
       '@types/node': 18.7.17
       '@types/shallowequal': 1.1.1
 
@@ -424,12 +424,6 @@ packages:
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
-    dev: true
-
-  /@types/lodash.get/4.4.7:
-    resolution: {integrity: sha512-af34Mj+KdDeuzsJBxc/XeTtOx0SZHZNLd+hdrn+PcKGQs0EG2TJTzQAOTCZTgDJCArahlCzLWSy8c2w59JRz7Q==}
-    dependencies:
-      '@types/lodash': 4.14.185
     dev: true
 
   /@types/lodash/4.14.185:
@@ -1101,7 +1095,7 @@ packages:
     dependencies:
       semver: 7.3.7
       shelljs: 0.8.5
-      typescript: 4.9.0-dev.20220912
+      typescript: 4.9.0-dev.20220917
     dev: true
 
   /eastasianwidth/0.2.0:
@@ -2275,10 +2269,6 @@ packages:
       p-locate: 5.0.0
     dev: true
 
-  /lodash.get/4.4.2:
-    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
-    dev: false
-
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
@@ -2293,7 +2283,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-update/4.0.0:
     resolution: {integrity: sha512-9fkkDevMefjg0mmzWFBW8YkFP91OrizzkW3diF7CpG+S2EYdy4+TVfGwz1zeF8x7hCx1ovSPTOE9Ngib74qqUg==}
@@ -3364,8 +3353,8 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript/4.9.0-dev.20220912:
-    resolution: {integrity: sha512-B1WnNBtZgqkG48/Z1v4VQWxZSjJl+iJdgafU/8mLFOZyinS5Jejz04TucADMOTufHaIc4USMcYALrAg03Twg1A==}
+  /typescript/4.9.0-dev.20220917:
+    resolution: {integrity: sha512-lWQcM2WDtYbIm7s//TgM84bRnGpuHqMVGX7Gl97qNs1QdBojiS7lzYVgLVMopBWvQc1KKAmBr6LZXhO2AfZ8Vw==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
