@@ -65,7 +65,7 @@
     "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
     "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint     && pnpm run test:ci && pnpm run build",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
-    "build": "pnpm run build:main && pnpm run build:legacytypes",
+    "build": "pnpm run build:main && pnpm run size && pnpm run build:legacytypes",
     "build:clean": "rimraf ./dist ./legacy-types",
     "build:main": "pnpm run build:clean && tsup src/index.ts ./src/index.devOnly.ts --format esm,cjs && tsc -p ./tsconfig.build.json --declaration --emitDeclarationOnly",
     "build:legacytypes": "pnpm run build:legacytypes:3.5 && pnpm run build:legacytypes:4.0 && pnpm run build:legacytypes:4.5",
@@ -77,6 +77,7 @@
     "format:verify": "prettier --list-different .",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --max-warnings 0 --fix",
+    "size": "size-limit",
     "test": "pnpm run test:coverage",
     "test:clean": "rimraf ./coverage",
     "test:ci": "pnpm run test:clean            && vitest run --coverage",
@@ -95,6 +96,12 @@
     "@types/node": "18.7.18",
     "@types/shallowequal": "1.1.1"
   },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "5 kB"
+    }
+  ],
   "typesVersions123": {
     "<4.0": {
       "devOnly": [
