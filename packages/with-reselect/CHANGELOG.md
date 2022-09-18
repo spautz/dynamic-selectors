@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0](https://github.com/spautz/dynamic-selectors/compare/v1.0.0...v1.1.0) (2022-09-17)
+
+All docs have been updated for clarity and accuracy.
+
+- Improve bundle size and add size-limit checks to build ([#40](https://github.com/spautz/dynamic-selectors/issues/40)) ([7ec596c](https://github.com/spautz/dynamic-selectors/commit/7ec596ca8a67e53db3e7074189a7731bce7ab501))
+
 ## [1.0.0](https://github.com/spautz/dynamic-selectors/compare/v0.4.0...v1.0.0) (2022-09-12)
 
 Typescript typings for Dynamic-Selectors have been rewritten from the ground up: the typings for a dynamic selector are

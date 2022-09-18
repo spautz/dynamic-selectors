@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/spautz/dynamic-selectors/compare/v1.0.0...v1.1.0) (2022-09-17)
+
+All docs have been updated for clarity and accuracy.
+
+- Improve bundle size and add size-limit checks to build ([#40](https://github.com/spautz/dynamic-selectors/issues/40)) ([7ec596c](https://github.com/spautz/dynamic-selectors/commit/7ec596ca8a67e53db3e7074189a7731bce7ab501))
+- Use core lodash get for default state accessor, instead of a standalone package ([#39](https://github.com/spautz/dynamic-selectors/issues/39)) ([e16ae4f](https://github.com/spautz/dynamic-selectors/commit/e16ae4f87a47b01a619e012dbd59456e9156ac5c))
+
 ## [1.0.0](https://github.com/spautz/dynamic-selectors/compare/v0.4.0...v1.0.0) (2022-09-12)
 
 Typescript typings for Dynamic-Selectors have been rewritten from the ground up: the typings for a dynamic selector are
