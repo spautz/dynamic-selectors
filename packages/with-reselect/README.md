@@ -3,6 +3,8 @@
 Helper functions to make it easy to use [Dynamic Selectors](https://github.com/spautz/dynamic-selectors) and
 [Reselect](https://github.com/reduxjs/reselect) together.
 
+For more information or related packages, see the [Dynamic Selectors workspace](https://github.com/spautz/dynamic-selectors).
+
 [![npm version](https://img.shields.io/npm/v/@dynamic-selectors/with-reselect.svg)](https://www.npmjs.com/package/@dynamic-selectors/with-reselect)
 [![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-with-reselect)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-with-reselect)

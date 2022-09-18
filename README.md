@@ -66,3 +66,5 @@ This may be used with a state library like Redux, or on its own as a general mem
     hook</a>, you can specify your own comparison function to 'freeze' updates. This may be customized for each selector.
   </dd>
 </dl>
+
+[**_Comparison between Reselect and Dyanamic Selectors_**](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md)

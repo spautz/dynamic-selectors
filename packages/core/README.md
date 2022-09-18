@@ -81,7 +81,7 @@ used if you call `getBookInfo(state, bookId)` directly.
   </dd>
 </dl>
 
-[**Comparison between Reselect and Dyanamic Selectors**](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md)
+[**_Comparison between Reselect and Dyanamic Selectors_**](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/docs/comparison-with-reselect.md)
 
 ## API
 
@@ -114,6 +114,35 @@ const getSortedList = createDynamicSelector((getState, { listId, sortField }) =>
 });
 
 getSortedList(state, { listId: 123, sortField: 'title' });
+```
+
+### Typings
+
+In Typescript, the return type of the selector -- as well as any typings for its `params` or additional arguments --
+will be inferred from the type of the function passed into it.
+
+```typescript
+const selector1 = createDynamicSelector(() => 3);
+const value1 = selector1(); // type: number
+
+const selector2 = createDynamicSelector(() => 'Hello');
+const value2 = selector2(); // type: string
+
+const selector3 = createDynamicSelector(
+  (getState, userId: number): UserModel => getState(['users', userId]),
+);
+const value3 = selector2(state, 123); // type: UserModel
+const value4 = selector2(state, true); // error
+```
+
+Inside a selector, `getState` can be assigned a specific return type. (Default: `unknown`)
+
+```typescript
+createDynamicSelector((getState) => {
+  const value1 = getState<number>('path.to.number'); // type: number
+  const value2 = getState<boolean>('path.to.boolean', false); // type: boolean
+  const value3 = getState<string>('path.to.string', false); // error: defaultValue doesn't match string
+});
 ```
 
 ### Additional selector properties
