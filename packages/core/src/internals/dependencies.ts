@@ -1,14 +1,14 @@
-import { popCallStackEntry, pushCallStackEntry } from './callStack';
+import { popCallStackEntry, pushCallStackEntry } from './callStack.js';
 import {
   createDepCheckEntry,
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
-} from './resultCache';
+} from './resultCache.js';
 import type {
   DynamicSelectorFnFromTypes,
   DynamicSelectorParams,
   DynamicSelectorStateGetFn,
-} from '../types';
+} from '../types.js';
 
 /**
  * We track wo types of dependencies:

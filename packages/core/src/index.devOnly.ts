@@ -1,2 +1,2 @@
-export * from './devOnlyUtils/DebugInfoCheckUtil';
-export * from './types';
+export * from './devOnlyUtils/DebugInfoCheckUtil.js';
+export * from './types.js';

@@ -2,7 +2,7 @@ import type {
   DynamicSelectorDebugInfo,
   DynamicSelectorResultCache,
   DynamicSelectorResultEntry,
-} from './internals';
+} from './internals/index.js';
 import {
   RESULT_ENTRY__STATE_OPTIONS,
   RESULT_ENTRY__STATE,
@@ -29,7 +29,7 @@ import {
   pushCallStackEntry,
   validateOptions,
   validateStateOptions,
-} from './internals';
+} from './internals/index.js';
 import type {
   DefaultExtraArgsType,
   DefaultReturnType,
@@ -40,8 +40,8 @@ import type {
   DynamicSelectorParams,
   DynamicSelectorStateOptions,
   StatePath,
-} from './types';
-import { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types';
+} from './types.js';
+import { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
 
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,

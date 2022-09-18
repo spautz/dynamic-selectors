@@ -1,4 +1,4 @@
-import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types';
+import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types.js';
 
 const validateOptions = (options: DynamicSelectorOptions) => {
   /* c8 ignore start */

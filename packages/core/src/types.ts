@@ -4,7 +4,7 @@ import type {
   DynamicSelectorDebugInfo,
   DynamicSelectorResultCache,
   DynamicSelectorResultEntry,
-} from './internals';
+} from './internals/index.js';
 
 type AnyPrimitive = boolean | number | string | null | undefined;
 
