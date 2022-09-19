@@ -1,14 +1,18 @@
-import get from 'lodash/get.js';
+import { get } from 'lodash-es';
 import shallowEqual from 'shallowequal';
 
-import { dynamicSelectorForState } from './dynamicSelectorForState';
-import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals';
+import { dynamicSelectorForState } from './dynamicSelectorForState.js';
+import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals/index.js';
 import type {
   DefaultStateType,
   DynamicSelectorOptions,
   DynamicSelectorStateOptions,
-} from './types';
-import { DynamicSelectorFnFromInnerFn, DynamicSelectorInnerFn, RemoveFirstElement } from './types';
+} from './types.js';
+import {
+  DynamicSelectorFnFromInnerFn,
+  DynamicSelectorInnerFn,
+  RemoveFirstElement,
+} from './types.js';
 
 /**
  * Default cache for dynamic-selector call results

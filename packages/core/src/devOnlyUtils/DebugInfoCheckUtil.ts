@@ -1,6 +1,6 @@
 /* c8 ignore start */
 
-import type { DynamicSelectorDebugInfo } from '../internals/debugInfo';
+import type { DynamicSelectorDebugInfo } from '../internals/debugInfo.js';
 import {
   createDebugInfo,
   debugAbortedRun,
@@ -9,8 +9,8 @@ import {
   debugInvoked,
   debugPhantomRun,
   debugSkippedRun,
-} from '../internals/debugInfo';
-import type { AnyDynamicSelectorFn, DynamicSelectorParams } from '../types';
+} from '../internals/debugInfo.js';
+import type { AnyDynamicSelectorFn, DynamicSelectorParams } from '../types.js';
 
 type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';

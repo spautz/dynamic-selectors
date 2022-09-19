@@ -1,2 +1,2 @@
-export * from './dynamicSelectorFromReselect';
-export * from './reselectSelectorFromDynamic';
+export * from './dynamicSelectorFromReselect.js';
+export * from './reselectSelectorFromDynamic.js';

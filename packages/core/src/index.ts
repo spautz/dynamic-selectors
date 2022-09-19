@@ -1,4 +1,4 @@
-export * from './createDynamicSelector';
-export * from './dynamicSelectorForState';
+export * from './createDynamicSelector.js';
+export * from './dynamicSelectorForState.js';
 
-export * from './types';
+export * from './types.js';
