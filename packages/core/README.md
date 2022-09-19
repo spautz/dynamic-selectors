@@ -91,7 +91,7 @@ when calling the selector will be passed through as well, although they don't do
 - `getState<T>(path: string | Array<string>, defaultValue?: T)` lets you access any path in `state`. It works like [lodash's get](https://lodash.com/docs#get).
 - `params` (optional) can be anything you want, but it's best as either a single primitive value or a flat object containing a few values -- similar to route params.
 
-The selector's results will be cached using `params`. See [Options](#options) to customize the cache key generation.
+The selector's results will be cached using `params`. See [Selector Options](#selector-options) to customize the cache key generation.
 
 ### Calling a dynamic selector
 
@@ -263,8 +263,9 @@ A selector that's called with the same `state` and `params` will always use its 
 #### `get` (function<T>(state, pathString, defaultValue?): T, default: `_.get`)
 
 Accessor to retrieve a value from the state. The path will always be a string. To completely avoid lodash, you can
-customize this to use something like [tiny-get](https://github.com/NickGard/tiny-get) instead.
+customize this to use something like [object-path](https://github.com/mariocasciaro/object-path) or
+[tiny-get](https://github.com/NickGard/tiny-get) instead.
 
-#### `defaultSelectorOptions` ([selector options](#options), default: [options](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/src/createDynamicSelector.ts#L29-L37))
+#### `defaultSelectorOptions` ([selector options](#selector-options), default: [options](https://github.com/spautz/dynamic-selectors/blob/main/packages/core/src/createDynamicSelector.ts#L33-L41))
 
 The default, base options that will be used for each selector (unless overridden when creating the selector.)
