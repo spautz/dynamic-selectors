@@ -1,4 +1,4 @@
-import get from 'lodash/get.js';
+import { get } from 'lodash-es';
 import shallowEqual from 'shallowequal';
 
 import { dynamicSelectorForState } from './dynamicSelectorForState.js';
