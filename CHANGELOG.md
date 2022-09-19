@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.1.0](https://github.com/spautz/dynamic-selectors/compare/v1.0.0...v1.1.0) (2022-09-17)
+## [1.1.1](https://github.com/spautz/dynamic-selectors/compare/v1.1.0...v1.1.1) (2022-09-18)
+
+- Add esm-related fixes that were supposed to be in v1.1.0 ([#41](https://github.com/spautz/dynamic-selectors/issues/41)) ([f598f24](https://github.com/spautz/dynamic-selectors/commit/f598f2469cb04aa1ca748d87292b39c10e5e7237))
+
+## [1.1.0](https://github.com/spautz/dynamic-selectors/compare/v1.0.0...v1.1.0) (2022-09-18)
 
 All docs have been updated for clarity and accuracy.
 
