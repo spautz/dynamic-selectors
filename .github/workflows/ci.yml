@@ -1,7 +1,9 @@
 name: CI
 
-on:
-  push
+on: [push]
+
+permissions:
+  contents: read
 
 jobs:
   workspace-ci:
@@ -43,6 +45,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check for a changelog entry
+        if: ${{ github.ref != 'refs/heads/prepare-release' }}
+        run: pnpm run changelog:status:ci
+
       - name: Run CI checks
         run: pnpm run all:ci
 
@@ -67,7 +73,7 @@ jobs:
       - name: Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - uses: pnpm/action-setup@v2
         with:
