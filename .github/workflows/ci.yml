@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 14.x, 16.x, 18.x ]
+        node-version: [ 16.x, 18.x, 19.x, 20.x ]
 
     steps:
       - uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 8
 
       - run: corepack enable
 
@@ -71,7 +71,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 8
 
       - run: corepack enable
 

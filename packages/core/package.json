@@ -92,8 +92,8 @@
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
-    "@types/lodash-es": "4.17.6",
-    "@types/node": "18.8.2",
+    "@types/lodash-es": "4.17.7",
+    "@types/node": "18.16.3",
     "@types/shallowequal": "1.1.1"
   },
   "size-limit": [
