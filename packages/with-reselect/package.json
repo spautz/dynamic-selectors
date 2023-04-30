@@ -24,7 +24,9 @@
     "url": "https://github.com/spautz/"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true,
+    "tag": "next"
   },
   "files": [
     "dist/",
@@ -40,7 +42,7 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "types": "./dist/index.d.js"
+      "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -54,13 +56,13 @@
     "prepare": "pnpm run build:main",
     "prepack": "pnpm run clean && pnpm run build",
     "____ INTEGRATION ___________________________________________________": "",
-    "clean": "pnpm run build:clean && pnpm run test:clean && rimraf ./node_modules/.cache *.log",
-    "all": "pnpm run format                 && pnpm run types && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
-    "all:readonly": "pnpm run format:verify && pnpm run types && pnpm run lint     && pnpm run test:quick",
-    "all:quick": "pnpm run format           && pnpm run types && pnpm run lint:fix",
-    "all:ci": "pnpm run format:verify       && pnpm run types && pnpm run lint     && pnpm run test:ci && pnpm run build",
+    "clean": "pnpm run build:clean && pnpm run test:clean && rimraf --glob ./node_modules/.cache *.log",
+    "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
+    "all:readonly": "pnpm run format:verify && pnpm run typecheck && pnpm run lint     && pnpm run test:quick",
+    "all:quick": "pnpm run format           && pnpm run typecheck && pnpm run lint:fix",
+    "all:ci": "pnpm run format:verify       && pnpm run typecheck && pnpm run lint     && pnpm run test:ci && pnpm run build",
     "____ INDIVIDUAL COMMANDS ___________________________________________": "",
-    "build": "pnpm run build:main && pnpm run size && pnpm run build:legacytypes",
+    "build": "pnpm run build:main && pnpm run sizecheck && pnpm run build:legacytypes",
     "build:clean": "rimraf ./dist ./legacy-types",
     "build:main": "pnpm run build:clean && tsup src/index.ts --format cjs && tsc -p ./tsconfig.build.json",
     "build:legacytypes": "pnpm run build:legacytypes:3.5 && pnpm run build:legacytypes:4.0 && pnpm run build:legacytypes:4.5",
@@ -72,7 +74,7 @@
     "format:verify": "prettier --list-different .",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --max-warnings 0 --fix",
-    "size": "size-limit",
+    "sizecheck": "size-limit",
     "test": "pnpm run test:coverage",
     "test:clean": "rimraf ./coverage",
     "test:ci": "pnpm run test:clean            && vitest run --coverage",
@@ -80,17 +82,23 @@
     "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
     "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
     "test:watchcoverage": "pnpm run test:clean && vitest watch --coverage",
-    "types": "tsc -p ./tsconfig.json --noEmit"
+    "typecheck": "tsc -p ./tsconfig.json --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@dynamic-selectors/core": "workspace:*",
+    "reselect": "4.1.8"
   },
   "peerDependencies": {
     "@dynamic-selectors/core": "workspace:^",
     "reselect": "^4.0.0"
   },
-  "devDependencies": {
-    "@dynamic-selectors/core": "workspace:*",
-    "reselect": "4.1.8"
-  },
   "size-limit": [
+    {
+      "path": "dist/index.js",
+      "import": "{}",
+      "limit": "20 B"
+    },
     {
       "path": "dist/index.js",
       "limit": "1 kB"
