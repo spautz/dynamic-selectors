@@ -9,7 +9,7 @@ For more information or related packages, see the [Dynamic Selectors workspace](
 [![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-with-reselect)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-with-reselect)
 [![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/with-reselect.svg)](https://libraries.io/github/spautz/dynamic-selectors)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/with-reselect@latest/dist/index.cjs?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/with-reselect)
+[![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/with-reselect.svg)](https://bundlephobia.com/package/@dynamic-selectors/with-reselect@latest)
 
 ## What's included
 

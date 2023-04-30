@@ -8,7 +8,7 @@ See **[Selector Comparison](https://github.com/spautz/dynamic-selectors/blob/mai
 [![build status](https://github.com/spautz/dynamic-selectors/workflows/CI/badge.svg)](https://github.com/spautz/dynamic-selectors/actions)
 [![test coverage](https://coveralls.io/repos/github/spautz/dynamic-selectors/badge.svg?branch=x-cov-core)](https://coveralls.io/github/spautz/dynamic-selectors?branch=x-cov-core)
 [![dependencies status](https://img.shields.io/librariesio/release/npm/@dynamic-selectors/core.svg)](https://libraries.io/github/spautz/dynamic-selectors)
-[![gzip size](https://img.badgesize.io/https://unpkg.com/@dynamic-selectors/core@latest/dist/index.cjs?compression=gzip)](https://bundlephobia.com/result?p=@dynamic-selectors/core)
+[![gzip size](https://img.shields.io/bundlephobia/minzip/@dynamic-selectors/core.svg)](https://bundlephobia.com/package/@dynamic-selectors/core@latest)
 
 Dynamic selectors can access state dynamically and call each other like plain functions, even conditionally or within loops, without needing
 to register dependencies up-front. Like Reselect and Re-reselect, selectors are only re-run when necessary.
