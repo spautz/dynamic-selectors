@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 (2023-04-30)
+
+### Minor Changes
+
+- Add NPM provenance via Github actions ([83ff1ee](https://github.com/spautz/dynamic-selectors/commit/83ff1eefa9cd056fc8b8a317e3cac805507c101c))
+- Confirm support for Node 20 ([83ff1ee](https://github.com/spautz/dynamic-selectors/commit/83ff1eefa9cd056fc8b8a317e3cac805507c101c))
+- Update dependencies and devDependencies ([83ff1ee](https://github.com/spautz/dynamic-selectors/commit/83ff1eefa9cd056fc8b8a317e3cac805507c101c))
+
 ## [1.1.1](https://github.com/spautz/dynamic-selectors/compare/v1.1.0...v1.1.1) (2022-09-18)
 
 - Add esm-related fixes that were supposed to be in v1.1.0 ([#41](https://github.com/spautz/dynamic-selectors/issues/41)) ([f598f24](https://github.com/spautz/dynamic-selectors/commit/f598f2469cb04aa1ca748d87292b39c10e5e7237))
