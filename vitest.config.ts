@@ -6,6 +6,7 @@ export default defineConfig({
     setupFiles: './setupTests.ts',
 
     coverage: {
+      provider: 'c8',
       exclude: [...configDefaults.exclude, '**/__tests__/**', '**/legacy-types/**'],
       reporter: ['html', 'lcov'],
     },

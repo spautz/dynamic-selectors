@@ -1,39 +1,7 @@
 {
-  "extends": "@tsconfig/recommended/tsconfig.json",
+  "extends": "./tsconfig-base.typecheck.json",
 
-  "compilerOptions": {
-    /* Basic Options */
-    "target": "ES2019",
-    "module": "esnext",
-    "lib": ["dom", "ES2019"],
-    "allowJs": true,
-    "declaration": true,
-    "jsx": "react",
-    "noEmit": true,
-    "sourceMap": true,
-    "removeComments": false,
-    /* Strict Type-Checking Options */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    /* Module Resolution Options */
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    /* Advanced Options */
-    "forceConsistentCasingInFileNames": true
-  },
-  // The "include" for the root is for typechecking the entire project (it includes directories like "tests" which
-  // the package-level tsconfigs don't include)
-  "include": ["packages/*/src"],
+  // Check the full project for each package, plus their consumption in the demos
+  "include": ["packages", "demos/*/src"],
   "exclude": ["node_modules"]
 }
