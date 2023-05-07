@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.2.0 (2023-04-30)
+## [1.2.1](https://github.com/spautz/dynamic-selectors/compare/v1.2.0...v1.2.1) (2023-05-05)
+
+### Patch Changes
+
+- Add declarationMap to build ([#48](https://github.com/spautz/dynamic-selectors/issues/48)) ([d067579](https://github.com/spautz/dynamic-selectors/commit/d0675791ce3c2278e8bdb3573500aab981527fab))
+
+## [1.2.0](https://github.com/spautz/dynamic-selectors/compare/v1.1.1...v1.2.0) (2023-04-30)
 
 ### Minor Changes
 
