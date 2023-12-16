@@ -1723,7 +1723,7 @@ packages:
     dependencies:
       semver: 7.5.0
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231007
+      typescript: 5.4.0-dev.20231205
     dev: true
 
   /eastasianwidth@0.2.0:
@@ -3510,8 +3510,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /rollup@3.27.0:
-    resolution: {integrity: sha512-aOltLCrYZ0FhJDm7fCqwTjIUEVjWjcydKBV/Zeid6Mn8BWgDCUBBWT5beM5ieForYNo/1ZHuGJdka26kvQ3Gzg==}
+  /rollup@3.29.4:
+    resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -4082,8 +4082,8 @@ packages:
     hasBin: true
     dev: true
 
-  /typescript@5.3.0-dev.20231007:
-    resolution: {integrity: sha512-yNeHmU15JtC5TgUuiCaywQqtVJ6Q1T6mNwDg5N1ObnctoaqBrZ0FGy37NP0Y/UnJUhZxgcYrIb1gcial4fUiyA==}
+  /typescript@5.4.0-dev.20231205:
+    resolution: {integrity: sha512-jeYaYMtVCDclulasTrZlhlF9k/Xu88FCpff6+BP3YVNbWefdRy/3nmmrAFVC/TqGSrLhhjSRHBn6bw49b9Jxdw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -4138,7 +4138,7 @@ packages:
       mlly: 1.2.0
       pathe: 1.1.0
       picocolors: 1.0.0
-      vite: 4.4.8(@types/node@20.1.0)
+      vite: 4.5.1(@types/node@20.1.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -4150,8 +4150,8 @@ packages:
       - terser
     dev: true
 
-  /vite@4.4.8(@types/node@20.1.0):
-    resolution: {integrity: sha512-LONawOUUjxQridNWGQlNizfKH89qPigK36XhMI7COMGztz8KNY0JHim7/xDd71CZwGT4HtSRgI7Hy+RlhG0Gvg==}
+  /vite@4.5.1(@types/node@20.1.0):
+    resolution: {integrity: sha512-AXXFaAJ8yebyqzoNB9fu2pHoo/nWX+xZlaRwoeYUxEqBO+Zj4msE5G+BhGBll9lYEKv9Hfks52PAF2X7qDYXQA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -4181,7 +4181,7 @@ packages:
       '@types/node': 20.1.0
       esbuild: 0.18.17
       postcss: 8.4.31
-      rollup: 3.27.0
+      rollup: 3.29.4
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -4239,7 +4239,7 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.5.0
-      vite: 4.4.8(@types/node@20.1.0)
+      vite: 4.5.1(@types/node@20.1.0)
       vite-node: 0.31.0(@types/node@20.1.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
