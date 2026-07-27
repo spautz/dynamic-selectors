@@ -85,9 +85,9 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "size-limit": "8.2.4",
-    "tsup": "6.7.0",
-    "typescript": "5.0.4",
-    "vitest": "0.31.0"
+    "tsdown": "catalog:packages",
+    "typescript": "catalog:packages",
+    "vitest": "catalog:shared"
   },
   "lint-staged": {
     "*.{css,html,js,jsx,json,less,md,scss,ts,tsx,yaml}": [

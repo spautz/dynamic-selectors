@@ -39,59 +39,75 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./devOnly": {
-      "import": "./dist/index.devOnly.js",
-      "require": "./dist/index.devOnly.cjs",
-      "types": "./dist/index.devOnly.d.ts"
+      "local-dev": "./src/index.ts",
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "jsnext:main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "____ HOOKS _________________________________________________________": "",
-    "prepare": "pnpm run build:main",
+    "TODO_prepack": "pnpm run clean && turbo run build",
+    "prepare": "pnpm run build:lib",
     "prepack": "pnpm run clean && pnpm run build",
-    "____ INTEGRATION ___________________________________________________": "",
-    "clean": "pnpm run build:clean && pnpm run test:clean && rimraf --glob ./node_modules/.cache *.log",
+    "postpack": "pnpm run build:verifypack",
+    "____ STANDARD PACKAGE TASKS ________________________________________": "",
+    "TODO_all": "turbo run pipeline-all",
+    "TODO_all:ci": "turbo run pipeline-ci --ui=stream",
     "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
     "all:readonly": "pnpm run format:verify && pnpm run typecheck && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run typecheck && pnpm run lint:fix",
     "all:ci": "pnpm run format:verify       && pnpm run typecheck && pnpm run lint     && pnpm run test:ci && pnpm run build",
-    "____ INDIVIDUAL COMMANDS ___________________________________________": "",
-    "build": "pnpm run build:main && pnpm run sizecheck",
-    "build:clean": "rimraf ./dist",
-    "build:main": "pnpm run build:clean && tsup src/index.ts --format cjs && tsc -p ./tsconfig.build.json",
-    "build:watch": "pnpm run build:clean && tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "pnpm run build:clean && pnpm run build:lib && pnpm run build:verify",
+    "clean": "pnpm run \"/^.*:clean$/\" && rimraf --glob ./node_modules/.cache ./.turbo ./*.log",
+    "dev": "pnpm run build:lib:watch",
+    "TODO_lint": "biome check --write .",
+    "lint:verify": "biome check .",
+    "publish:yalc": "pnpm run prepack && yalc publish --no-scripts --sig --push --replace",
+    "test:clean": "rimraf ./coverage",
+    "test": "pnpm run test:clean       && vitest run --coverage",
+    "test:ci": "pnpm run test:clean    && vitest run --coverage --bail 1",
+    "test:ui": "pnpm run test:clean    && vitest --ui",
+    "test:watch": "pnpm run test:clean && vitest watch --coverage",
+    "typecheck": "tsc -p ./tsconfig.json --noEmit",
+    "____ BUILD & VALIDATION TASKS ______________________________________": "",
+    "build:clean": "rimraf --glob ./dist ./*.tgz",
+    "build:lib": "tsdown --config ./tsdown.config.ts",
+    "build:lib:watch": "tsdown --config ./tsdown.config.ts --watch",
+    "build:verify": "publint --strict && size-limit",
+    "build:verifypack": "node --experimental-strip-types ../../scripts/verify-packed-tarballs.ts",
+    "size-check": "size-limit --why",
+    "____ TODO: legacy / to-be-refactored _______________________________": "",
     "format": "prettier --write .",
     "format:verify": "prettier --list-different .",
     "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --max-warnings 0 --fix",
-    "sizecheck": "size-limit",
-    "test": "pnpm run test:coverage",
-    "test:clean": "rimraf ./coverage",
-    "test:ci": "pnpm run test:clean            && vitest run --coverage",
-    "test:coverage": "pnpm run test:clean      && vitest run --coverage",
-    "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
-    "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
-    "test:watchcoverage": "pnpm run test:clean && vitest watch --coverage",
-    "typecheck": "tsc -p ./tsconfig.json --noEmit"
+    "lint:fix": "eslint . --max-warnings 0 --fix"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "catalog:packages",
+    "@size-limit/esbuild": "catalog:packages",
+    "@size-limit/esbuild-why": "catalog:packages",
+    "@size-limit/file": "catalog:packages",
     "@types/lodash-es": "4.17.7",
     "@types/node": "20.1.0",
-    "@types/shallowequal": "1.1.1"
+    "@types/shallowequal": "1.1.1",
+    "publint": "catalog:packages",
+    "size-limit": "catalog:packages",
+    "tsdown": "catalog:packages"
   },
   "peerDependencies": {},
   "size-limit": [

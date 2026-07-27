@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "../../tsconfig-base.typecheck-core.json",
+    "../../tsconfig-base.typecheck-modernoptions.json",
+    "../../tsconfig-base.build-cjs.json"
+  ],
+  "compilerOptions": {
+    "outDir": "dist/cjs/",
+    "declarationDir": "dist/cjs/"
+  },
+  "include": ["src"]
+}
