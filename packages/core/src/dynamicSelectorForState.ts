@@ -41,7 +41,7 @@ import type {
   DynamicSelectorStateOptions,
   StatePath,
 } from './types.js';
-import { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
+import type { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
 
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
@@ -156,7 +156,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
             'Internal consistency error: expected to find debugInfo in the nextResultEntry. Please report this bug.',
           );
         }
-        debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
+        debugInfo._verbose = !!debug && (typeof debug === 'string' ? debug : displayName || false);
 
         if (recordDependencies && allowExecution) {
           debugInvoked(debugInfo);

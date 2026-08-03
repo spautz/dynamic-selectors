@@ -1,2 +1,2 @@
-import 'packages/core/setupTests';
-import 'packages/with-reselect/setupTests';
+// nothing to do
+export {};
