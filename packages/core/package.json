@@ -28,6 +28,9 @@
     "provenance": true,
     "tag": "next"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "files": [
     "dist/",
     "docs/",
@@ -47,6 +50,28 @@
       "require": {
         "types": "./dist/cjs/index.d.cts",
         "default": "./dist/cjs/index.cjs"
+      }
+    },
+    "./dev-only": {
+      "local-dev": "./src/index.dev-only.ts",
+      "import": {
+        "types": "./dist/esm/index.dev-only.d.ts",
+        "default": "./dist/esm/index.dev-only.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.dev-only.d.cts",
+        "default": "./dist/cjs/index.dev-only.cjs"
+      }
+    },
+    "./devOnly": {
+      "local-dev": "./src/index.dev-only.ts",
+      "import": {
+        "types": "./dist/esm/index.dev-only.d.ts",
+        "default": "./dist/esm/index.dev-only.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.dev-only.d.cts",
+        "default": "./dist/cjs/index.dev-only.cjs"
       }
     },
     "./package.json": "./package.json"
@@ -116,12 +141,13 @@
   "peerDependencies": {},
   "size-limit": [
     {
-      "path": "dist/index.js",
+      "path": "./dist/esm/index.js",
       "import": "{}",
       "limit": "20 B"
     },
     {
-      "path": "dist/index.js",
+      "path": "./dist/esm/index.js",
+      "import": "{ createDynamicSelector }",
       "limit": "5 kB"
     }
   ]

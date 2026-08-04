@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest';
 import { createDynamicSelector } from '@dynamic-selectors/core';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore Typescript and esm exports don't play nice, for now
-import { DebugInfoCheckUtil } from '@dynamic-selectors/core/devOnly';
+import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dev-only';
 
 import { reselectSelectorFromDynamic } from '../reselectSelectorFromDynamic';
 

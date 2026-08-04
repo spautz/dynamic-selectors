@@ -43,9 +43,29 @@ import type {
 } from './types.js';
 import type { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
 
+/**
+ * Constructor for dynamic selectors, using the state provided
+ */
+type CreateDynamicSelectorFnForState<StateType> = <
+  InnerFn extends DynamicSelectorInnerFn<StateType>,
+>(
+  selectorFn: InnerFn,
+  options?: Partial<
+    DynamicSelectorOptions<
+      ReturnType<InnerFn>,
+      // Arg0 = state = StateType
+      Parameters<InnerFn>[0],
+      // Arg1 = params = ParamsType
+      Parameters<InnerFn>[1],
+      // ...otherArgs = ExtraArgsType
+      RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
+    >
+  >,
+) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
+
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
-) => {
+): CreateDynamicSelectorFnForState<StateType> => {
   // Internally we use the default types to keep things simple
   type ArgsWithState = [StateType, DynamicSelectorParams, []];
   type ArgsWithoutState = [DynamicSelectorParams, []];
@@ -81,25 +101,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     return args as ArgsWithState;
   };
 
-  /**
-   * Constructor for dynamic selectors, using the state provided
-   */
-  type CreateDynamicSelectorFnForState = <InnerFn extends DynamicSelectorInnerFn<StateType>>(
-    selectorFn: InnerFn,
-    options?: Partial<
-      DynamicSelectorOptions<
-        ReturnType<InnerFn>,
-        // Arg0 = state = StateType
-        Parameters<InnerFn>[0],
-        // Arg1 = params = ParamsType
-        Parameters<InnerFn>[1],
-        // ...otherArgs = ExtraArgsType
-        RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
-      >
-    >,
-  ) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
-
-  const createDynamicSelector: CreateDynamicSelectorFnForState = ((
+  const createDynamicSelector: CreateDynamicSelectorFnForState<StateType> = ((
     innerFn: DynamicSelectorInnerFn<StateType>,
     options,
   ) => {
@@ -445,7 +447,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     outerFn.displayName = displayName || innerFn.displayName || innerFn.name;
 
     return outerFn;
-  }) as CreateDynamicSelectorFnForState;
+  }) as CreateDynamicSelectorFnForState<StateType>;
 
   return createDynamicSelector;
 };

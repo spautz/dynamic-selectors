@@ -35,6 +35,9 @@
     "LICENSE",
     "*.md"
   ],
+  "engines": {
+    "node": ">=22"
+  },
   "source": "./src/index.ts",
   "type": "module",
   "exports": {
@@ -115,13 +118,14 @@
   },
   "size-limit": [
     {
-      "path": "dist/index.js",
+      "path": "./dist/esm/index.js",
       "import": "{}",
       "limit": "20 B"
     },
     {
-      "path": "dist/index.js",
-      "limit": "1 kB"
+      "path": "./dist/esm/index.js",
+      "import": "{ dynamicSelectorFromReselect }",
+      "limit": "50 B"
     }
   ]
 }

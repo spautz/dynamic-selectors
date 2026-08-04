@@ -1,6 +1,6 @@
 import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types.js';
 
-const validateOptions = (options: DynamicSelectorOptions) => {
+const validateOptions = (options: DynamicSelectorOptions): void => {
   /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     const {
@@ -32,7 +32,7 @@ const validateOptions = (options: DynamicSelectorOptions) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) => {
+const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>): void => {
   /* c8 ignore start */
   if (process.env.NODE_ENV !== 'production') {
     const {

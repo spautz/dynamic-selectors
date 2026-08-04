@@ -87,6 +87,7 @@
     "size-limit": "8.2.4",
     "tsdown": "catalog:packages",
     "typescript": "catalog:packages",
+    "typescript-eslint": "8.65.0",
     "vite": "catalog:shared",
     "vitest": "catalog:shared"
   },
