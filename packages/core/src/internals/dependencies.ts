@@ -83,11 +83,13 @@ const hasAnyCallDependencyChanged = (
 
     for (let i = 0; i < numPreviousCallDependencies; i += 1) {
       const [dependencySelectorFn, dependencyParams, dependencyReturnValue, dependencyIsReadOnly] =
-        previousCallDependencies[i];
+        previousCallDependencies[i] as DynamicSelectorCallDependency;
 
       /* c8 ignore start */
-      // eslint-disable-next-line no-constant-condition
-      if (false) {
+      // This `NEVER` alias is a hack to trick Typescript into thinking the never-run block below
+      // is not actually never-run. (Otherwise it complains about unreachable code.)
+      const NEVER: boolean = false;
+      if (NEVER) {
         // This block is here ONLY to catch possible errors if the structure of `previousCallDependencies` changes
         const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] =
           dependencySelectorFn;

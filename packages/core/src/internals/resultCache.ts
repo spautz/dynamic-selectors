@@ -76,6 +76,7 @@ const createResultEntry = (
   ];
 
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = myPreviousResult
       ? myPreviousResult[RESULT_ENTRY__DEBUG_INFO]
@@ -91,6 +92,7 @@ const createDepCheckEntry = (allowExecution: boolean): DynamicSelectorResultEntr
   newResultEntry[RESULT_ENTRY__ALLOW_EXECUTION] = allowExecution;
   newResultEntry[RESULT_ENTRY__RECORD_DEPENDENCIES] = false;
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = null;
   }

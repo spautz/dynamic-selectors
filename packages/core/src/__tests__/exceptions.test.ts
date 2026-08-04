@@ -53,6 +53,7 @@ describe('exceptions', () => {
         let result = 0;
         try {
           result = childSelector() * multiplier;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           exceptionWasCaught();
         }

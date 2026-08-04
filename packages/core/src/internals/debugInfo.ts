@@ -12,6 +12,7 @@ export type DynamicSelectorDebugInfo = {
 } | null;
 
 const createDebugInfo = (): DynamicSelectorDebugInfo => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     return {
       depCheckCount: 0,
@@ -30,6 +31,7 @@ const debugLogVerbose = (
   label: string,
   ...moreInfo: Array<unknown>
 ): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo && debugInfo._verbose) {
     const labelPrefix = typeof debugInfo._verbose === 'string' ? `${debugInfo._verbose}: ` : '';
     console.log(labelPrefix + label, ...moreInfo, debugInfo);
@@ -37,6 +39,7 @@ const debugLogVerbose = (
 };
 
 const debugDepCheck = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.depCheckCount++;
     debugLogVerbose(debugInfo, 'Begin DepCheck');
@@ -44,6 +47,7 @@ const debugDepCheck = (debugInfo: DynamicSelectorDebugInfo): void => {
 };
 
 const debugInvoked = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.invokeCount++;
     debugLogVerbose(debugInfo, 'Begin Invoke');
@@ -51,6 +55,7 @@ const debugInvoked = (debugInfo: DynamicSelectorDebugInfo): void => {
 };
 
 const debugSkippedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.skippedRunCount++;
     debugLogVerbose(debugInfo, 'Skipped!');
@@ -58,6 +63,7 @@ const debugSkippedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
 };
 
 const debugPhantomRun = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.phantomRunCount++;
     debugLogVerbose(debugInfo, 'Phantom!');
@@ -65,6 +71,7 @@ const debugPhantomRun = (debugInfo: DynamicSelectorDebugInfo): void => {
 };
 
 const debugFullRun = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.fullRunCount++;
     debugLogVerbose(debugInfo, 'Full run!');
@@ -72,6 +79,7 @@ const debugFullRun = (debugInfo: DynamicSelectorDebugInfo): void => {
 };
 
 const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production' && debugInfo) {
     debugInfo.abortedRunCount++;
     debugLogVerbose(debugInfo, 'Aborted!');

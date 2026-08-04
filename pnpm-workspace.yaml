@@ -49,7 +49,7 @@ catalogs:
     react-dom: 19.2.8
     size-limit: 12.1.0
     tsdown: 0.22.13
-    typescript: 7.0.2
+    typescript: 6.0.3
   # Demo apps sometimes use older dependencies and devDependencies
   demos:
     '@types/node': 26.1.2
