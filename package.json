@@ -34,7 +34,7 @@
     "____ BATCH COMMANDS FOR PACKAGES ___________________________________": "",
     "packages:clean": "pnpm --parallel -r run clean",
     "packages:build": "pnpm -r run build",
-    "packages:test": "pnpm -r run test:coverage",
+    "packages:test": "pnpm -r run test",
     "packages:test:coverage": "pnpm -r run test:coverage",
     "packages:test:quick": "pnpm --parallel -r run test:quick",
     "packages:all": "pnpm -r run all",
