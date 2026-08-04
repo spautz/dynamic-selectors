@@ -28,9 +28,6 @@
     "provenance": true,
     "tag": "next"
   },
-  "engines": {
-    "node": ">=22"
-  },
   "files": [
     "dist/",
     "docs/",

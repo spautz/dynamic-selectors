@@ -35,9 +35,6 @@
     "LICENSE",
     "*.md"
   ],
-  "engines": {
-    "node": ">=22"
-  },
   "source": "./src/index.ts",
   "type": "module",
   "exports": {

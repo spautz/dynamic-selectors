@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This runs the full CI pipeline using act (GitHub Actions locally)
+# This updates external tests by publishing local packages and updating yalc dependencies
 
 ###################################################################################################
 # Standard setup for all scripts
@@ -21,16 +21,23 @@ source ./scripts/helpers/helpers.sh
 ###################################################################################################
 # Main body
 
-if command_exists act; then
-  # act =  https://github.com/nektos/act
-  act
-else
-  emit_warning "Could not find 'act': https://github.com/nektos/act"
-  exit 1
-fi
+# This script assumes you've already run either `setup-local-environment.sh` or
+# `setup-ci-environment.sh`
 
-# @TODO: Detect actions-runner/Runner.Client
-# https://github.com/ChristopherHX/runner.server
+run_command pnpm run publish:yalc
+
+for DIRECTORY in external-tests/*/ ; do
+  pushd $DIRECTORY
+
+  # Use workspace's copy of Yalc to copy over any necessary local packages, so that they'll be
+  # in place when we try to install
+  if [ -f "./package.json" ]; then
+    ../../node_modules/.bin/yalc update
+  fi
+  # TODO: else = Deno or other alternative
+
+  popd
+done
 
 ###################################################################################################
 # Standard teardown for all scripts

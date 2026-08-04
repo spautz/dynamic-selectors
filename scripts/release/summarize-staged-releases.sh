@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This runs the full CI pipeline using act (GitHub Actions locally)
+# Write the staged npm release IDs to the GitHub Actions step summary.
 
 ###################################################################################################
 # Standard setup for all scripts
@@ -21,19 +21,27 @@ source ./scripts/helpers/helpers.sh
 ###################################################################################################
 # Main body
 
-if command_exists act; then
-  # act =  https://github.com/nektos/act
-  act
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  exec 3>> "$GITHUB_STEP_SUMMARY"
 else
-  emit_warning "Could not find 'act': https://github.com/nektos/act"
-  exit 1
+  exec 3>&1
 fi
 
-# @TODO: Detect actions-runner/Runner.Client
-# https://github.com/ChristopherHX/runner.server
+{
+  echo '## Staged releases'
+  echo
+  echo 'Approve these stages manually on npm, then run the Verify and Promote Release workflow.'
+  echo
+} >&3
+
+while IFS= read -r STAGE_ID; do
+  [[ -n "$STAGE_ID" ]] || continue
+  echo "- \`$STAGE_ID\`" >&3
+done <<< "${STAGE_IDS:-}"
 
 ###################################################################################################
 # Standard teardown for all scripts
 
+exec 3>&-
 popd
 echo "### End ${THIS_SCRIPT_NAME}"

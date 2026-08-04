@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This runs the full CI pipeline using act (GitHub Actions locally)
+# This runs the checks for every package and demo app.
 
 ###################################################################################################
 # Standard setup for all scripts
@@ -21,16 +21,30 @@ source ./scripts/helpers/helpers.sh
 ###################################################################################################
 # Main body
 
-if command_exists act; then
-  # act =  https://github.com/nektos/act
-  act
-else
-  emit_warning "Could not find 'act': https://github.com/nektos/act"
-  exit 1
-fi
+./scripts/check-environment.sh
 
-# @TODO: Detect actions-runner/Runner.Client
-# https://github.com/ChristopherHX/runner.server
+run_command pnpm install --frozen-lockfile --prefer-offline
+
+# Run all normal commands and all CI commands. This is overkill and duplicates a lot of work,
+# but also helps catch any intermittent errors. Suitable for running before lunch or teatime.
+run_command pnpm run clean
+run_command pnpm run packages:all
+run_command pnpm run packages:all:ci
+
+run_command pnpm run clean
+run_command pnpm run all
+run_command pnpm run all:ci
+
+run_command pnpm run clean
+run_command pnpm run all:all
+
+# Also ensure that packing works: AreTheTypesWrong might not run outside of pack
+for DIRECTORY in packages/* ; do
+  pushd $DIRECTORY;
+  run_command pnpm pack || exit 1;
+  popd;
+done
+
 
 ###################################################################################################
 # Standard teardown for all scripts

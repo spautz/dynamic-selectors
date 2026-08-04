@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This runs the full CI pipeline using act (GitHub Actions locally)
+# Pack every public package tarball for release.
 
 ###################################################################################################
 # Standard setup for all scripts
@@ -21,16 +21,16 @@ source ./scripts/helpers/helpers.sh
 ###################################################################################################
 # Main body
 
-if command_exists act; then
-  # act =  https://github.com/nektos/act
-  act
-else
-  emit_warning "Could not find 'act': https://github.com/nektos/act"
-  exit 1
-fi
+pack_public_package() {
+  local PACKAGE_DIR="$1"
 
-# @TODO: Detect actions-runner/Runner.Client
-# https://github.com/ChristopherHX/runner.server
+  (
+    cd "$PACKAGE_DIR"
+    run_command pnpm pack --out package-%v.tgz
+  )
+}
+
+for_each_public_package pack_public_package
 
 ###################################################################################################
 # Standard teardown for all scripts

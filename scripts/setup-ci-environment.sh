@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# This runs the full CI pipeline using act (GitHub Actions locally)
+# `setup-ci-environment.sh` is for CI runs where system-level dependencies are already met.
+# We don't want to clobber that setup with NVM.
 
 ###################################################################################################
 # Standard setup for all scripts
@@ -21,16 +22,15 @@ source ./scripts/helpers/helpers.sh
 ###################################################################################################
 # Main body
 
-if command_exists act; then
-  # act =  https://github.com/nektos/act
-  act
-else
-  emit_warning "Could not find 'act': https://github.com/nektos/act"
-  exit 1
-fi
+run_command ./scripts/check-environment.sh
 
-# @TODO: Detect actions-runner/Runner.Client
-# https://github.com/ChristopherHX/runner.server
+# Only use the lockfile if it exists: for many demos and external-tests it's better to ignore the
+# lockfile, to catch issues that package consumers might encounter when upgrading.
+if [ -f "./pnpm-lock.yaml" ]; then
+  run_command pnpm install --frozen-lockfile --prefer-offline
+else
+  run_command pnpm install --no-frozen-lockfile
+fi;
 
 ###################################################################################################
 # Standard teardown for all scripts
