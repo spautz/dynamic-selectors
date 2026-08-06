@@ -1,27 +1,80 @@
-# dependencies
-/.pnp
-/node_modules
-/packages/*/node_modules
-.pnp.js
+# IDE settings
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
 
-# outputs
-/coverage
-/packages/*/coverage
-/packages/*/dist
-/packages/*/legacy-types
+# project files
+
+*.local.*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# dependencies
+
+.pnp
+.pnp.js
+.pnpm-store/
+node_modules/
+
+# unit tests
+
+coverage/
+
+# e2e tests
+
+e2e-test-output/
+playwright-report/
+
+# linting
+
+.eslintcache
+
+# build output
+
+*.log
+*.tsbuildinfo
+
+.astro/
+.cache/
+.cache-loader/
+.docusaurus/
+.next/
+.nitro/
+.nuxt/
+.output/
+.react-router/
+.svelte-kit/
+.turbo/
+.wrangler/
+_fresh/
+build/
+dist/
+dist-ssr/
+legacy-types/
+out/
+public/build/
+packages/*/*.tgz
+
+# storybook
+
+storybook-static/
+
+# external-tests
+
+external-tests/*/.yalc/
 
 # misc
-.idea/
-.vscode/
 
 .DS_Store
+.env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-.pnpm-debug.log*
-lerna-debug.log*
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.env*.local
+.env.production
+.vercel
+*.pem
+next-env.d.ts
+Thumbs.db

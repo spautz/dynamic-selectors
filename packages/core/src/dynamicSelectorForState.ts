@@ -41,11 +41,31 @@ import type {
   DynamicSelectorStateOptions,
   StatePath,
 } from './types.js';
-import { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
+import type { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
+
+/**
+ * Constructor for dynamic selectors, using the state provided
+ */
+type CreateDynamicSelectorFnForState<StateType> = <
+  InnerFn extends DynamicSelectorInnerFn<StateType>,
+>(
+  selectorFn: InnerFn,
+  options?: Partial<
+    DynamicSelectorOptions<
+      ReturnType<InnerFn>,
+      // Arg0 = state = StateType
+      Parameters<InnerFn>[0],
+      // Arg1 = params = ParamsType
+      Parameters<InnerFn>[1],
+      // ...otherArgs = ExtraArgsType
+      RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
+    >
+  >,
+) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
 
 const dynamicSelectorForState = <StateType = DefaultStateType>(
   stateOptions: DynamicSelectorStateOptions<StateType>,
-) => {
+): CreateDynamicSelectorFnForState<StateType> => {
   // Internally we use the default types to keep things simple
   type ArgsWithState = [StateType, DynamicSelectorParams, []];
   type ArgsWithoutState = [DynamicSelectorParams, []];
@@ -81,25 +101,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     return args as ArgsWithState;
   };
 
-  /**
-   * Constructor for dynamic selectors, using the state provided
-   */
-  type CreateDynamicSelectorFnForState = <InnerFn extends DynamicSelectorInnerFn<StateType>>(
-    selectorFn: InnerFn,
-    options?: Partial<
-      DynamicSelectorOptions<
-        ReturnType<InnerFn>,
-        // Arg0 = state = StateType
-        Parameters<InnerFn>[0],
-        // Arg1 = params = ParamsType
-        Parameters<InnerFn>[1],
-        // ...otherArgs = ExtraArgsType
-        RemoveFirstElement<RemoveFirstElement<Parameters<InnerFn>>>
-      >
-    >,
-  ) => DynamicSelectorFnFromInnerFn<StateType, InnerFn>;
-
-  const createDynamicSelector: CreateDynamicSelectorFnForState = ((
+  const createDynamicSelector: CreateDynamicSelectorFnForState<StateType> = ((
     innerFn: DynamicSelectorInnerFn<StateType>,
     options,
   ) => {
@@ -149,6 +151,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       let debugInfo: DynamicSelectorDebugInfo = null;
 
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production') {
         debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
         if (!debugInfo) {
@@ -156,7 +159,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
             'Internal consistency error: expected to find debugInfo in the nextResultEntry. Please report this bug.',
           );
         }
-        debugInfo._verbose = debug && (typeof debug === 'string' ? debug : displayName);
+        debugInfo._verbose = !!debug && (typeof debug === 'string' ? debug : displayName || false);
 
         if (recordDependencies && allowExecution) {
           debugInvoked(debugInfo);
@@ -180,8 +183,10 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         ] = previousResult;
 
         /* c8 ignore start */
-        // eslint-disable-next-line no-constant-condition
-        if (false) {
+        // This `NEVER` alias is a hack to trick Typescript into thinking the never-run block below
+        // is not actually never-run. (Otherwise it complains about unreachable code.)
+        const NEVER: boolean = false;
+        if (NEVER) {
           // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
           const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] =
             previousState;
@@ -357,6 +362,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production') {
         const paramKey = getKeyForParams(params);
         const resultEntry = resultCache.get(paramKey);
@@ -423,6 +429,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     outerFn.resetCache = () => {
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
         // @TODO: Add a way to mute this warning
         console.warn(
@@ -445,7 +452,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     outerFn.displayName = displayName || innerFn.displayName || innerFn.name;
 
     return outerFn;
-  }) as CreateDynamicSelectorFnForState;
+  }) as CreateDynamicSelectorFnForState<StateType>;
 
   return createDynamicSelector;
 };

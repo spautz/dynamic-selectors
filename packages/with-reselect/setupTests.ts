@@ -1,7 +1,5 @@
 import { expect } from 'vitest';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { DebugInfoCheckUtil } from '@dynamic-selectors/core/devOnly';
+import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dev-only';
 
 DebugInfoCheckUtil.setDefaultExpectFn(expect);

@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig-base.typecheck.json",
+  "extends": [
+    "./tsconfig-base.typecheck-core.json",
+    "./tsconfig-base.typecheck-modernoptions.json"
+  ],
 
-  // Check the full project for each package, plus their consumption in the demos
-  "include": ["packages", "demos/*/src"],
-  "exclude": ["node_modules"]
+  // This root config only checks files that are outside other projects: every package, demo app, and external-test
+  // has its own tsconfig targeting its own files.
+  "include": ["scripts/", "*.*"]
 }

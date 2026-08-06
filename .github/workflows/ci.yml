@@ -2,102 +2,65 @@ name: CI
 
 on: [push]
 
-permissions:
-  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
 
 jobs:
   workspace-ci:
     name: Workspace CI
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
-        node-version: [ 16.x, 18.x, 19.x, 20.x ]
+        node-version: [22.x, 24.x, latest]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: ./.github/reusable-workflows/setup-repo
         with:
           node-version: ${{ matrix.node-version }}
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - run: corepack enable
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Check for a changelog entry
-        if: ${{ github.ref != 'refs/heads/prepare-release' }}
-        run: pnpm run changelog:status:ci
+        if: ${{ github.ref != 'refs/heads/prepare-release' && !startsWith(github.ref_name, 'dependabot/') }}
+        run: |
+          pnpm run changelog:status:ci
 
       - name: Run CI checks
-        run: pnpm run all:ci
+        run: |
+          pnpm run all:ci
 
       - name: Report test coverage to coveralls.io
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
         with:
           github-token: ${{ github.token }}
-
+          fail-on-error: false
 
   package-ci:
     name: Package CI
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
-        package-name: [ core, with-reselect ]
+        package-name: [core, with-reselect]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Node.js
-        uses: actions/setup-node@v3
+      - uses: ./.github/reusable-workflows/setup-repo
         with:
-          node-version: 20
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - run: corepack enable
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          node-version: nvmrc
 
       - name: Run CI checks for package
-        run: |
-          cd packages/${{ matrix.package-name }}
-          pnpm run all:ci
+        working-directory: packages/${{ matrix.package-name }}
+        run: pnpm run all:ci

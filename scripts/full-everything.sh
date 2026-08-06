@@ -1,20 +1,35 @@
 #!/usr/bin/env bash
 
+# This does everything: clean, setup, run all commands, and build everything
+
+###################################################################################################
+# Standard setup for all scripts
+
+THIS_SCRIPT_NAME=$(basename "$0")
+echo "### Begin ${THIS_SCRIPT_NAME}"
+
 # Fail if anything in here fails
-set -e
+set -euo pipefail
 
-# This script runs from the project root
-cd "$(dirname "$0")/.."
+# Always run from the repo root
+REPO_ROOT=$(git -C "$(dirname "${BASH_SOURCE[0]:-$0}")" rev-parse --show-toplevel)
+pushd "$REPO_ROOT"
 
+# shellcheck source=scripts/helpers/helpers.sh
 source ./scripts/helpers/helpers.sh
 
 ###################################################################################################
+# Main body
 
 echo "Going to doing everything: this will take a while..."
 ./scripts/clean-everything.sh
-./scripts/setup-environment.sh
+source ./scripts/setup-local-environment.sh
+run_command pnpm run all:all
+run_command pnpm run clean
 ./scripts/build-everything.sh
 
 ###################################################################################################
+# Standard teardown for all scripts
 
-echo "Done doing everything"
+popd
+echo "### End ${THIS_SCRIPT_NAME}"

@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    // Modules
+    "allowImportingTsExtensions": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
+    // Emit
+    "declaration": true,
+    "noEmit": true,
+    "removeComments": false,
+    "sourceMap": true,
+    // Interop Constraints
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["ES2022"],
+    "moduleDetection": "force",
+    // Completeness
+    "skipLibCheck": true
+  }
+}

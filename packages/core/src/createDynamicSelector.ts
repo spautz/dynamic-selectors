@@ -8,7 +8,7 @@ import type {
   DynamicSelectorOptions,
   DynamicSelectorStateOptions,
 } from './types.js';
-import {
+import type {
   DynamicSelectorFnFromInnerFn,
   DynamicSelectorInnerFn,
   RemoveFirstElement,

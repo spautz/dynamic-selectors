@@ -59,7 +59,7 @@ class DebugInfoCheckUtil {
     result: ExpectedDebugInfoResultType,
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
-  ) {
+  ): void {
     this._logExpectedEntry('depCheck');
     this._logExpectedResult(result);
     this._checkLogs(selector, params);
@@ -69,7 +69,7 @@ class DebugInfoCheckUtil {
     result: ExpectedDebugInfoResultType,
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
-  ) {
+  ): void {
     this._logExpectedEntry('invoked');
     this._logExpectedResult(result);
     this._checkLogs(selector, params);
@@ -79,7 +79,7 @@ class DebugInfoCheckUtil {
     results: Array<[ExpectedDebugInfoEntryType, ExpectedDebugInfoResultType]>,
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
-  ) {
+  ): void {
     results.forEach(([entry, result]) => {
       this._logExpectedEntry(entry);
       this._logExpectedResult(result);
@@ -90,7 +90,7 @@ class DebugInfoCheckUtil {
   expectUntouched(
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
-  ) {
+  ): void {
     if (this._expectedDebugInfo?.invokeCount) {
       return this._checkLogs(selector, params);
     }
@@ -104,7 +104,7 @@ class DebugInfoCheckUtil {
   _checkLogs(
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
-  ) {
+  ): void {
     // Clone so that we can remove the `_verbose` flag from our checks
     const selectorInfo = { ...selector.getDebugInfo(params) } as DynamicSelectorDebugInfo;
     const expectedInfo = { ...this._expectedDebugInfo } as DynamicSelectorDebugInfo;
@@ -118,7 +118,7 @@ class DebugInfoCheckUtil {
     expect(selectorInfo).toEqual(this._expectedDebugInfo);
   }
 
-  _logExpectedEntry(entry: ExpectedDebugInfoEntryType) {
+  _logExpectedEntry(entry: ExpectedDebugInfoEntryType): void {
     switch (entry) {
       case 'depCheck': {
         debugDepCheck(this._expectedDebugInfo);
@@ -134,7 +134,7 @@ class DebugInfoCheckUtil {
     }
   }
 
-  _logExpectedResult(result: ExpectedDebugInfoResultType) {
+  _logExpectedResult(result: ExpectedDebugInfoResultType): void {
     switch (result) {
       case 'skipped': {
         debugSkippedRun(this._expectedDebugInfo);

@@ -11,13 +11,19 @@
   },
   "author": {
     "name": "Steven Pautz",
-    "url": "http://stevenpautz.com/"
+    "url": "https://stevenpautz.com"
   },
   "engines": {
-    "node": "^16 || ^18 || ^19 || ^20",
-    "pnpm": "^8"
+    "node": "^22 || ^24 || ^26",
+    "pnpm": "^11"
   },
-  "packageManager": "pnpm@8.3.1",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.15.0",
+      "onFail": "download"
+    }
+  },
   "type": "module",
   "scripts": {
     "____ HOOKS _________________________________________________________": "",
@@ -28,8 +34,7 @@
     "____ BATCH COMMANDS FOR PACKAGES ___________________________________": "",
     "packages:clean": "pnpm --parallel -r run clean",
     "packages:build": "pnpm -r run build",
-    "packages:test": "pnpm -r run test:coverage",
-    "packages:test:coverage": "pnpm -r run test:coverage",
+    "packages:test": "pnpm -r run test",
     "packages:test:quick": "pnpm --parallel -r run test:quick",
     "packages:all": "pnpm -r run all",
     "packages:all:readonly": "pnpm -r run all:readonly",
@@ -37,7 +42,7 @@
     "packages:all:ci": "pnpm -r run all:ci",
     "____ INTEGRATION ___________________________________________________": "",
     "clean": "pnpm run test:clean && rimraf --glob ./node_modules/.cache ./*.log && pnpm run packages:clean",
-    "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test:coverage && pnpm run packages:build",
+    "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test && pnpm run packages:build",
     "all:readonly": "pnpm run format:verify && pnpm run typecheck && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run typecheck && pnpm run lint:fix",
     "all:ci": "pnpm run format:verify       && pnpm run typecheck && pnpm run lint     && pnpm run test:ci && pnpm run packages:build",
@@ -50,10 +55,9 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --max-warnings 0 --fix",
     "release:prep": "pnpm run changelog:status && changeset version",
-    "test": "pnpm run test:coverage",
+    "test": "pnpm run test:clean               && vitest run --coverage",
     "test:clean": "rimraf ./coverage",
     "test:ci": "pnpm run test:clean            && vitest run --coverage",
-    "test:coverage": "pnpm run test:clean      && vitest run --coverage",
     "test:quick": "pnpm run test:clean         && vitest run --coverage=false",
     "test:watch": "pnpm run test:clean         && vitest watch --coverage=false",
     "test:watchcoverage": "pnpm run test:clean && vitest watch --coverage",
@@ -66,22 +70,25 @@
     "@dynamic-selectors/with-reselect": "workspace:*",
     "@size-limit/preset-small-lib": "8.2.4",
     "@tsconfig/recommended": "1.0.2",
-    "@typescript-eslint/eslint-plugin": "5.59.2",
-    "@typescript-eslint/parser": "5.59.2",
-    "@vitest/coverage-c8": "0.31.0",
+    "@typescript-eslint/eslint-plugin": "8.65.0",
+    "@typescript-eslint/parser": "8.65.0",
     "changesets-format-with-issue-links": "0.3.0",
     "downlevel-dts": "0.11.0",
     "eslint": "8.40.0",
     "eslint-config-prettier": "8.8.0",
     "gitlog": "4.0.4",
+    "glob": "13.0.6",
     "husky": "8.0.3",
+    "jsdom": "29.1.1",
     "lint-staged": "13.2.2",
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "size-limit": "8.2.4",
-    "tsup": "6.7.0",
-    "typescript": "5.0.4",
-    "vitest": "0.31.0"
+    "tsdown": "catalog:packages",
+    "typescript": "catalog:packages",
+    "typescript-eslint": "8.65.0",
+    "vite": "catalog:shared",
+    "vitest": "catalog:shared"
   },
   "lint-staged": {
     "*.{css,html,js,jsx,json,less,md,scss,ts,tsx,yaml}": [
