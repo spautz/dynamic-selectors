@@ -151,6 +151,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       let debugInfo: DynamicSelectorDebugInfo = null;
 
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production') {
         debugInfo = nextResult[RESULT_ENTRY__DEBUG_INFO];
         if (!debugInfo) {
@@ -182,8 +183,10 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         ] = previousResult;
 
         /* c8 ignore start */
-        // eslint-disable-next-line no-constant-condition
-        if (false) {
+        // This `NEVER` alias is a hack to trick Typescript into thinking the never-run block below
+        // is not actually never-run. (Otherwise it complains about unreachable code.)
+        const NEVER: boolean = false;
+        if (NEVER) {
           // This block is here ONLY to catch possible errors if the structure of `previousResult` changes
           const checkType_previousState: DynamicSelectorResultEntry[typeof RESULT_ENTRY__STATE] =
             previousState;
@@ -359,6 +362,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     outerFn.getDebugInfo = (params: DynamicSelectorParams): DynamicSelectorDebugInfo => {
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production') {
         const paramKey = getKeyForParams(params);
         const resultEntry = resultCache.get(paramKey);
@@ -425,6 +429,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     outerFn.resetCache = () => {
       /* c8 ignore start */
+      // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
         // @TODO: Add a way to mute this warning
         console.warn(

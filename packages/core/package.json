@@ -86,7 +86,7 @@
     "____ STANDARD PACKAGE TASKS ________________________________________": "",
     "TODO_all": "turbo run pipeline-all",
     "TODO_all:ci": "turbo run pipeline-ci --ui=stream",
-    "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test:coverage && pnpm run build",
+    "all": "pnpm run format                 && pnpm run typecheck && pnpm run lint:fix && pnpm run test && pnpm run build",
     "all:readonly": "pnpm run format:verify && pnpm run typecheck && pnpm run lint     && pnpm run test:quick",
     "all:quick": "pnpm run format           && pnpm run typecheck && pnpm run lint:fix",
     "all:ci": "pnpm run format:verify       && pnpm run typecheck && pnpm run lint     && pnpm run test:ci && pnpm run build",

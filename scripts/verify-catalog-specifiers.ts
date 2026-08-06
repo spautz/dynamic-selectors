@@ -54,7 +54,7 @@ function collectCatalogPoliciesWithFiles(rootDir: string): PolicyWithFiles[] {
       cwd: rootDir,
       nodir: true,
     })
-      .map((packageJsonPath) => packageJsonPath.replaceAll(path.sep, '/'))
+      .map((packageJsonPath: string) => packageJsonPath.replaceAll(path.sep, '/'))
       .sort(),
   }));
 }

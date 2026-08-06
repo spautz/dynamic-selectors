@@ -6,7 +6,7 @@ import { createDynamicSelector } from '@dynamic-selectors/core';
 // @ts-ignore Typescript and esm exports don't play nice, for now
 import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dev-only';
 
-import { reselectSelectorFromDynamic } from '../reselectSelectorFromDynamic';
+import { reselectSelectorFromDynamic } from '../reselectSelectorFromDynamic.js';
 
 type MockState = { a: number; b?: number; c?: number };
 

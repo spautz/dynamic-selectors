@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 // @ts-ignore Typescript and esm exports don't play nice, for now
 import { DebugInfoCheckUtil } from '@dynamic-selectors/core/dev-only';
 
-import { dynamicSelectorFromReselect } from '../dynamicSelectorFromReselect';
+import { dynamicSelectorFromReselect } from '../dynamicSelectorFromReselect.js';
 
 type MockState = { a: number };
 

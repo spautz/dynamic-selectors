@@ -1,9 +1,9 @@
-import {
-  createDynamicSelector,
+import { createDynamicSelector } from '@dynamic-selectors/core';
+import type {
+  DynamicSelectorInnerFn,
   DynamicSelectorFnFromTypes,
   DynamicSelectorOptions,
 } from '@dynamic-selectors/core';
-import type { DynamicSelectorInnerFn } from '@dynamic-selectors/core';
 import type { Selector } from 'reselect';
 
 /**
