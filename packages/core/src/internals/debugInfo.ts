@@ -1,4 +1,5 @@
 /* c8 ignore start */
+// biome-ignore-all lint/suspicious/noConsole: Intentional console output
 
 // Because this is ONLY used in dev mode, it's stored as a normal object instead of an array
 export type DynamicSelectorDebugInfo = {

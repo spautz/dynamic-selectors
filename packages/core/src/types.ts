@@ -64,13 +64,13 @@ export type DynamicSelectorStateOptions<StateType = DefaultStateType> = {
  * Options for how an individual selector behaves.
  */
 export type DynamicSelectorOptions<
-  ReturnType = DefaultReturnType,
+  ReturnedValueType = DefaultReturnType,
   StateType = DefaultStateType,
   ParamsType = DynamicSelectorParams,
   ExtraArgsType extends Array<any> = DefaultExtraArgsType,
 > = {
   /* Output equality checking: if this returns true then the selector will be considered unchanged */
-  compareResult: (oldReturnValue: ReturnType, newReturnValue: ReturnType) => boolean;
+  compareResult: (oldReturnValue: ReturnedValueType, newReturnValue: ReturnedValueType) => boolean;
   /* Used to customize the cache of results */
   createResultCache: () => DynamicSelectorResultCache;
   /* Verbose output, useful for debugging the library itself */
@@ -92,12 +92,12 @@ export type DynamicSelectorOptions<
 /**
  * The `getState` function that's available within each Dynamic Selector.
  */
-export type DynamicSelectorStateAccessor<ReturnType = DefaultReturnType> = <
-  InnerReturnType = ReturnType,
+export type DynamicSelectorStateAccessor<FallbackReturnedValueType = DefaultReturnType> = <
+  ReturnedValueType = FallbackReturnedValueType,
 >(
   path: number | string | Array<number | string> | null,
-  defaultValue?: InnerReturnType,
-) => InnerReturnType;
+  defaultValue?: ReturnedValueType,
+) => ReturnedValueType;
 
 /**
  * The plain, 'inner' function that a Dynamic Selector is created from.
@@ -148,7 +148,7 @@ export interface DynamicSelectorFnFromInnerFn<
 }
 
 export type DynamicSelectorFnFromTypes<
-  ReturnType = DefaultReturnType,
+  ReturnedValueType = DefaultReturnType,
   StateType = DefaultStateType,
   ParamsType = DynamicSelectorParams,
   ExtraArgsType extends Array<any> = DefaultExtraArgsType,
@@ -159,12 +159,12 @@ export type DynamicSelectorFnFromTypes<
         getStateFn: DynamicSelectorStateAccessor<StateType>,
         params?: ParamsType,
         ...extraArgs: ExtraArgsType | any
-      ) => ReturnType
+      ) => ReturnedValueType
     : (
         getStateFn: DynamicSelectorStateAccessor<StateType>,
         params: ParamsType,
         ...extraArgs: ExtraArgsType | any
-      ) => ReturnType
+      ) => ReturnedValueType
 >;
 
 export type AnyDynamicSelectorFn = DynamicSelectorFnFromTypes<any, any, any, Array<any>>;

@@ -55,9 +55,9 @@ export type DynamicSelectorResultCache = {
   [propName: string]: unknown;
 };
 
-const createResultEntry = (
+const createResultEntry = <StateType>(
   stateOptions: DynamicSelectorStateOptions,
-  state: unknown,
+  state: StateType,
   allowExecution: boolean,
   recordDependencies: boolean,
   myPreviousResult?: DynamicSelectorResultEntry,
@@ -67,7 +67,7 @@ const createResultEntry = (
     state,
     allowExecution,
     recordDependencies,
-    [],
+    {} as DynamicSelectorStateDependencies,
     [],
     false,
     undefined,

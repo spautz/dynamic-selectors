@@ -13,6 +13,7 @@ import type { DynamicSelectorResultEntry } from './resultCache.js';
  */
 const callStack: Array<DynamicSelectorResultEntry> = [];
 
+// biome-ignore lint/style/noNonNullAssertion: This function is only called when there is a call stack entry
 const getTopCallStackEntry = (): DynamicSelectorResultEntry => callStack[callStack.length - 1]!;
 const pushCallStackEntry: (...items: DynamicSelectorResultEntry[]) => number =
   callStack.push.bind(callStack);

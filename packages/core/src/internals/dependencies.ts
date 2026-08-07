@@ -10,13 +10,13 @@ import {
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache.js';
 
-/**
- * We track wo types of dependencies:
- *  - "State Dependency": the selector accessed a state value directly, through getState
- *  - "Call Dependency": the selector called another selector, maybe passing it some params
- */
+// We track two types of dependencies:
+//    - "State Dependency": the selector accessed a state value directly, through getState
+//    - "Call Dependency": the selector called another selector, maybe passing it some params
 
-export type DynamicSelectorStateDependencies = Record<string, unknown>;
+export type Internal_StatePath = string;
+
+export type DynamicSelectorStateDependencies = Record<Internal_StatePath, unknown>;
 export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependency>;
 
 export type DynamicSelectorCallDependency = [
@@ -94,6 +94,7 @@ const hasAnyCallDependencyChanged = (
           dependencyReturnValue;
         const checkType_dependencyIsReadOnly: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__IS_READONLY] =
           dependencyIsReadOnly;
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log({
           checkType_selectorFn,
           checkType_params,

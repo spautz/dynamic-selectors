@@ -79,10 +79,10 @@ class DebugInfoCheckUtil {
     selector: AnyDynamicSelectorFn = this._defaultSelector,
     params: DynamicSelectorParams = this._defaultParams,
   ): void {
-    results.forEach(([entry, result]) => {
+    for (const [entry, result] of results) {
       this._logExpectedEntry(entry);
       this._logExpectedResult(result);
-    });
+    }
     this._checkLogs(selector, params);
   }
 
@@ -91,7 +91,8 @@ class DebugInfoCheckUtil {
     params: DynamicSelectorParams = this._defaultParams,
   ): void {
     if (this._expectedDebugInfo?.invokeCount) {
-      return this._checkLogs(selector, params);
+      this._checkLogs(selector, params);
+      return;
     }
     // If it's never been invoked, there should be nothing at all
     const expect = this.getExpectFn();
@@ -108,9 +109,11 @@ class DebugInfoCheckUtil {
     const selectorInfo = { ...selector.getDebugInfo(params) } as DynamicSelectorDebugInfo;
     const expectedInfo = { ...this._expectedDebugInfo } as DynamicSelectorDebugInfo;
     if (selectorInfo) {
+      // biome-ignore lint/performance/noDelete: Ensure the `_verbose` flag doesn't affect the comparison
       delete selectorInfo._verbose;
     }
     if (expectedInfo) {
+      // biome-ignore lint/performance/noDelete: Ensure the `_verbose` flag doesn't affect the comparison
       delete expectedInfo._verbose;
     }
     const expect = this.getExpectFn();

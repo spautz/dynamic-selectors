@@ -16,6 +16,7 @@ const validateOptions = (options: DynamicSelectorOptions): void => {
 
     const unrecognizedStateOptionKeys = Object.keys(unrecognizedOptions);
     if (unrecognizedStateOptionKeys.length) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error(
         `Unrecognized options provided for selector: ${unrecognizedStateOptionKeys.join(', ')}`,
         unrecognizedOptions,
@@ -23,9 +24,11 @@ const validateOptions = (options: DynamicSelectorOptions): void => {
     }
 
     if (!createResultCache) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('Selector options must provide `createResultCache`', options);
     }
     if (!getKeyForParams) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('Selector options must provide `getKeyForParams`', options);
     }
   }
@@ -47,6 +50,7 @@ const validateStateOptions = <StateType>(
 
     const unrecognizedStateOptionKeys = Object.keys(unrecognizedStateOptions);
     if (unrecognizedStateOptionKeys.length) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error(
         `Unrecognized stateOptions provided for dynamicSelectorForState: ${unrecognizedStateOptionKeys.join(
           ', ',
@@ -56,6 +60,7 @@ const validateStateOptions = <StateType>(
     }
 
     if (!get) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('stateOptions must provide `get`', stateOptions);
     }
 

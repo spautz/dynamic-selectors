@@ -48,8 +48,9 @@
       "outputLogs": "new-only"
     },
 
-    // Typecheck only target the root's own files: not repo-wide
+    // Typecheck only targets the root's own files: not repo-wide
     "//#w:typecheck": {
+      "dependsOn": ["w:dependencies"],
       "outputLogs": "new-only"
     },
 
