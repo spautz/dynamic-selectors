@@ -32,8 +32,9 @@ const validateOptions = (options: DynamicSelectorOptions): void => {
   /* c8 ignore stop */
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>): void => {
+const validateStateOptions = <StateType>(
+  stateOptions: DynamicSelectorStateOptions<StateType>,
+): void => {
   /* c8 ignore start */
   // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
@@ -65,4 +66,4 @@ const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>): v
   /* c8 ignore stop */
 };
 
-export { validateStateOptions, validateOptions };
+export { validateOptions, validateStateOptions };

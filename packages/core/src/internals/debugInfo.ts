@@ -88,13 +88,13 @@ const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
 
 export {
   createDebugInfo,
-  debugLogVerbose,
-  debugDepCheck,
-  debugInvoked,
-  debugSkippedRun,
-  debugPhantomRun,
-  debugFullRun,
   debugAbortedRun,
+  debugDepCheck,
+  debugFullRun,
+  debugInvoked,
+  debugLogVerbose,
+  debugPhantomRun,
+  debugSkippedRun,
 };
 
 /* c8 ignore stop */

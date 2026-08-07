@@ -4,16 +4,6 @@ import type {
   DynamicSelectorResultEntry,
 } from './internals/index.js';
 import {
-  RESULT_ENTRY__STATE_OPTIONS,
-  RESULT_ENTRY__STATE,
-  RESULT_ENTRY__ALLOW_EXECUTION,
-  RESULT_ENTRY__RECORD_DEPENDENCIES,
-  RESULT_ENTRY__STATE_DEPENDENCIES,
-  RESULT_ENTRY__CALL_DEPENDENCIES,
-  RESULT_ENTRY__HAS_RETURN_VALUE,
-  RESULT_ENTRY__RETURN_VALUE,
-  RESULT_ENTRY__ERROR,
-  RESULT_ENTRY__DEBUG_INFO,
   createCallDependency,
   createResultEntry,
   debugAbortedRun,
@@ -27,6 +17,16 @@ import {
   hasAnyStateDependencyChanged,
   popCallStackEntry,
   pushCallStackEntry,
+  RESULT_ENTRY__ALLOW_EXECUTION,
+  RESULT_ENTRY__CALL_DEPENDENCIES,
+  RESULT_ENTRY__DEBUG_INFO,
+  RESULT_ENTRY__ERROR,
+  RESULT_ENTRY__HAS_RETURN_VALUE,
+  RESULT_ENTRY__RECORD_DEPENDENCIES,
+  RESULT_ENTRY__RETURN_VALUE,
+  RESULT_ENTRY__STATE,
+  RESULT_ENTRY__STATE_DEPENDENCIES,
+  RESULT_ENTRY__STATE_OPTIONS,
   validateOptions,
   validateStateOptions,
 } from './internals/index.js';
@@ -34,14 +34,15 @@ import type {
   DefaultExtraArgsType,
   DefaultReturnType,
   DefaultStateType,
+  DynamicSelectorFnFromInnerFn,
   DynamicSelectorFnFromTypes,
   DynamicSelectorInnerFn,
   DynamicSelectorOptions,
   DynamicSelectorParams,
   DynamicSelectorStateOptions,
+  RemoveFirstElement,
   StatePath,
 } from './types.js';
-import type { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
 
 /**
  * Constructor for dynamic selectors, using the state provided
@@ -117,7 +118,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
-    // eslint-disable-next-line prefer-const
+    // biome-ignore lint/style/useConst: declared here so closures above can reference it before it's assigned below
     let outerFn: DynamicSelectorFnFromTypes<DefaultReturnType, StateType>;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -236,9 +237,8 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         // If we reach this point, the previousResult could not be used: we MUST run
 
         // Any calls to getState while run will register a state dependency on ourselves / our result
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const getState = (path: StatePath, defaultValue: unknown): any => {
-          let stateValue;
+        const getState = (path: StatePath, defaultValue: unknown): unknown => {
+          let stateValue: unknown;
           if (path) {
             stateValue = get(state, path, defaultValue);
           } else {
@@ -402,7 +402,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       }
 
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: placeholder value, cache entry has no return value
         resultCache.set(paramKey, null as any);
       }
 

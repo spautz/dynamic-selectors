@@ -81,7 +81,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "catalog:packages",
-    "@biomejs/biome": "2.5.0",
+    "@biomejs/biome": "2.5.6",
     "@changesets/cli": "2.31.0",
     "@typescript/native-preview": "7.0.0-dev.20260616.1",
     "changesets-format-with-issue-links": "0.3.0",

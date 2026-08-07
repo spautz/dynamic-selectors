@@ -19,4 +19,4 @@ const pushCallStackEntry: (...items: DynamicSelectorResultEntry[]) => number =
 const popCallStackEntry: () => DynamicSelectorResultEntry | undefined =
   callStack.pop.bind(callStack);
 
-export { getTopCallStackEntry, pushCallStackEntry, popCallStackEntry };
+export { getTopCallStackEntry, popCallStackEntry, pushCallStackEntry };

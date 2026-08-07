@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// biome-ignore-all lint/suspicious/noExplicitAny: this file's generic type params are intentionally untyped by default
 
 import type {
   DynamicSelectorDebugInfo,
@@ -109,7 +109,6 @@ export interface DynamicSelectorInnerFn<StateType = DefaultStateType> {
     ...extraArgs: Array<any>
   ): any;
   displayName?: string;
-  // eslint-enable @typescript-eslint/no-explicit-any
 }
 
 /**
@@ -133,9 +132,10 @@ export interface DynamicSelectorFnFromInnerFn<
     /** Call signature when invoked from inside another selector: no state argument */
     (...args: RemoveFirstElement<Parameters<InnerFn>>): ReturnType<InnerFn> | undefined;
     /** Call signature when invoked from outside any selector: state is first argument */
-    (state: StateType, ...args: RemoveFirstElement<Parameters<InnerFn>>):
-      | ReturnType<InnerFn>
-      | undefined;
+    (
+      state: StateType,
+      ...args: RemoveFirstElement<Parameters<InnerFn>>
+    ): ReturnType<InnerFn> | undefined;
   };
   hasCachedResult: {
     /** Call signature when invoked from inside another selector: no state argument */

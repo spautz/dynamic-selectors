@@ -16,7 +16,7 @@ type ExpectedDebugInfoEntryType = 'depCheck' | 'invoked';
 type ExpectedDebugInfoResultType = 'skipped' | 'phantom' | 'run' | 'aborted';
 
 // @FIXME
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: expectFn from test framework has no shared type
 type ExpectFn = any;
 
 /**
@@ -36,8 +36,7 @@ class DebugInfoCheckUtil {
 
   constructor(defaultSelector?: AnyDynamicSelectorFn, defaultParams?: DynamicSelectorParams) {
     this._expectedDebugInfo = createDebugInfo();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore: We don't care if this is undefined, because it can be provided later
+    // @ts-expect-error: We don't care if this is undefined, because it can be provided later
     this._defaultSelector = defaultSelector;
     this._defaultParams = defaultParams;
   }

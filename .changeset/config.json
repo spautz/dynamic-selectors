@@ -8,12 +8,7 @@
   ],
   "commit": false,
   "fixed": [],
-  "linked": [
-    [
-      "@dynamic-selectors/with-reselect",
-      "@dynamic-selectors/core"
-    ]
-  ],
+  "linked": [["@dynamic-selectors/with-reselect", "@dynamic-selectors/core"]],
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

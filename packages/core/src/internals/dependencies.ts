@@ -1,14 +1,14 @@
+import type {
+  DynamicSelectorFnFromTypes,
+  DynamicSelectorParams,
+  DynamicSelectorStateGetFn,
+} from '../types.js';
 import { popCallStackEntry, pushCallStackEntry } from './callStack.js';
 import {
   createDepCheckEntry,
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache.js';
-import type {
-  DynamicSelectorFnFromTypes,
-  DynamicSelectorParams,
-  DynamicSelectorStateGetFn,
-} from '../types.js';
 
 /**
  * We track wo types of dependencies:
@@ -16,8 +16,7 @@ import type {
  *  - "Call Dependency": the selector called another selector, maybe passing it some params
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DynamicSelectorStateDependencies = Record<string, any>;
+export type DynamicSelectorStateDependencies = Record<string, unknown>;
 export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependency>;
 
 export type DynamicSelectorCallDependency = [
@@ -40,20 +39,18 @@ export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 const createCallDependency = (
   selectorFn: DynamicSelectorFnFromTypes,
   params: DynamicSelectorParams,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  returnValue: any,
+  returnValue: unknown,
   isReadOnly: boolean,
 ): DynamicSelectorCallDependency => [selectorFn, params, returnValue, isReadOnly];
 
 const hasAnyStateDependencyChanged = (
   getFn: DynamicSelectorStateGetFn,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  state: any,
+  state: unknown,
   previousStateDependencies: DynamicSelectorStateDependencies,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   for (const path in previousStateDependencies) {
-    if (Object.prototype.hasOwnProperty.call(previousStateDependencies, path)) {
+    if (Object.hasOwn(previousStateDependencies, path)) {
       const previousValue = previousStateDependencies[path];
       const currentValue = path ? getFn(state, path) : state;
       if (previousValue !== currentValue) {
@@ -68,12 +65,10 @@ const hasAnyStateDependencyChanged = (
 };
 
 const hasAnyCallDependencyChanged = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  state: any,
+  state: unknown,
   previousCallDependencies: DynamicSelectorCallDependencies,
   allowExecution: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  otherArgs: Array<any>,
+  otherArgs: Array<unknown>,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   const numPreviousCallDependencies = previousCallDependencies.length;
