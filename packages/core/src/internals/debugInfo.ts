@@ -1,4 +1,5 @@
 /* c8 ignore start */
+// biome-ignore-all lint/suspicious/noConsole: Intentional console output
 
 // Because this is ONLY used in dev mode, it's stored as a normal object instead of an array
 export type DynamicSelectorDebugInfo = {
@@ -88,13 +89,13 @@ const debugAbortedRun = (debugInfo: DynamicSelectorDebugInfo): void => {
 
 export {
   createDebugInfo,
-  debugLogVerbose,
-  debugDepCheck,
-  debugInvoked,
-  debugSkippedRun,
-  debugPhantomRun,
-  debugFullRun,
   debugAbortedRun,
+  debugDepCheck,
+  debugFullRun,
+  debugInvoked,
+  debugLogVerbose,
+  debugPhantomRun,
+  debugSkippedRun,
 };
 
 /* c8 ignore stop */

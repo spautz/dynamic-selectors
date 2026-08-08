@@ -4,16 +4,6 @@ import type {
   DynamicSelectorResultEntry,
 } from './internals/index.js';
 import {
-  RESULT_ENTRY__STATE_OPTIONS,
-  RESULT_ENTRY__STATE,
-  RESULT_ENTRY__ALLOW_EXECUTION,
-  RESULT_ENTRY__RECORD_DEPENDENCIES,
-  RESULT_ENTRY__STATE_DEPENDENCIES,
-  RESULT_ENTRY__CALL_DEPENDENCIES,
-  RESULT_ENTRY__HAS_RETURN_VALUE,
-  RESULT_ENTRY__RETURN_VALUE,
-  RESULT_ENTRY__ERROR,
-  RESULT_ENTRY__DEBUG_INFO,
   createCallDependency,
   createResultEntry,
   debugAbortedRun,
@@ -27,6 +17,16 @@ import {
   hasAnyStateDependencyChanged,
   popCallStackEntry,
   pushCallStackEntry,
+  RESULT_ENTRY__ALLOW_EXECUTION,
+  RESULT_ENTRY__CALL_DEPENDENCIES,
+  RESULT_ENTRY__DEBUG_INFO,
+  RESULT_ENTRY__ERROR,
+  RESULT_ENTRY__HAS_RETURN_VALUE,
+  RESULT_ENTRY__RECORD_DEPENDENCIES,
+  RESULT_ENTRY__RETURN_VALUE,
+  RESULT_ENTRY__STATE,
+  RESULT_ENTRY__STATE_DEPENDENCIES,
+  RESULT_ENTRY__STATE_OPTIONS,
   validateOptions,
   validateStateOptions,
 } from './internals/index.js';
@@ -34,14 +34,15 @@ import type {
   DefaultExtraArgsType,
   DefaultReturnType,
   DefaultStateType,
+  DynamicSelectorFnFromInnerFn,
   DynamicSelectorFnFromTypes,
   DynamicSelectorInnerFn,
   DynamicSelectorOptions,
   DynamicSelectorParams,
   DynamicSelectorStateOptions,
+  RemoveFirstElement,
   StatePath,
 } from './types.js';
-import type { DynamicSelectorFnFromInnerFn, RemoveFirstElement } from './types.js';
 
 /**
  * Constructor for dynamic selectors, using the state provided
@@ -87,6 +88,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
     if (parentCaller) {
       if (parentCaller[RESULT_ENTRY__STATE_OPTIONS] !== stateOptions) {
         // @TODO: Better error message/explanation, and add a way to mute it
+        // biome-ignore lint/suspicious/noConsole: Intentional console output
         console.error(
           'A selector for one state is being called from a selector for a different state: this is probably a bug',
         );
@@ -117,7 +119,6 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
 
     let resultCache: DynamicSelectorResultCache = createResultCache();
 
-    // eslint-disable-next-line prefer-const
     let outerFn: DynamicSelectorFnFromTypes<DefaultReturnType, StateType>;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -196,6 +197,8 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
             previousCallDependencies;
           const checkType_hasPreviousReturnValue: DynamicSelectorResultEntry[typeof RESULT_ENTRY__HAS_RETURN_VALUE] =
             hasPreviousReturnValue;
+
+          // biome-ignore lint/suspicious/noConsole: Intentional console output
           console.log({
             checkType_previousState,
             checkType_previousStateDependencies,
@@ -206,7 +209,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         /* c8 ignore stop */
 
         if (hasPreviousReturnValue) {
-          if (compareState && compareState(previousState as StateType, state)) {
+          if (compareState?.(previousState as StateType, state)) {
             // We've already run with these params and this state
             canUsePreviousResult = true;
           } else {
@@ -235,17 +238,20 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       } else if (allowExecution) {
         // If we reach this point, the previousResult could not be used: we MUST run
 
-        // Any calls to getState while run will register a state dependency on ourselves / our result
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const getState = (path: StatePath, defaultValue: unknown): any => {
-          let stateValue;
+        // Any calls to getState while run will register a state dependency on ourselves / our result.
+        // Note that the default `ReturnedValueType = StateType` only applies when no path is sent.
+        const getState = <ReturnedValueType = StateType>(
+          path: StatePath,
+          defaultValue?: ReturnedValueType,
+        ): ReturnedValueType => {
+          let stateValue: unknown;
           if (path) {
             stateValue = get(state, path, defaultValue);
           } else {
             stateValue = state;
           }
           nextResult[RESULT_ENTRY__STATE_DEPENDENCIES][String(path) || ''] = stateValue;
-          return stateValue;
+          return stateValue as ReturnedValueType;
         };
 
         // Any calls to other selectors will register a call dependency on ourselves / our result
@@ -275,8 +281,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
         // We were able to run without error -- but is our "new" result actually new?
         if (
           compareResult &&
-          previousResult &&
-          previousResult[RESULT_ENTRY__HAS_RETURN_VALUE] &&
+          previousResult?.[RESULT_ENTRY__HAS_RETURN_VALUE] &&
           nextResult[RESULT_ENTRY__HAS_RETURN_VALUE] &&
           compareResult(
             previousResult[RESULT_ENTRY__RETURN_VALUE],
@@ -390,7 +395,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       popCallStackEntry();
 
       const parentCaller = getTopCallStackEntry();
-      if (parentCaller && parentCaller[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
+      if (parentCaller?.[RESULT_ENTRY__RECORD_DEPENDENCIES]) {
         parentCaller[RESULT_ENTRY__CALL_DEPENDENCIES].push(
           createCallDependency(
             outerFn,
@@ -402,7 +407,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       }
 
       if (!result[RESULT_ENTRY__HAS_RETURN_VALUE]) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: placeholder value, cache entry has no return value
         resultCache.set(paramKey, null as any);
       }
 
@@ -432,6 +437,7 @@ const dynamicSelectorForState = <StateType = DefaultStateType>(
       // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
       if (process.env.NODE_ENV !== 'production' && getTopCallStackEntry()) {
         // @TODO: Add a way to mute this warning
+        // biome-ignore lint/suspicious/noConsole: Intentional console output
         console.warn(
           'Called resetCache while selectors are running: this will probably cause unexpected results',
         );
