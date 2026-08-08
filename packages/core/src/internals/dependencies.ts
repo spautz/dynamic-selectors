@@ -1,23 +1,22 @@
+import type {
+  DynamicSelectorFnFromTypes,
+  DynamicSelectorParams,
+  DynamicSelectorStateGetFn,
+} from '../types.js';
 import { popCallStackEntry, pushCallStackEntry } from './callStack.js';
 import {
   createDepCheckEntry,
   RESULT_ENTRY__HAS_RETURN_VALUE,
   RESULT_ENTRY__RETURN_VALUE,
 } from './resultCache.js';
-import type {
-  DynamicSelectorFnFromTypes,
-  DynamicSelectorParams,
-  DynamicSelectorStateGetFn,
-} from '../types.js';
 
-/**
- * We track wo types of dependencies:
- *  - "State Dependency": the selector accessed a state value directly, through getState
- *  - "Call Dependency": the selector called another selector, maybe passing it some params
- */
+// We track two types of dependencies:
+//    - "State Dependency": the selector accessed a state value directly, through getState
+//    - "Call Dependency": the selector called another selector, maybe passing it some params
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type DynamicSelectorStateDependencies = Record<string, any>;
+export type Internal_StatePath = string;
+
+export type DynamicSelectorStateDependencies = Record<Internal_StatePath, unknown>;
 export type DynamicSelectorCallDependencies = Array<DynamicSelectorCallDependency>;
 
 export type DynamicSelectorCallDependency = [
@@ -40,20 +39,18 @@ export const CALL_DEPENDENCY__IS_READONLY = 3 as const;
 const createCallDependency = (
   selectorFn: DynamicSelectorFnFromTypes,
   params: DynamicSelectorParams,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  returnValue: any,
+  returnValue: unknown,
   isReadOnly: boolean,
 ): DynamicSelectorCallDependency => [selectorFn, params, returnValue, isReadOnly];
 
 const hasAnyStateDependencyChanged = (
   getFn: DynamicSelectorStateGetFn,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  state: any,
+  state: unknown,
   previousStateDependencies: DynamicSelectorStateDependencies,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   for (const path in previousStateDependencies) {
-    if (Object.prototype.hasOwnProperty.call(previousStateDependencies, path)) {
+    if (Object.hasOwn(previousStateDependencies, path)) {
       const previousValue = previousStateDependencies[path];
       const currentValue = path ? getFn(state, path) : state;
       if (previousValue !== currentValue) {
@@ -68,12 +65,10 @@ const hasAnyStateDependencyChanged = (
 };
 
 const hasAnyCallDependencyChanged = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  state: any,
+  state: unknown,
   previousCallDependencies: DynamicSelectorCallDependencies,
   allowExecution: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  otherArgs: Array<any>,
+  otherArgs: Array<unknown>,
 ): boolean => {
   // Manual loop to get the tiny performance boost, and because we don't need a closure
   const numPreviousCallDependencies = previousCallDependencies.length;
@@ -83,11 +78,13 @@ const hasAnyCallDependencyChanged = (
 
     for (let i = 0; i < numPreviousCallDependencies; i += 1) {
       const [dependencySelectorFn, dependencyParams, dependencyReturnValue, dependencyIsReadOnly] =
-        previousCallDependencies[i];
+        previousCallDependencies[i] as DynamicSelectorCallDependency;
 
       /* c8 ignore start */
-      // eslint-disable-next-line no-constant-condition
-      if (false) {
+      // This `NEVER` alias is a hack to trick Typescript into thinking the never-run block below
+      // is not actually never-run. (Otherwise it complains about unreachable code.)
+      const NEVER: boolean = false;
+      if (NEVER) {
         // This block is here ONLY to catch possible errors if the structure of `previousCallDependencies` changes
         const checkType_selectorFn: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__SELECTOR_FN] =
           dependencySelectorFn;
@@ -97,6 +94,7 @@ const hasAnyCallDependencyChanged = (
           dependencyReturnValue;
         const checkType_dependencyIsReadOnly: DynamicSelectorCallDependency[typeof CALL_DEPENDENCY__IS_READONLY] =
           dependencyIsReadOnly;
+        // biome-ignore lint/suspicious/noConsole: intentional log
         console.log({
           checkType_selectorFn,
           checkType_params,

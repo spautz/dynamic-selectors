@@ -1,3 +1,4 @@
+import type { DynamicSelectorStateOptions } from '../types.js';
 import { getTopCallStackEntry } from './callStack.js';
 import type { DynamicSelectorDebugInfo } from './debugInfo.js';
 import { createDebugInfo } from './debugInfo.js';
@@ -5,7 +6,6 @@ import type {
   DynamicSelectorCallDependencies,
   DynamicSelectorStateDependencies,
 } from './dependencies.js';
-import type { DynamicSelectorStateOptions } from '../types.js';
 
 /**
  * This is where things happen: this tracks everything about a single Dynamic Selector call: what was called,
@@ -55,9 +55,9 @@ export type DynamicSelectorResultCache = {
   [propName: string]: unknown;
 };
 
-const createResultEntry = (
+const createResultEntry = <StateType>(
   stateOptions: DynamicSelectorStateOptions,
-  state: unknown,
+  state: StateType,
   allowExecution: boolean,
   recordDependencies: boolean,
   myPreviousResult?: DynamicSelectorResultEntry,
@@ -67,7 +67,7 @@ const createResultEntry = (
     state,
     allowExecution,
     recordDependencies,
-    [],
+    {} as DynamicSelectorStateDependencies,
     [],
     false,
     undefined,
@@ -76,6 +76,7 @@ const createResultEntry = (
   ];
 
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = myPreviousResult
       ? myPreviousResult[RESULT_ENTRY__DEBUG_INFO]
@@ -91,6 +92,7 @@ const createDepCheckEntry = (allowExecution: boolean): DynamicSelectorResultEntr
   newResultEntry[RESULT_ENTRY__ALLOW_EXECUTION] = allowExecution;
   newResultEntry[RESULT_ENTRY__RECORD_DEPENDENCIES] = false;
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     newResultEntry[RESULT_ENTRY__DEBUG_INFO] = null;
   }
@@ -98,4 +100,4 @@ const createDepCheckEntry = (allowExecution: boolean): DynamicSelectorResultEntr
   return newResultEntry;
 };
 
-export { createResultEntry, createDepCheckEntry };
+export { createDepCheckEntry, createResultEntry };

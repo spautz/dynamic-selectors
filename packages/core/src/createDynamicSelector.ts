@@ -5,12 +5,10 @@ import { dynamicSelectorForState } from './dynamicSelectorForState.js';
 import type { DynamicSelectorResultCache, DynamicSelectorResultEntry } from './internals/index.js';
 import type {
   DefaultStateType,
-  DynamicSelectorOptions,
-  DynamicSelectorStateOptions,
-} from './types.js';
-import {
   DynamicSelectorFnFromInnerFn,
   DynamicSelectorInnerFn,
+  DynamicSelectorOptions,
+  DynamicSelectorStateOptions,
   RemoveFirstElement,
 } from './types.js';
 
@@ -72,4 +70,4 @@ type CreateDynamicSelectorFn = <InnerFn extends DynamicSelectorInnerFn>(
  */
 const createDynamicSelector: CreateDynamicSelectorFn = dynamicSelectorForState(defaultStateOptions);
 
-export { createDefaultCache, defaultStateOptions, defaultSelectorOptions, createDynamicSelector };
+export { createDefaultCache, createDynamicSelector, defaultSelectorOptions, defaultStateOptions };

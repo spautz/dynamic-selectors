@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { createDynamicSelector } from '../index';
+import { createDynamicSelector } from '../index.js';
 
 describe('accessing cached results', () => {
   test('without params, from outside', () => {

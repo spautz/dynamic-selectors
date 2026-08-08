@@ -1,2 +1,2 @@
-import 'packages/core/setupTests';
-import 'packages/with-reselect/setupTests';
+import './packages/core/setupTests.ts';
+import './packages/with-reselect/setupTests.ts';

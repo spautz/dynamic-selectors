@@ -13,8 +13,11 @@ import type { DynamicSelectorResultEntry } from './resultCache.js';
  */
 const callStack: Array<DynamicSelectorResultEntry> = [];
 
-const getTopCallStackEntry = () => callStack[callStack.length - 1];
-const pushCallStackEntry = callStack.push.bind(callStack);
-const popCallStackEntry = callStack.pop.bind(callStack);
+// biome-ignore lint/style/noNonNullAssertion: This function is only called when there is a call stack entry
+const getTopCallStackEntry = (): DynamicSelectorResultEntry => callStack[callStack.length - 1]!;
+const pushCallStackEntry: (...items: DynamicSelectorResultEntry[]) => number =
+  callStack.push.bind(callStack);
+const popCallStackEntry: () => DynamicSelectorResultEntry | undefined =
+  callStack.pop.bind(callStack);
 
-export { getTopCallStackEntry, pushCallStackEntry, popCallStackEntry };
+export { getTopCallStackEntry, popCallStackEntry, pushCallStackEntry };

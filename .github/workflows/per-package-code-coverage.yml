@@ -9,63 +9,41 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   package-test-coverage:
-    name: Package code coverage
+    name: Per-package code coverage
     runs-on: ubuntu-latest
-    # Only run for the original repo, and only the default branch, and only if it's properly protected
+    permissions:
+      contents: read
+    # Only run in non-fork repos, on protected default branches.
     if: |
-      (! github.event.push.head.repo.fork)
+      (! github.event.repository.fork)
         && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        && github.ref_protected == true
+        && github.ref_protected
     strategy:
       matrix:
-        package-name: [ core, with-reselect ]
+        package-name: [core, with-reselect]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Node.js
-        uses: actions/setup-node@v3
+      - uses: ./.github/reusable-workflows/setup-repo
         with:
-          node-version: 20
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - run: corepack enable
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          node-version: nvmrc
 
       - name: Run package tests
-        run: |
-          cd packages/${{ matrix.package-name }}
-          pnpm run test:coverage
+        working-directory: packages/${{ matrix.package-name }}
+        run: pnpm exec turbo run test:ci
 
       - name: Report package test coverage to coveralls.io
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
         with:
           github-token: ${{ github.token }}
           path-to-lcov: packages/${{ matrix.package-name }}/coverage/lcov.info
           base-path: packages/${{ matrix.package-name }}
           git-branch: x-cov-${{ matrix.package-name }}
+          fail-on-error: false

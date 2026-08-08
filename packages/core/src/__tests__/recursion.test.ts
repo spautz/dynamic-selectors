@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
-
-import { createDynamicSelector, DynamicSelectorFnFromTypes } from '../index';
-import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil.js';
+import { createDynamicSelector, type DynamicSelectorFnFromTypes } from '../index.js';
 
 describe('recursion', () => {
   test('Fibonacci(3)', () => {
@@ -9,7 +8,8 @@ describe('recursion', () => {
       createDynamicSelector((_getState, num: number) => {
         if (num < 1) {
           return 0;
-        } else if (num === 1) {
+        }
+        if (num === 1) {
           return 1;
         }
         return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);
@@ -36,7 +36,8 @@ describe('recursion', () => {
       createDynamicSelector((_getState, num: number) => {
         if (num < 1) {
           return 0;
-        } else if (num === 1) {
+        }
+        if (num === 1) {
           return 1;
         }
         return fibonacciSelector(num - 1) + fibonacciSelector(num - 2);

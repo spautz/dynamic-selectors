@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 
+# This script cleans everything in the repo: packages, demos, and external tests
+# It is the inverse of `build-everything.sh`
+
+###################################################################################################
+# Standard setup for all scripts
+
+THIS_SCRIPT_NAME=$(basename "$0")
+echo "### Begin ${THIS_SCRIPT_NAME}"
+
 # Fail if anything in here fails
-set -e
+set -euo pipefail
 
-# This script runs from the project root
-cd "$(dirname "$0")/.."
+# Always run from the repo root
+REPO_ROOT=$(git -C "$(dirname "${BASH_SOURCE[0]:-$0}")" rev-parse --show-toplevel)
+pushd "$REPO_ROOT"
 
+# shellcheck source=scripts/helpers/helpers.sh
 source ./scripts/helpers/helpers.sh
 
 ###################################################################################################
-# Halt running processes and local servers
+# Main body
 
 if command_exists killall; then
   run_command killall -v node || true
@@ -19,49 +30,51 @@ if command_exists watchman; then
   run_command watchman watch-del-all
 fi
 
-##################################################################################################
-# Clear caches
+# Remove any and all generated files
 
 if [ -d "./node_modules/" ]; then
   run_command pnpm run clean
 fi
 
-if command_exists pnpm; then
-  run_command "pnpm store prune" || true
-fi
+run_command rm -rf "${TMPDIR:-/tmp}"/react-*
 
-run_command "rm -rf
-  $TMPDIR/react-*
-  "
-
-##################################################################################################
-# Remove generated files
-
-for DIRECTORY in '.' 'demos/*' 'packages/*' ; do
-  run_command "rm -rf
-    $DIRECTORY/.yarn
-    $DIRECTORY/build/
-    $DIRECTORY/coverage/
-    $DIRECTORY/coverage-local/
-    $DIRECTORY/dist/
-    $DIRECTORY/legacy-types/
-    $DIRECTORY/lib-dist/
-    $DIRECTORY/node_modules/
-    $DIRECTORY/storybook-static/
-    $directory/.pnpm-debug.log*
-    $DIRECTORY/lerna-debug.log*
-    $DIRECTORY/npm-debug.log*
-    $DIRECTORY/yarn-debug.log*
-    $DIRECTORY/yarn-error.log*
-    "
+for DIRECTORY in '.' 'docs-website' 'demos/*' 'external-tests/*' 'packages/*' ; do
+  run_command rm -rf                  \
+    $DIRECTORY/.astro/                \
+    $DIRECTORY/.cache/                \
+    $DIRECTORY/.cache-loader/         \
+    $DIRECTORY/.docusaurus/           \
+    $DIRECTORY/.next/                 \
+    $DIRECTORY/.nitro/                \
+    $DIRECTORY/.nuxt/                 \
+    $DIRECTORY/.output/               \
+    $DIRECTORY/.react-router/         \
+    $DIRECTORY/.svelte-kit/           \
+    $DIRECTORY/.turbo/                \
+    $DIRECTORY/.wrangler/             \
+    $DIRECTORY/.yalc/                 \
+    $DIRECTORY/_fresh/                \
+    $DIRECTORY/build/                 \
+    $DIRECTORY/coverage/              \
+    $DIRECTORY/dist/                  \
+    $DIRECTORY/e2e-test-output/       \
+    $DIRECTORY/legacy-types/          \
+    $DIRECTORY/node_modules/          \
+    $DIRECTORY/out/                   \
+    $DIRECTORY/playwright-report/     \
+    $DIRECTORY/public/build/          \
+    $DIRECTORY/storybook-static/      \
+    $DIRECTORY/*.log*
 done
 
-REMAINING_FILES=$(git clean -xdn)
+REMAINING_FILES=$(git clean -xdn | sed 's/Would remove /    /')
 if [[ $REMAINING_FILES ]]; then
   echo "Ignored files left:"
   echo "$REMAINING_FILES"
 fi;
 
 ###################################################################################################
+# Standard teardown for all scripts
 
-echo "Environment reset completed"
+popd
+echo "### End ${THIS_SCRIPT_NAME}"

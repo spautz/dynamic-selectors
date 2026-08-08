@@ -1,3 +1,87 @@
+# General settings
+blockExoticSubdeps: true
+confirmModulesPurge: false
+engineStrict: true
+minimumReleaseAge: 7200 # 5 days
+strictDepBuilds: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 129600 # 90 days
+verifyDepsBeforeRun: error
+
+allowBuilds:
+  "core-js": false
+  "esbuild@0.28.1": true
+
+overrides:
+  esbuild: 0.28.1
+
+# Pacquet disabled until pnpm 12
+#configDependencies:
+#  '@pnpm/pacquet': 0.11.12
+
+# Workspace
+
 packages:
-  - 'demos/*'
-  - 'packages/*'
+  - packages/*
+  - demos/*
+
+catalogs:
+  # Shared = aligned between packages and demos
+  # (There are some dependencies in common between packages/demos which are not aligned)
+  shared:
+    '@testing-library/jest-dom': 7.0.0
+    '@testing-library/react': 16.3.2
+    '@vitest/coverage-v8': 4.1.10
+    '@vitest/ui': 4.1.10
+    vite: 8.1.5
+    vitest: 4.1.10
+  # Packages use (mostly) up-to-date dependencies and devDependencies
+  packages:
+    '@arethetypeswrong/cli': 0.18.5
+    '@size-limit/esbuild': 12.1.0
+    '@size-limit/esbuild-why': 12.1.0
+    '@size-limit/file': 12.1.0
+    '@types/node': 26.1.2
+    '@types/react': 19.2.17
+    '@types/react-dom': 19.2.3
+    publint: 0.3.21
+    react: 19.2.8
+    react-dom: 19.2.8
+    size-limit: 12.1.0
+    tsdown: 0.22.13
+    typescript: 6.0.3
+  # Demo apps sometimes use older dependencies and devDependencies
+  demos:
+    '@types/node': 26.1.2
+    '@types/react': 19.2.17
+    '@types/react-dom': 19.2.3
+    react: 19.2.8
+    react-dom: 19.2.8
+    source-map-explorer: 2.5.3
+    vite: 8.1.5
+
+  # Library-specific catalogs help with isolated testing:
+  # these are generally not used for normal dev
+  react16:
+    '@types/react': ^16.9.0
+    '@types/react-dom': ^16.9.0
+    react: ^16.9.0
+    react-dom: ^16.9.0
+  react17:
+    '@types/react': ^17.0.0
+    '@types/react-dom': ^17.0.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+  react18:
+    '@types/react': ^18.0.0
+    '@types/react-dom': ^18.0.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  react19:
+    '@types/react': ^19.2.16
+    '@types/react-dom': ^19.2.3
+    react: ^19.2.8
+    react-dom: ^19.2.8
+  typescriptLTS:
+    # https://github.com/DefinitelyTyped/DefinitelyTyped#support-window
+    typescript: 5.5.x

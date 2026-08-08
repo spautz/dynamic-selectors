@@ -1,7 +1,8 @@
 import type { DynamicSelectorOptions, DynamicSelectorStateOptions } from '../types.js';
 
-const validateOptions = (options: DynamicSelectorOptions) => {
+const validateOptions = (options: DynamicSelectorOptions): void => {
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     const {
       compareResult: _compareResult,
@@ -15,6 +16,7 @@ const validateOptions = (options: DynamicSelectorOptions) => {
 
     const unrecognizedStateOptionKeys = Object.keys(unrecognizedOptions);
     if (unrecognizedStateOptionKeys.length) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error(
         `Unrecognized options provided for selector: ${unrecognizedStateOptionKeys.join(', ')}`,
         unrecognizedOptions,
@@ -22,18 +24,22 @@ const validateOptions = (options: DynamicSelectorOptions) => {
     }
 
     if (!createResultCache) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('Selector options must provide `createResultCache`', options);
     }
     if (!getKeyForParams) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('Selector options must provide `getKeyForParams`', options);
     }
   }
   /* c8 ignore stop */
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) => {
+const validateStateOptions = <StateType>(
+  stateOptions: DynamicSelectorStateOptions<StateType>,
+): void => {
   /* c8 ignore start */
+  // @ts-expect-error `process.env.NODE_ENV` left intact and not added to global typings
   if (process.env.NODE_ENV !== 'production') {
     const {
       compareState: _compareState,
@@ -44,6 +50,7 @@ const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) =>
 
     const unrecognizedStateOptionKeys = Object.keys(unrecognizedStateOptions);
     if (unrecognizedStateOptionKeys.length) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error(
         `Unrecognized stateOptions provided for dynamicSelectorForState: ${unrecognizedStateOptionKeys.join(
           ', ',
@@ -53,6 +60,7 @@ const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) =>
     }
 
     if (!get) {
+      // biome-ignore lint/suspicious/noConsole: intentional log
       console.error('stateOptions must provide `get`', stateOptions);
     }
 
@@ -63,4 +71,4 @@ const validateStateOptions = (stateOptions: DynamicSelectorStateOptions<any>) =>
   /* c8 ignore stop */
 };
 
-export { validateStateOptions, validateOptions };
+export { validateOptions, validateStateOptions };

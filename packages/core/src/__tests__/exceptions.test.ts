@@ -1,7 +1,6 @@
 import { describe, expect, test, vitest } from 'vitest';
-
-import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil.js';
+import { createDynamicSelector } from '../index.js';
 
 describe('exceptions', () => {
   test('throws exceptions when uncaught', () => {
@@ -53,7 +52,7 @@ describe('exceptions', () => {
         let result = 0;
         try {
           result = childSelector() * multiplier;
-        } catch (e) {
+        } catch (_e) {
           exceptionWasCaught();
         }
 

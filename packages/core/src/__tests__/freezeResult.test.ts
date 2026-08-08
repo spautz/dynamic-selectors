@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
-
-import { createDynamicSelector } from '../index';
-import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil';
+import { DebugInfoCheckUtil } from '../devOnlyUtils/DebugInfoCheckUtil.js';
+import { createDynamicSelector } from '../index.js';
 
 type MockState = { list?: Array<number> };
 

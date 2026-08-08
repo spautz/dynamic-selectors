@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig-base.typecheck-core.json",
+  "compilerOptions": {
+    // Modules
+    "module": "CommonJS",
+    "moduleResolution": "Node16",
+    // Emit
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "sourceMap": true,
+    // Language and Environment
+    "target": "ES2022",
+    "verbatimModuleSyntax": false
+  },
+  "exclude": ["node_modules", "**/*.stories.*", "**/__tests__", "**/*.test.*"]
+}
