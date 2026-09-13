@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- Legacy typings are no longer included in each package ([#77](https://github.com/spautz/dynamic-selectors/issues/77)) ([369f8ed](https://github.com/spautz/dynamic-selectors/commit/369f8edcb01e0ad9596527be569a8ece7ed80543))
+- Change internal typings from `any` to `unknown` ([#78](https://github.com/spautz/dynamic-selectors/issues/78)) ([8edfd66](https://github.com/spautz/dynamic-selectors/commit/8edfd66fc15e492873f8b213ad627d73c86059ce))
+
+### Minor Changes
+
+- Modernize package config, particularly for `exports` ([#77](https://github.com/spautz/dynamic-selectors/issues/77)) ([369f8ed](https://github.com/spautz/dynamic-selectors/commit/369f8edcb01e0ad9596527be569a8ece7ed80543))
+- Migrate build system and build settings ([#77](https://github.com/spautz/dynamic-selectors/issues/77)) ([369f8ed](https://github.com/spautz/dynamic-selectors/commit/369f8edcb01e0ad9596527be569a8ece7ed80543))
+
 ## [1.2.1](https://github.com/spautz/dynamic-selectors/compare/v1.2.0...v1.2.1) (2023-05-05)
 
 ### Patch Changes
