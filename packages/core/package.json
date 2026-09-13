@@ -33,7 +33,8 @@
     "docs/",
     "src/",
     "LICENSE",
-    "*.md"
+    "*.md",
+    "dev-only.*"
   ],
   "source": "./src/index.ts",
   "type": "module",
@@ -50,17 +51,6 @@
       }
     },
     "./dev-only": {
-      "local-dev": "./src/index.dev-only.ts",
-      "import": {
-        "types": "./dist/esm/index.dev-only.d.ts",
-        "default": "./dist/esm/index.dev-only.js"
-      },
-      "require": {
-        "types": "./dist/cjs/index.dev-only.d.cts",
-        "default": "./dist/cjs/index.dev-only.cjs"
-      }
-    },
-    "./devOnly": {
       "local-dev": "./src/index.dev-only.ts",
       "import": {
         "types": "./dist/esm/index.dev-only.d.ts",

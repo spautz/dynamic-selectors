@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0
+## [2.0.0](https://github.com/spautz/dynamic-selectors/compare/v1.2.1...v2.0.0) (2026-09-13)
 
 ### Major Changes
 
